@@ -1,0 +1,26 @@
+{
+    "name": "bobv/latex-bundle",
+    "minimum-stability": "RC",
+    "version": "1.0.0",
+    "description": "Latex and pdf generator for Symfony 2",
+    "keywords": ["latex", "pdf", "generator"],
+    "type": "symfony-bundle",
+    "homepage": "http://github.com/bobvandevijver/latex-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Bob van de Vijver",
+            "email": "bobvandevijver@hotmail.com"
+        }
+    ],
+    "require": {
+        "symfony/symfony": ">= 2.3.0",
+        "twig/twig": ">= 1.9.0"
+    },
+    "target-dir": "BobV/LatexBundle",
+    "autoload": {
+        "psr-0": {
+            "BobV\\LatexBundle": ""
+        }
+    }
+}

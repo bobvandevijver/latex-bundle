@@ -1,0 +1,7 @@
+parameters:
+  bobv.latex.generator.class: BobV\LatexBundle\Generator\LatexGenerator
+
+services:
+  bobv.latex.generator:
+    class: %bobv.latex.generator.class%
+    arguments: [ %kernel.cache_dir%, %kernel.environment% ,"@twig" ]

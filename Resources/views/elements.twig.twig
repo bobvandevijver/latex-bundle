@@ -1,0 +1,7 @@
+{% block bobv_latex_elements %}
+
+  {% for element in elements %}
+    {% include element.template with element.context %}
+  {% endfor %}
+
+{% endblock bobv_latex_elements %}

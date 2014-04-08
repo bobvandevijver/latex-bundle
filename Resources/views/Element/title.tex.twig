@@ -1,0 +1,18 @@
+{% block bobv_latex_title_element %}
+
+  \title{
+    \vspace{2in}
+    \textmd{\textbf{ {{- title -}} }}\\
+    \normalsize\vspace{0.1in}\small{ {{- subtitle -}} }
+  }
+
+  \author{\textbf{ {{- author -}} }}
+  \date{ {{- date -}} } % Insert date here if you want it to appear below your name
+
+  \clearpage
+  \maketitle
+  \thispagestyle{empty}
+
+  \newpage
+
+{% endblock bobv_latex_title_element%}
