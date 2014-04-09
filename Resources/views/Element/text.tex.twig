@@ -1,3 +1,7 @@
 {% block bobv_latex_text_element %}
-  {{- text -}}
+
+  % Text element
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  {{ text }}
 {% endblock bobv_latex_text_element %}

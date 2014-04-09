@@ -1,0 +1,19 @@
+{% block bobv_latex_titlepage_element %}
+
+  % Title page
+  \title{
+    \vspace{ {{ vspace }} }
+    \textmd{\textbf{ {{- title -}} }}\\
+    \normalsize\vspace{ {{- vspace_subtitle -}} }\small{ {{- subtitle -}} }
+  }
+
+  \author{\textbf{ {{- author -}} }}
+  \date{ {{- date -}} } % Insert date here if you want it to appear below your name
+
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  \clearpage
+  \maketitle
+  \thispagestyle{empty}
+  \newpage
+{% endblock bobv_latex_titlepage_element%}

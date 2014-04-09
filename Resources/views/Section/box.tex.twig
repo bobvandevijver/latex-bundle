@@ -1,11 +1,13 @@
 {% block bobv_latex_section_section %}
 
-  % Section section
+  % Box section
   {% if newpage %}\newpage{% endif %}
 
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
-  \section {%- if not includeTOC %}*{% endif -%} { {{- sectionTitle -}} }
+  \noindent\framebox[\columnwidth][c]{\begin{minipage}{0.98\columnwidth}
 
-  {% include 'BobVLatexBundle::elements.twig.twig' %}
+    {% include 'BobVLatexBundle::elements.twig.twig' %}
+
+  \end{minipage}}
 {% endblock bobv_latex_section_section %}

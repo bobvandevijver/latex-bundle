@@ -1,0 +1,11 @@
+{% block bobv_latex_subsubsection_section %}
+
+  % Subsubsection section
+  {% if newpage %}\newpage{% endif %}
+
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  \subsubsection {%- if not includeTOC %}*{% endif -%} { {{- subsubsectionTitle -}} }
+
+  {% include 'BobVLatexBundle::elements.twig.twig' %}
+{% endblock bobv_latex_subsubsection_section %}

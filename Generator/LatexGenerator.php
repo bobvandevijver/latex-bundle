@@ -2,6 +2,7 @@
 
 namespace BobV\LatexBundle\Generator;
 
+use BobV\LatexBundle\Exception\ImageNotFoundException;
 use BobV\LatexBundle\Exception\LatexException;
 use BobV\LatexBundle\Latex\LatexBaseInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -85,6 +86,15 @@ class LatexGenerator
         $latex->getTemplate(),
         $latex->getContext()
     );
+
+    // Check if there are undefined images
+    $matches = array();
+    preg_match_all('/\\includegraphics\[.+\]\{([^}]+)\}/u', $texData, $matches);
+    foreach($matches[1] as $imageLocation){
+      if(!$this->filesystem->exists($imageLocation)){
+        throw new ImageNotFoundException($imageLocation);
+      }
+    }
 
     try {
       $texLocation = $this->writeTexFile($texData, $latex->getFileName());

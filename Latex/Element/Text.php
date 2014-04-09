@@ -5,7 +5,7 @@ namespace BobV\LatexBundle\Latex\Element;
 use BobV\LatexBundle\Latex\LatexElement;
 
 /**
- * Class LatexTitle
+ * Class Text
  * Base text element
  *
  * @author BobV
@@ -22,8 +22,9 @@ class Text extends LatexElement
   {
     // Define defaults
     $this->template = 'BobVLatexBundle:Element:text.tex.twig';
-    $this->params = array(
-      'text' => $text,
+    $this->params   = array(
+        'text'           => $text,
+        'extra_commands' => array(),
     );
   }
 

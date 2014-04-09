@@ -3,6 +3,11 @@ namespace BobV\LatexBundle\Latex\Element;
 
 use BobV\LatexBundle\Latex\LatexElement;
 
+/**
+ * Class TOC
+ *
+ * @author BobV
+ */
 class TOC extends LatexElement
 {
 

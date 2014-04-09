@@ -3,10 +3,13 @@
 namespace BobV\LatexBundle\Command;
 
 use BobV\LatexBundle\Latex\Base\Article;
+use BobV\LatexBundle\Latex\Element\CustomElement;
 use BobV\LatexBundle\Latex\Element\Text;
-use BobV\LatexBundle\Latex\Element\Title;
+use BobV\LatexBundle\Latex\Element\TitlePage;
 use BobV\LatexBundle\Latex\Element\TOC;
+use BobV\LatexBundle\Latex\Section\Box;
 use BobV\LatexBundle\Latex\Section\Section;
+use BobV\LatexBundle\Latex\Section\SubSection;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -30,11 +33,27 @@ class LatexTestCommand extends ContainerAwareCommand
     {
       $latexGenerator = $this->getContainer()->get('bobv.latex.generator');
       $latex = new Article('BobVLatexTest');
-      $latex->addElement(new Title('BobV Latex Test'));
+      $latex->addPackage('lipsum');
+      $latex->addElement(new TitlePage('BobV Latex Test'));
       $latex->addElement(new TOC());
+
       $section1 = new Section('Test Title');
       $section1->addElement(new Text('Test page'));
+      $section1->addElement(new CustomElement('\lipsum[9]'));
+      $section1->addElement(new SubSection('Subsection test'));
+      $section1->addElement(new CustomElement('\lipsum[2]'));
       $latex->addElement($section1);
+
+      $section2 = new Section('Test Title which is not in TOC');
+      $section2->setParam('includeTOC', false);
+      $section2->addElement(new Text('Test page, but not in TOC'));
+      $section2->addElement(new CustomElement('\lipsum[2]'));
+      $section2->addElement(new SubSection('Subsection test'));
+      $box = new Box();
+      $box->addElement(new Text('\lipsum[1]'));
+      $section2->addElement($box);
+      $latex->addElement($section2);
+
       $generatedLocation = $latexGenerator->generate($latex);
 
       $output->writeln($generatedLocation);

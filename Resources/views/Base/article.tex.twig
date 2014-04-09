@@ -1,5 +1,4 @@
 {% block bobv_latex_article %}
-
   \documentclass{article}
 
   \usepackage{fancyhdr} % Required for custom headers
@@ -8,15 +7,19 @@
   \usepackage{graphicx} % Required to insert images
   \usepackage{titling} % Required for multiple title pages
 
-  % Margins
-  \topmargin=-0.45in
-  \evensidemargin=0in
-  \oddsidemargin=0in
-  \textwidth=6.5in
-  \textheight=9.0in
-  \headsep=0.25in
+  % Added packages
+  {% for package in packages %}\usepackage{ {{- package -}} }
+  {% endfor %}
 
-  \linespread{1.1} % Line spacing
+  % Margins
+  \topmargin={{- topmargin  }}
+  \evensidemargin={{- evensidemargin }}
+  \oddsidemargin={{- oddsidemargin }}
+  \textwidth={{- textwidth }}
+  \textheight={{- textheight }}
+  \headsep={{- headsep }}
+
+  \linespread{ {{- linespread -}} } % Line spacing
 
   % Set up the header and footer
   \pagestyle{fancy}
@@ -24,23 +27,26 @@
   \lhead{ {{- lhead|raw -}} } % Top left header
   \chead{ {{- chead|raw -}} } % Top center header
   \rhead{ {{- rhead|raw -}} } % Top right header
+  \setlength{\headheight}{ {{- headheight -}} }
 
   \lfoot{ {{- lfoot|raw -}} } % Bottom left footer
   \cfoot{ {{- cfoot|raw -}} } % Bottom center footer
   \rfoot{ {{- rfoot|raw -}} } % Bottom right footer
+  \setlength{\footskip}{ {{- footskip -}} }
 
-  \renewcommand\headrulewidth{0.4pt} % Size of the header rule
-  \renewcommand\footrulewidth{0.4pt} % Size of the footer rule
+  \renewcommand\headrulewidth{ {{- headrulewidth -}} } % Size of the header rule
+  \renewcommand\footrulewidth{ {{- footrulewidth -}} } % Size of the footer rule
 
-  \setlength\parindent{0pt} % Removes all indentation from paragraphs
+  \setlength\parindent{ {{- parindent -}} } % Removes all indentation from paragraphs
 
-  \setcounter{secnumdepth}{0} % Removes default section numbers
-  \setcounter{tocdepth}{1} % No subsections in the ToC
+  \setcounter{secnumdepth}{ {{- secnumdepth -}} } % Removes default section numbers
+  \setcounter{tocdepth}{ {{- tocdepth -}} } % No subsections in the ToC
+
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
   \begin{document}
 
   {% include 'BobVLatexBundle::elements.twig.twig' %}
 
   \end{document}
-
 {% endblock bobv_latex_article %}

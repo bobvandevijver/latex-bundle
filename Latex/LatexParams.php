@@ -1,6 +1,7 @@
 <?php
 
 namespace BobV\LatexBundle\Latex;
+use BobV\LatexBundle\Exception\LatexException;
 
 /**
  * Class LatexContext
@@ -26,11 +27,23 @@ class LatexParams {
    * @param string $value
    *
    * @return LatexInterface $this
-   * @throws \BobV\LatexBundle\Exception\LatexNotImplementedException
+   * @throws \BobV\LatexBundle\Exception\LatexException
    */
   public function setParam($param, $value){
-    if(array_key_exists($this->params, $param)){
-      $this->params[$param] = $value;
+    if(array_key_exists($param, $this->params)){
+      // Check if the param is defined as array
+      if(is_array($this->params[$param])){
+        // If the value is an array, replace the complete array, else add a new array element
+        if(is_array($value)){
+          $this->params[$param] = $value;
+        }else{
+          $this->params[$param][] = $value;
+        }
+      }else{
+        $this->params[$param] = $value;
+      }
+    }else{
+      throw new LatexException("The param $param is not defined for " . get_class($this));
     }
     return $this;
   }
