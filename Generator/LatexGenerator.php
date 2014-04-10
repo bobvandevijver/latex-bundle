@@ -7,6 +7,7 @@ use BobV\LatexBundle\Exception\LatexException;
 use BobV\LatexBundle\Latex\LatexBaseInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 /**
  * Class LatexGenerator
@@ -47,6 +48,38 @@ class LatexGenerator
   }
 
   /**
+   * Generate a response containing a PDF document
+   *
+   * @param LatexBaseInterface $latex
+   *
+   * @return StreamedResponse
+   */
+  public function createPdfResponse(LatexBaseInterface $latex){
+    $pdfLocation = $this->generate($latex);
+
+    $response = new BinaryFileResponse($pdfLocation);
+    $response->headers->set('Content-Type', 'application/pdf; charset=utf-8');
+    $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.pdf');
+    return $response;
+  }
+
+  /**
+   * Generate a response containing a generated .tex file
+   *
+   * @param LatexBaseInterface $latex
+   *
+   * @return BinaryFileResponse
+   */
+  public function createTexResponse(LatexBaseInterface $latex){
+    $texLocation = $this->generateLatex($latex);
+
+    $response = new BinaryFileResponse($texLocation);
+    $response->headers->set('Content-Type', 'application/x-tex; charset=utf-8');
+    $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.tex');
+    return $response;
+  }
+
+  /**
    * Compile a LaTeX object into the wanted PDF file
    *
    * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
@@ -67,7 +100,7 @@ class LatexGenerator
    * @throws LatexException
    * @return string Location of the generated LaTeX file
    */
-  protected function generateLatex(LatexBaseInterface $latex = null)
+  public function generateLatex(LatexBaseInterface $latex = null)
   {
 
     if($this->latex === null && $latex === null){
@@ -110,7 +143,7 @@ class LatexGenerator
   }
 
   /**
-   * Generates a PDF from a given LaTeX object
+   * Generates a PDF from a given LaTeX location
    *
    * @param string $texLocation
    *
@@ -118,7 +151,7 @@ class LatexGenerator
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @throws LatexException
    */
-  protected function generatePdf($texLocation)
+  public function generatePdf($texLocation)
   {
 
     // Check if the compiled tex file exists
