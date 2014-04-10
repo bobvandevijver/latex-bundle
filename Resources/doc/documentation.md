@@ -99,7 +99,7 @@ use BobV\LatexBundle\Latex\Section\TOC;
 $latex->addElement(new TOC());
 ```
 
-For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/sections).
+For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/section).
 
 ### 3. Adding elements
 
@@ -111,7 +111,7 @@ use BobV\LatexBundle\Latex\Element\TitlePage;
 $latex->addElement(new TitlePage('Test title'));
 ```
 
-For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/elements).
+For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/element).
 
 ### 4. Generate the latex/pdf files/response
 
