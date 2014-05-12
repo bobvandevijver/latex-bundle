@@ -29,7 +29,7 @@ class Article extends LatexBase
         'rhead'          => '', // Top right header
         'headheight'     => '12pt',
 
-        'lfoot'          => $dateTime->format('d-m-Y h:m'), // Bottom left footer
+        'lfoot'          => $dateTime->format('d-m-Y G:i'), // Bottom left footer
         'cfoot'          => '', // Bottom center footer
         'rfoot'          => 'Page\ \thepage\ of\ \pageref{LastPage}', // Bottom right footer
         'footskip'       => '20pt',
