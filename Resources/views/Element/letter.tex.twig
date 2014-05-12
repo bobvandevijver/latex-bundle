@@ -1,0 +1,15 @@
+{% block bobv_latex_letter_element %}
+
+
+  \begin{letter}{ {{- address -}} }
+
+  % Letter element
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  \opening{ {{- opening -}},}
+
+  {{ text|raw }}
+
+  \end{letter}
+
+{% endblock bobv_latex_letter_element %}

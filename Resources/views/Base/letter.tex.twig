@@ -1,0 +1,42 @@
+{% block bobv_latex_letter %}
+  \documentclass[
+    pagenumber={{ pagenumber }}, % Removes page numbers from page 2 onwards
+    parskip={{ parskip }}, % Separates paragraphs with some whitespace, use parskip=full for more space or comment out to return to default
+    fromalign={{ fromalign }}, % Aligns the from address to the right
+    foldmarks={{ foldmarks }}, % Prints small fold marks on the left of the page
+    addrfield={{ addrfield }}, % Set to false to hide the addressee section
+    paper={{ paper }}
+  ]{scrlttr2}
+
+  \usepackage[
+    left={{ left }},
+    right={{ right }},
+    top={{ top }},
+    bottom={{ bottom }}
+  ]{geometry}
+
+  \usepackage[english]{babel}
+  \usepackage[T1]{fontenc}
+
+  % Added packages
+  {% for package in packages %}\usepackage{ {{- package -}} }
+  {% endfor %}
+
+  \makeatletter
+  \@setplength{toaddrvpos}{ {{- toaddrvpos -}} }
+  \@setplength{toaddrhpos}{ {{- toaddrhpos -}} }
+  \@setplength{refvpos}{ {{- refvpos -}} }
+  \makeatletter
+
+  \date{ {{- date -}} }
+
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  \begin{document}
+
+  \null
+
+  {% include 'BobVLatexBundle::elements.twig.twig' %}
+
+  \end{document}
+{% endblock bobv_latex_letter %}
