@@ -11,6 +11,8 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   protected $fileName;
   /** @var string */
   protected $template;
+  /** @var array */
+  protected $dependencies = array();
 
   /**
    * @param string $filename
@@ -104,6 +106,16 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   public function setTemplate($template)
   {
     $this->template = $template;
+
+    return $this;
+  }
+
+  public function getDependencies(){
+    return $this->dependencies;
+  }
+
+  public function addDependency($dependency){
+    $this->dependencies[] = $dependency;
 
     return $this;
   }

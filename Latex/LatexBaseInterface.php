@@ -25,4 +25,20 @@ interface LatexBaseInterface extends LatexInterface
    * @return LatexInterface
    */
   public function setFileName($fileName);
+
+  /**
+   * Should return an array with dependency locations
+   *
+   * @return array
+   */
+  public function getDependencies();
+
+  /**
+   * To add an dependency location
+   *
+   * @param $depedency
+   *
+   * @return LatexInterface
+   */
+  public function addDependency($depedency);
 } 

@@ -7,7 +7,10 @@ use BobV\LatexBundle\Exception\LatexException;
 use BobV\LatexBundle\Latex\LatexBaseInterface;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Finder\Finder;
+use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class LatexGenerator
@@ -114,7 +117,6 @@ class LatexGenerator
     // Create the compiled tex-file
     // @todo: uitbreiden compilatie
 
-    //var_dump($latex->getContext());die();
     $texData = $this->twig->render(
         $latex->getTemplate(),
         $latex->getContext()
@@ -136,6 +138,18 @@ class LatexGenerator
         throw $e;
       }
       throw new LatexException("Something failed during the creation of the tex file. Check the logs for more info. (filename: " . $latex->getFileName() . ".log)");
+    }
+
+    // Copy dependencies to working dir
+    foreach($latex->getDependencies() as $dependency){
+      if($this->filesystem->exists($dependency)){
+        $finder = new Finder();
+        $finder->files()->in($dependency)->depth('== 0');;
+        foreach($finder as $file){
+          /** @var SplFileInfo $file */
+          $this->filesystem->copy($file->getRealpath(), $this->outputDir . $file->getFilename(), true);
+        }
+      }
     }
 
     return $texLocation;
