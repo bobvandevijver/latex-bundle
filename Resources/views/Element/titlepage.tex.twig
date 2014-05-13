@@ -3,12 +3,12 @@
   % Title page
   \title{
     \vspace{ {{ vspace|raw }} }
-    \textmd{\textbf{ {{- title|raw -}} }}\\
-    \normalsize\vspace{ {{- vspace_subtitle|raw -}} }\small{ {{- subtitle|raw -}} }
+    \textmd{\textbf{ {{- title|latex_escape|raw -}} }}\\
+    \normalsize\vspace{ {{- vspace_subtitle|latex_escape|raw -}} }\small{ {{- subtitle|latex_escape|raw -}} }
   }
 
-  \author{\textbf{ {{- author|raw -}} }}
-  \date{ {{- date|raw -}} } % Insert date here if you want it to appear below your name
+  \author{\textbf{ {{- author|latex_escape|raw -}} }}
+  \date{ {{- date|latex_escape|raw -}} } % Insert date here if you want it to appear below your name
 
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 

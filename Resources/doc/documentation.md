@@ -151,6 +151,11 @@ class DefaultController Extends Controller{
 }
 ```
 
+## Charactar escaping
+---------------------------
+
+This bundle includes a simple twig filter: `latex_escape`. This filter can be used to escape most UTF-8 characters like ö to \"o. This is done automatically when using the standard objects/templates. If you have any character that generates an error, feel create an issue or create a PR.
+
 ## Test the bundle
 ---------------------------
 

@@ -5,7 +5,7 @@
 
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
-  \subsection {%- if not includeTOC %}*{% endif -%} { {{- subsectionTitle -}} }
+  \subsection {%- if not includeTOC %}*{% endif -%} { {{- subsectionTitle|latex_escape -}} }
 
   {% include 'BobVLatexBundle::elements.twig.twig' %}
 {% endblock bobv_latex_subsection_section %}

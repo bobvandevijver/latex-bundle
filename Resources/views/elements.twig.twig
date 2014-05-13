@@ -1,4 +1,7 @@
 {% block bobv_latex_elements %}
+  {% if elements|length == 0 %}
+    \null
+  {% endif %}
   {% for element in elements %}
     {% include element.template with element.context %}
   {% endfor %}

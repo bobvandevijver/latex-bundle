@@ -1,7 +1,13 @@
 parameters:
   bobv.latex.generator.class: BobV\LatexBundle\Generator\LatexGenerator
+  bobv.latex.twig.extension.class: BobV\LatexBundle\Twig\BobVLatexExtension
 
 services:
   bobv.latex.generator:
     class: %bobv.latex.generator.class%
     arguments: [ %kernel.cache_dir%, %kernel.environment% ,"@twig" ]
+
+  bobv.latex.twig.extension:
+    class: %bobv.latex.twig.extension.class%
+    tags:
+      - { name: twig.extension }

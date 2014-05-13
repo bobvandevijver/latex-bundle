@@ -28,7 +28,7 @@
   \@setplength{refvpos}{ {{- refvpos -}} }
   \makeatletter
 
-  \date{ {{- date -}} }
+  \date{ {{- date|latex_escape|raw -}} }
 
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
