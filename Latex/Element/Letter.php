@@ -25,12 +25,11 @@ class Letter extends LatexElement
     // Define defaults
     $this->template = 'BobVLatexBundle:Element:letter.tex.twig';
     $this->params   = array(
+        'address'        => $address, // Address
+        'opening'        => $opening, // Opening of the letter
+        'text'           => $text,    // Content of the letter
 
-        'address'        => $address,
-        'opening'        => $opening,
-        'text'           => $text,
-
-        'extra_commands' => array(),
+        'extra_commands' => array(),  // Define extra commands if needed
     );
   }
 

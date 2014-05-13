@@ -24,19 +24,19 @@ class Letter extends LatexBase
     $this->template = 'BobVLatexBundle:Base:letter.tex.twig';
     $datetime = new \DateTime();
     $this->params   = array(
-        'pagenumber'     => 'false',
-        'parskip'        => 'full',
-        'fromalign'      => 'right',
-        'foldmarks'      => 'false',
-        'addrfield'      => 'true',
-        'paper'          => 'a4',
+        'pagenumber'     => 'false', // Whether to print pagenumbers from page 2 and forward
+        'parskip'        => 'full',  // Spacing between paragraphs (full, half, ..)
+        'fromalign'      => 'right', // Alignment of the from address
+        'foldmarks'      => 'false', // Whether to print folding marks
+        'addrfield'      => 'true',  // Whether to print the address field
+        'paper'          => 'a4',    // Paper size
 
-        'left'           => '2cm',
+        'left'           => '2cm',   // Page margins
         'right'          => '2cm',
         'top'            => '1cm',
         'bottom'         => '2cm',
 
-        'toaddrvpos'     => '3cm',
+        'toaddrvpos'     => '3cm',   // Positioning
         'toaddrhpos'     => '2.5cm',
         'refvpos'        => '7.5cm',
 
@@ -48,26 +48,6 @@ class Letter extends LatexBase
 
     // Call parent constructor
     parent::__construct($filename);
-  }
-
-  /**
-   * Add an package to include
-   *
-   * @param $package
-   *
-   * @return $this
-   */
-  public function addPackage($package)
-  {
-    $matches = array();
-    preg_match_all('/\\\usepackage\{([^}]+)\}/u', $package, $matches);
-    if (count($matches[1]) > 0) {
-      $package = $matches[1][0];
-    }
-
-    $this->setParam('packages', $package);
-
-    return $this;
   }
 
 }

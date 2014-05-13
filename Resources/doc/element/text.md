@@ -5,7 +5,7 @@ The text block defines a standard text block directly printed in the document
 
 ### Constructor
 
-The constructor takes a mandatory custom command which will be directly printed in the LaTeX file.
+The constructor takes a mandatory custom text/command which will be directly printed in the LaTeX file.
 
 ```php
 new Text($text)

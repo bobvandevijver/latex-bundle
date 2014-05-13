@@ -110,12 +110,40 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this;
   }
 
+  /**
+   * @return array
+   */
   public function getDependencies(){
     return $this->dependencies;
   }
 
+  /**
+   * @param $dependency
+   *
+   * @return LatexInterface $this
+   */
   public function addDependency($dependency){
     $this->dependencies[] = $dependency;
+
+    return $this;
+  }
+
+  /**
+   * Add an package to include
+   *
+   * @param $package
+   *
+   * @return LatexInterface $this
+   */
+  public function addPackage($package)
+  {
+    $matches = array();
+    preg_match_all('/\\\usepackage\{([^}]+)\}/u', $package, $matches);
+    if (count($matches[1]) > 0) {
+      $package = $matches[1][0];
+    }
+
+    $this->setParam('packages', $package);
 
     return $this;
   }

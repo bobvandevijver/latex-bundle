@@ -48,12 +48,13 @@ For the latex to pdf compilation you will need to have `pdflatex` installed. I c
 texlive-base 
 texlive-latex-base 
 texlive-latex-extra
+texlive-fonts-recommended
 ```
 
 You can install them on Debian by issuing the following command:
 
 ```
-sudo apt-get install texlive-base texlive-latex-base texlive-latex-extra
+sudo apt-get install texlive-base texlive-latex-base texlive-latex-extra texlive-fonts-recommended
 ```
 
 That's it!

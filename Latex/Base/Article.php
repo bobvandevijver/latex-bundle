@@ -34,8 +34,6 @@ class Article extends LatexBase
         'rfoot'          => 'Page\ \thepage\ of\ \pageref{LastPage}', // Bottom right footer
         'footskip'       => '20pt',
 
-        'packages'       => array(), // Define extra packages to use
-
         'topmargin'      => '-0.45in', // Some document margins
         'evensidemargin' => '0in',
         'oddsidemargin'  => '0in',
@@ -55,30 +53,11 @@ class Article extends LatexBase
         'tocdepth'       => '2', // TOC depth
 
         'extra_commands' => array(), //Define extra commands if needed
+        'packages'       => array(), // Define extra packages to use
     );
 
     // Call parent constructor
     parent::__construct($filename);
-  }
-
-  /**
-   * Add an package to include
-   *
-   * @param $package
-   *
-   * @return $this
-   */
-  public function addPackage($package)
-  {
-    $matches = array();
-    preg_match_all('/\\\usepackage\{([^}]+)\}/u', $package, $matches);
-    if(count($matches[1]) > 0){
-      $package = $matches[1][0];
-    }
-
-    $this->setParam('packages', $package);
-
-    return $this;
   }
 
 }
