@@ -3,5 +3,5 @@
   % Text element
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
-  {{ text }}
+  {{ text|raw }}
 {% endblock bobv_latex_text_element %}
