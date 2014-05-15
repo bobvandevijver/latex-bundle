@@ -225,7 +225,7 @@ class LatexGenerator
   protected function compilePdf($texLocation)
   {
     $output = array();
-    exec("pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+    exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
 
     // Check if the result is ok
     if($result !== 0){
