@@ -8,9 +8,10 @@ For these steps I will use Gill Sans MT.
 ### Use the font
 -------------------------------
 
-To use the font in the document, include the correct package and map (which will be created later).
+To use the font in the document, include the correct packages and map (which will be created later). You will need to specify the font encoding as T1.
 
 ```
+\usepackage[T1]{fontenc}
 \usepackage{GillSansMT}
 \pdfmapfile{+GillSansMT.map}
 ```
