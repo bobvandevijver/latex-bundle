@@ -43,10 +43,13 @@ class BobVLatexExtension extends \Twig_Extension
   public function latexEscapeFilter($text)
   {
 
+    // Remove HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
     foreach ($matches[0] as $match) {
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
+    $text = str_replace('&sup2;', '\\textsuperscript{2}' , $text);
+    $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
 
     $text = str_replace("ä", "\\\"a", $text);
     $text = str_replace("á", "\\'a", $text);
