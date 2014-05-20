@@ -1,0 +1,52 @@
+{% block bobv_latex_book %}
+  \documentclass{book}
+
+  \usepackage{fancyhdr} % Required for custom headers
+  \usepackage{lastpage} % Required to determine the last page for the footer
+  \usepackage{extramarks} % Required for headers and footers
+  \usepackage{graphicx} % Required to insert images
+  \usepackage{titling} % Required for multiple title pages
+
+  % Added packages
+  {% for package in packages %}\usepackage{ {{- package -}} }
+  {% endfor %}
+
+  % Margins
+  \topmargin={{- topmargin  }}
+  \evensidemargin={{- evensidemargin }}
+  \oddsidemargin={{- oddsidemargin }}
+  \textwidth={{- textwidth }}
+  \textheight={{- textheight }}
+  \headsep={{- headsep }}
+
+  \linespread{ {{- linespread -}} } % Line spacing
+
+  % Set up the header and footer
+  \pagestyle{fancy}
+
+  \lhead{ {{- lhead|raw -}} } % Top left header
+  \chead{ {{- chead|raw -}} } % Top center header
+  \rhead{ {{- rhead|raw -}} } % Top right header
+  \setlength{\headheight}{ {{- headheight -}} }
+
+  \lfoot{ {{- lfoot|raw -}} } % Bottom left footer
+  \cfoot{ {{- cfoot|raw -}} } % Bottom center footer
+  \rfoot{ {{- rfoot|raw -}} } % Bottom right footer
+  \setlength{\footskip}{ {{- footskip -}} }
+
+  \renewcommand\headrulewidth{ {{- headrulewidth -}} } % Size of the header rule
+  \renewcommand\footrulewidth{ {{- footrulewidth -}} } % Size of the footer rule
+
+  \setlength\parindent{ {{- parindent -}} } % Removes all indentation from paragraphs
+
+  \setcounter{secnumdepth}{ {{- secnumdepth -}} } % Removes default section numbers
+  \setcounter{tocdepth}{ {{- tocdepth -}} } % No subsections in the ToC
+
+  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+
+  \begin{document}
+
+  {% include 'BobVLatexBundle::elements.twig.twig' %}
+
+  \end{document}
+{% endblock bobv_latex_book %}
