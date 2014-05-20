@@ -7,15 +7,32 @@ namespace BobV\LatexBundle\Twig;
  *
  * @author BobV
  */
-class BobVLatexExtension extends \Twig_Extension{
+class BobVLatexExtension extends \Twig_Extension
+{
+
+  protected $htmlCodes;
+
+  public function __construct()
+  {
+    $this->htmlCodes = array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES | ENT_HTML5));
+  }
 
   /**
    * @return array
    */
-  public function getFilters(){
+  public function getFilters()
+  {
     return array(
-      new \Twig_SimpleFilter('latex_escape', array($this, 'latexEscapeFilter')),
+        new \Twig_SimpleFilter('latex_escape', array($this, 'latexEscapeFilter')),
     );
+  }
+
+  /**
+   * @return string
+   */
+  public function getName()
+  {
+    return 'bobv_latex_twig_extension';
   }
 
   /**
@@ -23,7 +40,14 @@ class BobVLatexExtension extends \Twig_Extension{
    *
    * @param $text
    */
-  public function latexEscapeFilter($text){
+  public function latexEscapeFilter($text)
+  {
+
+    preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
+    foreach ($matches[0] as $match) {
+      $text = str_replace($match, $this->htmlCodes[$match], $text);
+    }
+
     $text = str_replace("ä", "\\\"a", $text);
     $text = str_replace("á", "\\'a", $text);
     $text = str_replace("à", "\\`a", $text);
@@ -79,13 +103,6 @@ class BobVLatexExtension extends \Twig_Extension{
     $text = str_replace("ø", "{\\o}", $text);
 
     return $text;
-  }
-
-  /**
-   * @return string
-   */
-  public function getName(){
-    return 'bobv_latex_twig_extension';
   }
 
 } 
