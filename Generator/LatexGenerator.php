@@ -26,12 +26,14 @@ class LatexGenerator
   protected $env;
   /** @var Filesystem */
   protected $filesystem;
+  /** @var bool */
+  protected $forceRegenerate;
   /** @var LatexBaseInterface */
   protected $latex;
+  /** @var \DateTime */
+  protected $maxAge;
   /** @var string */
   protected $outputDir;
-//  /** @var \DateTime */
-//  protected $maxAge;
   /** @var \Twig_Environment */
   protected $twig;
 
@@ -47,7 +49,8 @@ class LatexGenerator
     $this->twig       = $twig;
     $this->filesystem = new Filesystem();
     $this->maxAge     = new \DateTime();
-//    $this->maxAge->modify('-1 day');
+    $this->maxAge->modify('-1 day');
+    $this->forceRegenerate = false;
   }
 
   /**
@@ -57,12 +60,14 @@ class LatexGenerator
    *
    * @return StreamedResponse
    */
-  public function createPdfResponse(LatexBaseInterface $latex){
+  public function createPdfResponse(LatexBaseInterface $latex)
+  {
     $pdfLocation = $this->generate($latex);
 
     $response = new BinaryFileResponse($pdfLocation);
     $response->headers->set('Content-Type', 'application/pdf; charset=utf-8');
     $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.pdf');
+
     return $response;
   }
 
@@ -73,12 +78,14 @@ class LatexGenerator
    *
    * @return BinaryFileResponse
    */
-  public function createTexResponse(LatexBaseInterface $latex){
+  public function createTexResponse(LatexBaseInterface $latex)
+  {
     $texLocation = $this->generateLatex($latex);
 
     $response = new BinaryFileResponse($texLocation);
     $response->headers->set('Content-Type', 'application/x-tex; charset=utf-8');
     $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.tex');
+
     return $response;
   }
 
@@ -89,9 +96,11 @@ class LatexGenerator
    *
    * @return string Location of the PDF document
    */
-  public function generate(LatexBaseInterface $latex){
+  public function generate(LatexBaseInterface $latex)
+  {
     $this->latex = $latex;
     $texLocation = $this->generateLatex();
+
     return $this->generatePdf($texLocation);
   }
 
@@ -103,14 +112,14 @@ class LatexGenerator
    * @throws LatexException
    * @return string Location of the generated LaTeX file
    */
-  public function generateLatex(LatexBaseInterface $latex = null)
+  public function generateLatex(LatexBaseInterface $latex = NULL)
   {
 
-    if($this->latex === null && $latex === null){
+    if ($this->latex === NULL && $latex === NULL) {
       throw new LatexException("No latex file given");
     }
 
-    if($latex === null){
+    if ($latex === NULL) {
       $latex = $this->latex;
     }
 
@@ -125,8 +134,8 @@ class LatexGenerator
     // Check if there are undefined images
     $matches = array();
     preg_match_all('/\\includegraphics\[.+\]\{([^}]+)\}/u', $texData, $matches);
-    foreach($matches[1] as $imageLocation){
-      if(!$this->filesystem->exists($imageLocation)){
+    foreach ($matches[1] as $imageLocation) {
+      if (!$this->filesystem->exists($imageLocation)) {
         throw new ImageNotFoundException($imageLocation);
       }
     }
@@ -141,11 +150,11 @@ class LatexGenerator
     }
 
     // Copy dependencies to working dir
-    foreach($latex->getDependencies() as $dependency){
-      if($this->filesystem->exists($dependency)){
+    foreach ($latex->getDependencies() as $dependency) {
+      if ($this->filesystem->exists($dependency)) {
         $finder = new Finder();
         $finder->files()->in($dependency)->depth('== 0');;
-        foreach($finder as $file){
+        foreach ($finder as $file) {
           /** @var SplFileInfo $file */
           $this->filesystem->copy($file->getRealpath(), $this->outputDir . $file->getFilename(), true);
         }
@@ -169,7 +178,7 @@ class LatexGenerator
   {
 
     // Check if the compiled tex file exists
-    if (!$this->filesystem->exists($texLocation)){
+    if (!$this->filesystem->exists($texLocation)) {
       throw new IOException("The LaTeX file at $texLocation does not exist. Is the cache writable or did you forget to generate the .tex file?");
     }
 
@@ -187,11 +196,19 @@ class LatexGenerator
   }
 
   /**
-   * Returns the cache path
+   * @param boolean $forceRegenerate
    */
-  protected function getCacheBasePath()
+  public function setForceRegenerate($forceRegenerate)
   {
-    return $this->cacheDir . '/BobVLatex/';
+    $this->forceRegenerate = $forceRegenerate;
+  }
+
+  /**
+   * @param \DateTime $maxAge
+   */
+  public function setMaxAge($maxAge)
+  {
+    $this->maxAge = $maxAge;
   }
 
   /**
@@ -222,20 +239,32 @@ class LatexGenerator
    */
   protected function compilePdf($texLocation)
   {
+
+    $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
+
+    // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
+    if ($this->filesystem->exists($pdfLocation)
+        && $this->env == "prod"
+        && filemtime($pdfLocation) > $this->maxAge->getTimestamp()
+        && !$this->forceRegenerate
+    ) {
+      return $pdfLocation;
+    }
+
     $compile = true;
-    $count = 0;
+    $count   = 0;
 
     // Compile until all references are solved or three times is reached
-    while($compile && $count < 3){
+    while ($compile && $count < 3) {
 
       exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
 
       // Check if the result is ok
-      if($result !== 0){
-        throw new LatexException('Something went wrong during the execution of the pdflatex command, as it returned ' . $result . '. See the log file (' . explode('.tex', $texLocation)[0] .'.log) for more details.');
+      if ($result !== 0) {
+        throw new LatexException('Something went wrong during the execution of the pdflatex command, as it returned ' . $result . '. See the log file (' . explode('.tex', $texLocation)[0] . '.log) for more details.');
       }
 
-      if(count(array_filter($output, array($this, 'findReferenceError'))) == 0){
+      if (count(array_filter($output, array($this, 'findReferenceError'))) == 0) {
         $compile = false;
       }
 
@@ -243,7 +272,15 @@ class LatexGenerator
       $count++;
     }
 
-    return explode('.tex', $texLocation)[0] . '.pdf';
+    return $pdfLocation;
+  }
+
+  /**
+   * Returns the cache path
+   */
+  protected function getCacheBasePath()
+  {
+    return $this->cacheDir . '/BobVLatex/';
   }
 
   /**
@@ -251,24 +288,25 @@ class LatexGenerator
    *
    * @param string $texData
    * @param        $fileName
-   * @param bool   $regenerate
    *
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @return string The location of the saved .tex file
    */
-  protected function writeTexFile($texData, $fileName, $regenerate = NULL)
+  protected function writeTexFile($texData, $fileName)
   {
     $this->checkFilesystem();
     $this->outputDir = $this->getCacheBasePath() . hash('ripemd160', $texData) . '/';
-    $texLocation = $this->outputDir . $fileName . '.tex';
+    $texLocation     = $this->outputDir . $fileName . '.tex';
     try {
 
-//      // Do not regenerate unless cache is off
-//      if ($this->filesystem->exists($texLocation)) {
-//        if ($regenerate === false || filemtime($texLocation) > $this->maxAge->getTimestamp()) {
-//          return $texLocation;
-//        }
-//      }
+      // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
+      if ($this->filesystem->exists($texLocation)
+          && $this->env == "prod"
+          && filemtime($texLocation) > $this->maxAge->getTimestamp()
+          && !$this->forceRegenerate
+      ) {
+        return $texLocation;
+      }
 
       $this->filesystem->dumpFile(
           $texLocation,
@@ -288,7 +326,10 @@ class LatexGenerator
    *
    * @return bool
    */
-  private function findReferenceError($value){
+  private function findReferenceError($value)
+  {
     return count(preg_match_all('/reference|change/ui', $value)) > 0;
   }
+
+
 } 
