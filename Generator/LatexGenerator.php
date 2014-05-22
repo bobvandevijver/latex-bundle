@@ -174,8 +174,6 @@ class LatexGenerator
     }
 
     try {
-      // Pdf's need to be compiled twice for correct references
-      $this->compilePdf($texLocation);
       $pdfLocation = $this->compilePdf($texLocation);
     } catch (\Exception $e) {
       if ($e instanceof IOException || $e instanceOf LatexException) {
@@ -215,7 +213,7 @@ class LatexGenerator
 
   /**
    * Compile a PDF from a tex file on a given location
-   * Compilation will be done twice to ensure correct references
+   * If necessary, compilation will be done up to three times for correct references
    *
    * @param string $texLocation Location of the .tex file
    *
@@ -224,12 +222,25 @@ class LatexGenerator
    */
   protected function compilePdf($texLocation)
   {
-    $output = array();
-    exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+    $compile = true;
+    $count = 0;
 
-    // Check if the result is ok
-    if($result !== 0){
-      throw new LatexException('Something went wrong during the execution of the pdflatex command. See the log file (' . explode('.tex', $texLocation)[0] .'.log) for more details.');
+    // Compile until all references are solved or three times is reached
+    while($compile && $count < 3){
+
+      exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+
+      // Check if the result is ok
+      if($result !== 0){
+        throw new LatexException('Something went wrong during the execution of the pdflatex command, as it returned ' . $result . '. See the log file (' . explode('.tex', $texLocation)[0] .'.log) for more details.');
+      }
+
+      if(count(array_filter($output, array($this, 'findReferenceError'))) == 0){
+        $compile = false;
+      }
+
+      unset($output);
+      $count++;
     }
 
     return explode('.tex', $texLocation)[0] . '.pdf';
@@ -268,5 +279,16 @@ class LatexGenerator
     }
 
     return $texLocation;
+  }
+
+  /**
+   * Check if the line contains a reference error
+   *
+   * @param $value
+   *
+   * @return bool
+   */
+  private function findReferenceError($value){
+    return count(preg_match_all('/reference|change/ui', $value)) > 0;
   }
 } 
