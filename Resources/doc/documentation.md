@@ -151,6 +151,23 @@ class DefaultController Extends Controller{
 }
 ```
 
+### 5. Caching
+
+By default, this latexbundle will not dump the texfile or regenerate the PDF file if the file already exists. This is done by using a hash of the tex contents to ensure that when a file is changed, the generation will be done always.
+
+However, when a file still has the same hash, and the environment is prod, caching will be used. By default, a max file age of `1 day` is used. This is customizable using the `bobv.latex.maxage` parameter in your `parameters.yml`.
+
+It is also possible to temporarely force a regeneration: just use the right method on the generator:
+
+```
+$latexGenerator = $this->get('bobv.latex.generator');
+$latexGenerator->setForceRegenerate(true);
+
+// Or when the max age must be altered
+$dateTime = new \DateTime();
+$latexGenerator->setMaxAge($dateTime);
+```
+
 ## Charactar escaping
 ---------------------------
 

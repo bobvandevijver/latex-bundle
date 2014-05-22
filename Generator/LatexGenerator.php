@@ -42,14 +42,14 @@ class LatexGenerator
    * @param                   $env
    * @param \Twig_Environment $twig
    */
-  public function __construct($cacheDir, $env, \Twig_Environment $twig)
+  public function __construct($cacheDir, $env, \Twig_Environment $twig, $maxAge)
   {
     $this->cacheDir   = $cacheDir;
     $this->env        = $env;
     $this->twig       = $twig;
     $this->filesystem = new Filesystem();
     $this->maxAge     = new \DateTime();
-    $this->maxAge->modify('-1 day');
+    $this->maxAge->modify($maxAge);
     $this->forceRegenerate = false;
   }
 
