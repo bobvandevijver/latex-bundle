@@ -105,6 +105,9 @@ class BobVLatexExtension extends \Twig_Extension
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
 
+    $text = str_replace("&", "\\&", $text);
+    $text = str_replace("#", "\\#", $text);
+
     return $text;
   }
 
