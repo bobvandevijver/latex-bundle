@@ -11,7 +11,7 @@
         {% set first = true %}
         {% for cellData in rowData['data'] %}
           {% if not first %}&{% endif %}
-            {{ cellData }}
+            {{ cellData|latex_escape|raw }}
           {% set first = false %}
         {% endfor %}
         \\
