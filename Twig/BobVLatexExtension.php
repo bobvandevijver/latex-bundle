@@ -105,11 +105,11 @@ class BobVLatexExtension extends \Twig_Extension
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
 
-    // Check for & characters. Inside a tabular env they should not be replaced
+    // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
     while(FALSE !== ($position = strpos($text, '&', $offset))){
-      if(!(strrpos($text, '\begin{tabular}', $position - strlen($text)) < $position
-          && strpos($text, '\end{tabular}', $position) > $position)){
+      if(!(strrpos($text, '\begin{tabular', $position - strlen($text)) < $position
+          && strpos($text, '\end{tabular', $position) > $position)){
         $text = substr_replace($text, '\\&', $position, 1);
         $position = $position + 3;
       }
