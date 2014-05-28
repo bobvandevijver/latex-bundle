@@ -1,11 +1,11 @@
 # Custom element block
 -------------------------------
 
-The custom element block defines a simple print command block.
+The custom element block defines a simple print block. The statement is escaped.
 
 ### Constructor
 
-The constructor takes a mandatory custom command which will be directly printed in the LaTeX file.
+The constructor takes a mandatory custom element which will be directly printed in the LaTeX file (after escapeing).
 
 ```php
 new CustomElement($custom)
