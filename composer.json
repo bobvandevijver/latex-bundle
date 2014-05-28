@@ -1,7 +1,6 @@
 {
     "name": "bobv/latex-bundle",
     "minimum-stability": "RC",
-    "version": "1.0.0",
     "description": "Latex and pdf generator for Symfony 2",
     "keywords": ["latex", "pdf", "generator"],
     "type": "symfony-bundle",
