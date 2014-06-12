@@ -30,6 +30,7 @@ class Letter extends LatexBase
         'foldmarks'      => 'false', // Whether to print folding marks
         'addrfield'      => 'true',  // Whether to print the address field
         'paper'          => 'a4',    // Paper size
+        'firstfoot'      => 'false', // First page footer
 
         'left'           => '2cm',   // Page margins
         'right'          => '2cm',

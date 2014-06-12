@@ -2,7 +2,7 @@
     "name": "bobv/latex-bundle",
     "minimum-stability": "RC",
     "description": "Latex and pdf generator for Symfony 2",
-    "keywords": ["latex", "pdf", "generator"],
+    "keywords": ["latex", "pdf", "generator", "symfony"],
     "type": "symfony-bundle",
     "homepage": "http://github.com/bobvandevijver/latex-bundle",
     "license": "MIT",
