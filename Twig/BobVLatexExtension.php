@@ -61,9 +61,11 @@ class BobVLatexExtension extends \Twig_Extension
     $text = str_replace("ë", "\\\"e", $text);
     $text = str_replace("é", "\\'e", $text);
     $text = str_replace("è", "\\`e", $text);
+    $text = str_replace("ê", "\\^e", $text);
     $text = str_replace("Ë", "\\\"E", $text);
     $text = str_replace("É", "\\'E", $text);
     $text = str_replace("È", "\\`E", $text);
+    $text = str_replace("Ê", "\\^E", $text);
 
     $text = str_replace("ï", "\\\"i", $text);
     $text = str_replace("í", "\\'i", $text);
