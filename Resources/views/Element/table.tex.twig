@@ -3,7 +3,7 @@
   % Table element
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
-  {% if width == '\textwidth' %}
+  {% if width == '\\textwidth' %}
     \resizebox{\textwidth}{!}{
   {% endif %}
     \begin{tabularx}{ {{- width -}} }{ {%- for row in rows %}{{ row }} {% endfor %}}
@@ -21,7 +21,7 @@
         {% endif %}
       {% endfor %}
     \end{tabularx}
-  {% if width == '\textwidth' %}
+  {% if width == '\\textwidth' %}
     }
   {% endif %}
 {% endblock bobv_latex_table_element %}
