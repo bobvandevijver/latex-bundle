@@ -1,0 +1,13 @@
+{% block bobv_latex_graphic_element %}
+
+  % Graphic element
+  \begin{figure}[{{ placement }}]
+    {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+    \includegraphics[width={{ width }}]{ {{- location -}} }
+    {% if caption != false %}
+      \caption{ {{- caption -}} }
+    {% endif %}
+    \label{ {{- label -}} }
+  \end{figure}
+
+{% endblock bobv_latex_graphic_element %}
