@@ -1,0 +1,13 @@
+{% block bobv_latex_includepdf_element %}
+
+  % Include PDF
+  {% if not skip_first_wallpaper %}
+    \setlength{\wpYoffset}{ {{- y_offset -}} }
+    \setlength{\wpXoffset}{ {{- x_offset -}} }
+    \ThisCenterWallPaper{ {{- wallpaper_scaling -}} }{ {{- file_location -}} }
+  {% endif %}
+  {% if totalPages > 1 or skip_first_wallpaper %}
+    \includepdf[pages={{ pages }},width={{ width }},frame={{ frame }}{% if not skip_first_wallpaper %},pagecommand={\ClearWallPaper}{% endif %}{{ more_options }}]{ {{- file_location -}} }
+  {% endif %}
+
+{% endblock bobv_latex_includepdf_element %}

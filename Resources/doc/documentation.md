@@ -51,10 +51,15 @@ texlive-latex-extra
 texlive-fonts-recommended
 ```
 
+For the use of the includepdf command, you might need the pdfinfo command, which is located in the following package:
+```
+poppler-utils
+```
+
 You can install them on Debian by issuing the following command:
 
 ```
-sudo apt-get install texlive-base texlive-latex-base texlive-latex-extra texlive-fonts-recommended
+sudo apt-get install texlive-base texlive-latex-base texlive-latex-extra texlive-fonts-recommended poppler-utils
 ```
 
 That's it!
