@@ -11,9 +11,9 @@ The complete documentation can be found in the `Resources/doc` directory! Start 
 * Generate LaTeX (.tex) files using object oriënted programming
 * Generate PDF files from .tex files
 * HTTP responses containing the PDF using a single command
+* Basic caching system (do not regenerate the PDF when not needed)
 
 ## In development
-* Basic caching system (do not regenerate the PDF when not needed)
 * More standard LaTeX blocks
 
 ## Support
