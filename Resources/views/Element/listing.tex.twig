@@ -1,0 +1,11 @@
+{% block bobv_latex_listing_element %}
+
+  % List element
+  \begin{itemize}
+    {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+    {% for item in list %}
+      \item {{ item }}
+    {% endfor %}
+  \end{itemize}
+
+{% endblock bobv_latex_listing_element %}
