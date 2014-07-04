@@ -5,9 +5,9 @@
     {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
     \includegraphics[width={{ width }}]{ {{- location -}} }
     {% if caption != false %}
-      \caption{ {{- caption -}} }
+      \caption{ {{- caption|latex_escape|raw -}} }
     {% endif %}
-    \label{ {{- label -}} }
+    \label{ {{- label|latex_escape|raw -}} }
   \end{figure}
 
 {% endblock bobv_latex_graphic_element %}
