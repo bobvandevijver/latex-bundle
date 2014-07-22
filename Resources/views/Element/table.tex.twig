@@ -6,7 +6,7 @@
   {% if width == '\\textwidth' %}
     \resizebox{\textwidth}{!}{
   {% endif %}
-    \begin{tabularx}{ {{- width -}} }{ {%- for row in rows %}{{ row }} {% endfor %}}
+    \begin{tabular{% if tabularx %}x}{ {{- width -}}{% endif %}}{ {%- for row in rows %}{{ row }} {% endfor %}}
       {% for rowData in data %}
         {% if rowData['newRule'] == false %}
           {{ rowData['data'] }}
@@ -20,7 +20,7 @@
           \\
         {% endif %}
       {% endfor %}
-    \end{tabularx}
+    \end{tabular{% if tabularx %}x{% endif %}}
   {% if width == '\\textwidth' %}
     }
   {% endif %}

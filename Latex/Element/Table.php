@@ -18,6 +18,7 @@ class Table extends LatexElement
     // Define defaults
     $this->template = 'BobVLatexBundle:Element:table.tex.twig';
     $this->params   = array(
+        'tabularx'       => true,
         'rows'           => $rows,
         'data'           => array(),
         'width'          => '\textwidth',
