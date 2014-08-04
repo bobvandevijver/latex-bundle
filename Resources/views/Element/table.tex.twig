@@ -7,6 +7,12 @@
     \resizebox{\textwidth}{!}{
   {% endif %}
     \begin{tabular{% if tabularx %}x}{ {{- width -}}{% endif %}}{ {%- for row in rows %}{{ row }} {% endfor %}}
+
+      {% if caption != null %}
+        \caption{ {{- caption|latex_escape|raw -}} }
+      {% endif %}
+
+
       {% for rowData in data %}
         {% if rowData['newRule'] == false %}
           {{ rowData['data'] }}
@@ -20,8 +26,11 @@
           \\
         {% endif %}
       {% endfor %}
+
     \end{tabular{% if tabularx %}x{% endif %}}
+
   {% if width == '\\textwidth' %}
     }
   {% endif %}
+
 {% endblock bobv_latex_table_element %}

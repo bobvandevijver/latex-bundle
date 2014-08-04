@@ -14,6 +14,8 @@ new Table($rows)
 ### Params
 
 ```
+    'tabularx'       => true,
+    'caption'        => null,
     'rows'           => $rows,
     'data'           => array(),
     'width'          => '\textwidth',

@@ -3,7 +3,6 @@ namespace BobV\LatexBundle\Latex\Element;
 
 use BobV\LatexBundle\Exception\DimensionsNotMatchedException;
 use BobV\LatexBundle\Latex\LatexElement;
-use Doctrine\Common\Util\Debug;
 
 class Table extends LatexElement
 {
@@ -19,6 +18,7 @@ class Table extends LatexElement
     $this->template = 'BobVLatexBundle:Element:table.tex.twig';
     $this->params   = array(
         'tabularx'       => true,
+        'caption'        => null,
         'rows'           => $rows,
         'data'           => array(),
         'width'          => '\textwidth',
