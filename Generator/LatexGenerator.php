@@ -146,7 +146,7 @@ class LatexGenerator
       if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
       }
-      throw new LatexException("Something failed during the creation of the tex file. Check the logs for more info. (filename: " . $latex->getFileName() . ".log)");
+      throw new LatexException("Something failed during the creation of the tex file. Check the logs for more info. (filename: " . $latex->getFileName() . ".log )");
     }
 
     // Copy dependencies to working dir
@@ -188,7 +188,7 @@ class LatexGenerator
       if ($e instanceof IOException || $e instanceOf LatexException) {
         throw $e;
       }
-      throw new LatexException("Something failed during the compilation of the pdf file. Check the logs for more info. (filename: " . explode('.tex', $texLocation)[0] . ".log)");
+      throw new LatexException("Something failed during the compilation of the pdf file. Check the logs for more info. (filename: " . explode('.tex', $texLocation)[0] . ".log )");
     }
 
     return $pdfLocation;
@@ -261,7 +261,7 @@ class LatexGenerator
 
       // Check if the result is ok
       if ($result !== 0) {
-        throw new LatexException('Something went wrong during the execution of the pdflatex command, as it returned ' . $result . '. See the log file (' . explode('.tex', $texLocation)[0] . '.log) for more details.');
+        throw new LatexException('Something went wrong during the execution of the pdflatex command, as it returned ' . $result . '. See the log file ( ' . explode('.tex', $texLocation)[0] . '.log ) for more details.');
       }
 
       if (count(array_filter($output, array($this, 'findReferenceError'))) == 0) {
