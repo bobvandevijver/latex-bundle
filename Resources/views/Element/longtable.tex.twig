@@ -1,6 +1,6 @@
 {% block bobv_latex_longtable_element %}
 
-  % Table element
+  % Longtable element
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
   \begin{longtable}{ {%- for row in rows %}{{ row }} {% endfor -%} }
