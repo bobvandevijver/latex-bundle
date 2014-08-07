@@ -116,6 +116,9 @@ class BobVLatexExtension extends \Twig_Extension
         $position = $position + 3;
       }
       $offset = $position + 1;
+      if($offset > strlen($text)){
+        break;
+      }
     }
 
     $text = str_replace("#", "\\#", $text);
