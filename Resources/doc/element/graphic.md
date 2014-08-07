@@ -15,8 +15,10 @@ new Graphic($location)
 
 ```
     'placement'      => 'ht!',
+    'centering'      => true,
     'location'       => $graphic_location,
     'width'          => '\textwidth',
+    'options'        => '',
     'caption'        => $caption,
     'label'          => 'fig:' . basename($graphic_location),
     'extra_commands' => array(),

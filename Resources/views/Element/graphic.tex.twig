@@ -3,7 +3,10 @@
   % Graphic element
   \begin{figure}[{{ placement }}]
     {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
-    \includegraphics[width={{ width }}]{ {{- location -}} }
+    \includegraphics[{% if width != null %}width={{ width }}{% if options != '' %},{% endif %}{% endif %}{{ options }}]{ {{- location -}} }
+    {% if centering%}
+      \centering
+    {% endif %}
     {% if caption != false %}
       \caption{ {{- caption|latex_escape|raw -}} }
     {% endif %}
