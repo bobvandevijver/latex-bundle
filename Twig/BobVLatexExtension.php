@@ -40,7 +40,7 @@ class BobVLatexExtension extends \Twig_Extension
    *
    * @param $text
    */
-  public function latexEscapeFilter($text)
+  public function latexEscapeFilter($text, $checkTable = true)
   {
 
     // Remove HTML entities
@@ -109,7 +109,7 @@ class BobVLatexExtension extends \Twig_Extension
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
-    while(FALSE !== ($position = strpos($text, '&', $offset))){
+    while(FALSE !== ($position = strpos($text, '&', $offset)) && $checkTable){
       if(!(strrpos($text, '\begin{tabular', $position - strlen($text)) < $position
           && strpos($text, '\end{tabular', $position) > $position)){
         $text = substr_replace($text, '\\&', $position, 1);

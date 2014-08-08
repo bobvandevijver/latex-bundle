@@ -178,6 +178,8 @@ $latexGenerator->setMaxAge($dateTime);
 
 This bundle includes a simple twig filter: `latex_escape`. This filter can be used to escape most UTF-8 characters like ö to \"o. This is done automatically when using the standard objects/templates. If you have any character that generates an error, feel create an issue or create a PR.
 
+The filter takes a single argument, which is by default true. When set to false, the check for the & char is disabled, which might by handy in table environments. 
+
 ## Adding extra fonts
 
 See [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/font/font.md).

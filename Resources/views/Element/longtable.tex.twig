@@ -11,25 +11,25 @@
 
     {# First head #}
     {% if firsthead != null %}
-      {{ firsthead|raw }}
+      {{ firsthead|latex_escape(false)|raw }}
       \endfirsthead
     {% endif %}
 
     {# Head #}
     {% if head != null %}
-      {{ head|raw }}
+      {{ head|latex_escape(false)|raw }}
       \endhead
     {% endif %}
 
     {# Foot #}
     {% if foot != null %}
-      {{ foot|raw }}
+      {{ foot|latex_escape(false)|raw }}
       \endfoot
     {% endif %}
 
     {# Last foot #}
     {% if lastfoot %}
-      {{ lastfoot|raw }}
+      {{ lastfoot|latex_escape(false)|raw }}
       \endlastfoot
     {% endif %}
 
