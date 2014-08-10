@@ -65,8 +65,8 @@ class LatexGenerator
     $pdfLocation = $this->generate($latex);
 
     $response = new BinaryFileResponse($pdfLocation);
-    $response->headers->set('Content-Type', 'application/pdf; charset=utf-8');
-    $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.pdf');
+    $response->headers->set('Content-Type', 'application/pdf;charset=utf-8');
+    $response->headers->set('Content-Disposition', 'attachment;filename="' . $latex->getFileName() . '.pdf"');
 
     return $response;
   }
@@ -83,8 +83,8 @@ class LatexGenerator
     $texLocation = $this->generateLatex($latex);
 
     $response = new BinaryFileResponse($texLocation);
-    $response->headers->set('Content-Type', 'application/x-tex; charset=utf-8');
-    $response->headers->set('Content-Disposition', 'attachment;filename=' . $latex->getFileName() . '.tex');
+    $response->headers->set('Content-Type', 'application/x-tex;charset=utf-8');
+    $response->headers->set('Content-Disposition', 'attachment;filename="' . $latex->getFileName() . '.tex"');
 
     return $response;
   }
