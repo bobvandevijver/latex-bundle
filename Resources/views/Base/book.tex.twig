@@ -1,5 +1,5 @@
 {% block bobv_latex_book %}
-  \documentclass{book}
+  \documentclass{% if options != null %}[{{ options }}]{% endif %}{book}
 
   \usepackage{fancyhdr} % Required for custom headers
   \usepackage{lastpage} % Required to determine the last page for the footer

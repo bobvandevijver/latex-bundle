@@ -14,6 +14,8 @@ new Book($filename)
 ### Params
 
 ```
+    'options'        => null // Add options to the book environment
+
     'lhead'          => '', // Top left header
     'chead'          => '', // Top center header
     'rhead'          => '', // Top right header

@@ -24,6 +24,8 @@ class Book extends LatexBase
     $this->template = 'BobVLatexBundle:Base:book.tex.twig';
     $dateTime       = new \DateTime();
     $this->params   = array(
+        'options'        => null,
+
         'lhead'          => '', // Top left header
         'chead'          => '', // Top center header
         'rhead'          => '', // Top right header
