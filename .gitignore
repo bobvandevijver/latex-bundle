@@ -1,6 +1,9 @@
 # Bootstrap
 app/bootstrap*
 
+# Phpstorm project files
+.idea/*
+
 # Symfony directories
 vendor/*
 */logs/*
