@@ -93,15 +93,20 @@ class LatexGenerator
    * Compile a LaTeX object into the wanted PDF file
    *
    * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
+   * @param string $outputDir
    *
    * @return string Location of the PDF document
    */
-  public function generate(LatexBaseInterface $latex)
+  public function generate(LatexBaseInterface $latex, $outputDir = null)
   {
     $this->latex = $latex;
     $texLocation = $this->generateLatex();
 
-    return $this->generatePdf($texLocation);
+	if(!$outputDir) {
+		$outputDir = $this->getCacheBasePath();
+	}
+	
+    return $this->generatePdf($texLocation, $outputDir);
   }
 
   /**
@@ -169,12 +174,14 @@ class LatexGenerator
    * Generates a PDF from a given LaTeX location
    *
    * @param string $texLocation
+   * @param string $outputDir
+   * @param array $options
    *
    * @return string Location of the generated PDF file
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @throws LatexException
    */
-  public function generatePdf($texLocation)
+  public function generatePdf($texLocation, $outputDir, array $options = null)
   {
 
     // Check if the compiled tex file exists
@@ -183,7 +190,7 @@ class LatexGenerator
     }
 
     try {
-      $pdfLocation = $this->compilePdf($texLocation);
+      $pdfLocation = $this->compilePdf($texLocation, $outputDir, $options);
     } catch (\Exception $e) {
       if ($e instanceof IOException || $e instanceOf LatexException) {
         throw $e;
@@ -233,13 +240,32 @@ class LatexGenerator
    * If necessary, compilation will be done up to three times for correct references
    *
    * @param string $texLocation Location of the .tex file
+   * @param string $outputDir
+   * @param array $options
    *
    * @throws \Exception
    * @return string
    */
-  protected function compilePdf($texLocation)
+  protected function compilePdf($texLocation, $outputDir, array $options = null)
   {
 
+    // check if output directory exists
+	if(!$this->filesystem->exists($outputDir)) {
+		try {
+			$this->filesystem->mkdir($outputDir);
+		} catch(IOException $ioe) {
+			throw new IOException(sprintf('Failed creating the output directory "%s".',$outputDir));
+		}
+	}
+	
+	// check if there are additional options
+	$optionsString = '';
+	if(is_array($options)) {
+		foreach($options as $option => $value) {
+			$optionsString .= ' -' . $option . (($value) ? ' ' . $value . ' ' : ' ');
+		}
+	}
+	
     $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
@@ -257,7 +283,7 @@ class LatexGenerator
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
 
-      exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+      exec("cd " . $outputDir . " && pdflatex " . $optionsString . "-interaction=nonstopmode -output-directory=\"" . $outputDir . "\" \"$texLocation\"", $output, $result);
 
       // Check if the result is ok
       if ($result !== 0) {
