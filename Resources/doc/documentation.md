@@ -156,6 +156,8 @@ class DefaultController Extends Controller{
 }
 ```
 
+Note that the `generatePdf` also accepts an optional `$compileOptions` array. With this array you can specify extra compile options for the `pdflatex` command.  
+
 ### 5. Caching
 
 By default, this latexbundle will not dump the texfile or regenerate the PDF file if the file already exists. This is done by using a hash of the tex contents to ensure that when a file is changed, the generation will be done always.

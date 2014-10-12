@@ -109,6 +109,8 @@ class LatexGenerator
    *
    * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
    *
+   * @throws IOException
+   * @throws ImageNotFoundException
    * @throws LatexException
    * @return string Location of the generated LaTeX file
    */
@@ -168,13 +170,14 @@ class LatexGenerator
   /**
    * Generates a PDF from a given LaTeX location
    *
-   * @param string $texLocation
+   * @param string $texLocation Location of the .tex file
+   * @param array $compileOptions Optional compile options for pdflatex
    *
    * @return string Location of the generated PDF file
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @throws LatexException
    */
-  public function generatePdf($texLocation)
+  public function generatePdf($texLocation, array $compileOptions = array())
   {
 
     // Check if the compiled tex file exists
@@ -183,7 +186,7 @@ class LatexGenerator
     }
 
     try {
-      $pdfLocation = $this->compilePdf($texLocation);
+      $pdfLocation = $this->compilePdf($texLocation, $compileOptions);
     } catch (\Exception $e) {
       if ($e instanceof IOException || $e instanceOf LatexException) {
         throw $e;
@@ -233,11 +236,12 @@ class LatexGenerator
    * If necessary, compilation will be done up to three times for correct references
    *
    * @param string $texLocation Location of the .tex file
+   * @param array $compileOptions Optional compile options for pdflatex
    *
    * @throws \Exception
    * @return string
    */
-  protected function compilePdf($texLocation)
+  protected function compilePdf($texLocation, array $compileOptions = array())
   {
 
     $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
@@ -251,13 +255,22 @@ class LatexGenerator
       return $pdfLocation;
     }
 
+    // Get the output directory from the tex file
+    $this->outputDir = dirname($texLocation);
+
+    // Process extra options
+    $optionsString = '';
+    foreach ($compileOptions as $option => $value) {
+      $optionsString .= ' -' . $option . (($value) ? ' ' . $value . ' ' : ' ');
+    }
+
     $compile = true;
     $count   = 0;
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
 
-      exec("cd " . $this->outputDir . " && pdflatex -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+      exec("cd " . $this->outputDir . " && pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
 
       // Check if the result is ok
       if ($result !== 0) {
