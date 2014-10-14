@@ -7,9 +7,12 @@ If you're getting errors or have trouble with update'ing see [submitting issues]
 
 [1]: https://github.com/bobv/latex-bundle/blob/master/Resources/doc/support/submitting-issues.md
 
-* [Installation](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/documentation.md#installation)
-* [Usage](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/documentation.md#usage)
-* [Test the bundle](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/documentation.md#test-the-bundle)
+* [Installation](#installation)
+* [Usage](#usage)
+* [Exceptions](#exceptions)
+* [Character escaping](#character-escaping)
+* [Adding extra fonts](#adding-extra-fonts)
+* [Test the bundle](#test-the-bundle)
 
 ## Installation
 --------------------
@@ -175,7 +178,19 @@ $dateTime = new \DateTime();
 $latexGenerator->setMaxAge($dateTime);
 ```
 
-## Charactar escaping
+## Exceptions
+---------------------------
+
+This bundle is shipping with a few exception classes. These are al follows:
+
+* ImageNotFoundException: Thrown when a image in the generated tex file is not located on the disk.
+* LatexException: Base LaTeX exception class, thrown with explaining message
+* LatexNotImplementedException: Currently not used, but meant to signal not implemented behaviour
+* LatexParseException: Thrown when the compilation of the tex file to pdf fails. 
+
+The last exception also includes a backtrace in it message which can be used to find the exact point of failure in the tex file.
+
+## Character escaping
 ---------------------------
 
 This bundle includes a simple twig filter: `latex_escape`. This filter can be used to escape most UTF-8 characters like ö to \"o. This is done automatically when using the standard objects/templates. If you have any character that generates an error, feel create an issue or create a PR.
