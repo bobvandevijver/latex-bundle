@@ -11,6 +11,7 @@ If you're getting errors or have trouble with update'ing see [submitting issues]
 * [Usage](#usage)
 * [Exceptions](#exceptions)
 * [Character escaping](#character-escaping)
+* [HTML to LaTeX](#html-to-latex)
 * [Adding extra fonts](#adding-extra-fonts)
 * [Test the bundle](#test-the-bundle)
 
@@ -193,9 +194,26 @@ The last exception also includes a backtrace in it message which can be used to 
 ## Character escaping
 ---------------------------
 
-This bundle includes a simple twig filter: `latex_escape`. This filter can be used to escape most UTF-8 characters like ö to \"o. This is done automatically when using the standard objects/templates. If you have any character that generates an error, feel create an issue or create a PR.
+This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text. 
+
+This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. 
 
 The filter takes a single argument, which is by default true. When set to false, the check for the & char is disabled, which might by handy in table environments. 
+
+If you have any character that generates an error, feel create an issue or create a PR.
+
+## HTML to LaTeX
+---------------------------
+
+This bundle also includes a HTML to LaTeX parser, which will parse basic HTML structures and convert it to basic LaTeX syntax. At the moment the following tags are supported: 
+
+`b, strong, em, u, sup, sub (requires fixltx2e package), ol, ul, li, a and p`
+
+NOTE: The parser assumes that the HTML input is generated using a CK-editor instance. When this is not the case, the behaviour might be unexpected!
+
+It is recommended to use the `bobv_latex` form type when you are in need for a stylable input to LaTeX. This form field type will be updated with new functions when available. Note that to use this form field, you will need to require the suggested `egeloen/ckeditor-bundle` in your `composer.json`.  
+
+If you have any use-case that generates an error, feel create an issue or create a PR.
 
 ## Adding extra fonts
 
