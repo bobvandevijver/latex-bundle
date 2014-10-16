@@ -25,6 +25,7 @@ class BobVLatexExtension extends \Twig_Extension
   {
     return array(
         new \Twig_SimpleFilter('latex_escape', array($this->parser, 'parseText')),
+        new \Twig_SimpleFilter('latex_parse_html', array($this->parser, 'parseHtml'))
     );
   }
 
@@ -35,7 +36,5 @@ class BobVLatexExtension extends \Twig_Extension
   {
     return 'bobv_latex_twig_extension';
   }
-
-
 
 } 

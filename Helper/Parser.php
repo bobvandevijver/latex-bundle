@@ -106,4 +106,56 @@ class Parser {
     return $text;
   }
 
+  /**
+   * Parse the html input and create latex code of it
+   *
+   * @param $text
+   *
+   * @return mixed
+   */
+  public static function parseHtml($text){
+
+    // Replace boldface with \textbb{
+    $text = preg_replace("/\<b\b[^\>]*\>|\<strong\b[^\>]*\>/smui", "\\textbf{", $text);
+
+    // Replace boldface with \textbb{
+    $text = preg_replace("/\<em\b[^\>]*\>/smui", "\\textit{", $text);
+
+    // Replace underline with \textbb{
+    $text = preg_replace("/\<u\b[^\>]*\>/smui", "\\underline{", $text);
+
+    // Replace superscript with \textsuperscript{
+    $text = preg_replace("/\<sup\b[^\>]*\>/smui", "\\textsuperscript{", $text);
+
+    // Replace subscript with \textsubscript{
+    // -( needs fixltx2e package )-
+    $text = preg_replace("/\<sub\b[^\>]*\>/smui", "\\textsubscript{", $text);
+
+    // Replace end of boldface/underline/italic with }
+    $text = preg_replace("/(\s*)(\<\/b\b[^\>]*\>|\<\/strong\b[^\>]*\>|\<\/em\b[^\>]*\>|\<\/u\b[^\>]*\>|\<\/sup\b[^\>]*\>|\<\/sub\b[^\>]*\>)(([^a-z\\\<]?)|([a-z]))/smui", '}$4 $5', $text);
+
+    // Replace ol with enumerate
+    $text = preg_replace("/\<ol\b[^\>]*\>/smui", "\\begin{enumerate}", $text);
+    $text = preg_replace("/\<\/ol\b[^\>]*\>/smui", "\\end{enumerate}", $text);
+
+    // Replace ul with itemize
+    $text = preg_replace("/\<ul\b[^\>]*\>/smui", "\\begin{itemize}", $text);
+    $text = preg_replace("/\<\/ul\b[^\>]*\>/smui", "\\end{itemize}", $text);
+
+    // Replace li with /item
+    $text = preg_replace("/\<li\b[^\>]*\>/smui", "\\item ", $text);
+    $text = preg_replace("/\<\/li\b[^\>]*\>/smui", " ", $text);
+
+    // Replace link with url{} by removing a tags
+    $text = preg_replace("/\<a\b[^\>]*\>/smui", "", $text);
+    $text = preg_replace("/\<\/a\b[^\>]*\>/smui", "", $text);
+    $text = preg_replace("/((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?)/smui", '\\url{$1}', $text);
+
+    // Remove paragraphs and replace the closing tag with a simple \n
+    $text = preg_replace("/\<p\b[^\>]*\>/smui", "", $text);
+    $text = preg_replace("/\<\s*\/p\b[^\>]*\>/smui", "\n", $text);
+
+    return $text;
+  }
+
 } 
