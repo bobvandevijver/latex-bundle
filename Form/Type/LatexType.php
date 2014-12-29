@@ -10,29 +10,23 @@ use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 /**
  * Class LatexType
  * You will want to use this type when using the html->latex conversion
+ *
  * @author BobV
  */
 class LatexType extends AbstractType
 {
 
   /**
-   * {@inheritdoc}
+   * Returns the default config used so you can use it as base for your own config
+   *
+   * @return array
    */
-  public function buildView(FormView $view, FormInterface $form, array $options)
+  public static function getDefaultConfig()
   {
-    if (!is_array($view->vars['attr'])) $view->vars['attr'] = array();
-    $view->vars['attr']['data-bobv-latex'] = NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDefaultOptions(OptionsResolverInterface $resolver)
-  {
-    $resolver->setDefaults(array(
+    return array(
         'config' => array(
-            'entities'   => false,
-            'basicEntities'   => false,
+            'entities'         => false,
+            'basicEntities'    => false,
             'entities_greek'   => false,
             'entities_latin'   => false,
             'toolbar'          => array(
@@ -62,10 +56,10 @@ class LatexType extends AbstractType
                 ),
                 /**
                  * @todo: add support for tables/special chars
-                array(
-                    'name'  => 'insert',
-                    'items' => array('Table', 'SpecialChar'),
-                ),
+                 * array(
+                 * 'name'  => 'insert',
+                 * 'items' => array('Table', 'SpecialChar'),
+                 * ),
                  */
                 array(
                     'name'   => 'document',
@@ -80,7 +74,24 @@ class LatexType extends AbstractType
             'extraPlugins'     => '',
             'removeDialogTabs' => 'link:upload;image:Upload;image:advanced;link:advanced',
         )
-    ));
+    );
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function buildView(FormView $view, FormInterface $form, array $options)
+  {
+    if (!is_array($view->vars['attr'])) $view->vars['attr'] = array();
+    $view->vars['attr']['data-bobv-latex'] = NULL;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getName()
+  {
+    return 'bobv_latex';
   }
 
   /**
@@ -91,13 +102,12 @@ class LatexType extends AbstractType
     return 'ckeditor';
   }
 
-
   /**
    * {@inheritdoc}
    */
-  public function getName()
+  public function setDefaultOptions(OptionsResolverInterface $resolver)
   {
-    return 'bobv_latex';
+    $resolver->setDefaults(self::getDefaultConfig());
   }
 
 } 
