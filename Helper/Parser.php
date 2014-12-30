@@ -115,6 +115,9 @@ class Parser {
    */
   public static function parseHtml($text){
 
+    // Replace UTF-8 nbsp; with normal space
+    $text = str_replace("\xc2\xa0", ' ', $text);
+
     // Replace boldface with \textbb{
     $text = preg_replace("/\<b\b[^\>]*\>|\<strong\b[^\>]*\>/smui", "\\textbf{", $text);
 
