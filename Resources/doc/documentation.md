@@ -137,7 +137,8 @@ use BobV\LatexBundle\Latex\Element\TOC;
 class DefaultController Extends Controller{
   public function sendPdf(Request $request){
     $latex = new Article();
-    $latex->addElement(new TitlePage('Test pdf file'));
+    // Subtitle, author, date are optional
+    $latex->addElement(new TitlePage('BobV Latex Test', 'a subtitle', 'an author', '\today'));
     $latex->addElement(new TOC());
     
     $latexGenerator = $this->get('bobv.latex.generator');

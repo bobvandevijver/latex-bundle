@@ -34,7 +34,7 @@ class LatexTestCommand extends ContainerAwareCommand
       $latexGenerator = $this->getContainer()->get('bobv.latex.generator');
       $latex = new Article('BobVLatexTest');
       $latex->addPackage('lipsum');
-      $latex->addElement(new TitlePage('BobV Latex Test'));
+      $latex->addElement(new TitlePage('BobV Latex Test', 'a subtitle', 'an author'));
       $latex->addElement(new TOC());
 
       $section1 = new Section('Test Title');
