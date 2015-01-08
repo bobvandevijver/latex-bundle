@@ -28,7 +28,7 @@ The table block defines four extra public functions:
 
 ```
     addTopRule()    //Add \toprule command in the table
-    addMidRule()    //Add \midtule command in the table
+    addMidRule()    //Add \midrule command in the table
     addBottomRule() //Add \bottomrule command in the table
     addRow(array()) //Add row data: every array element will be splitted with & and it will be ended with \\
 ```
