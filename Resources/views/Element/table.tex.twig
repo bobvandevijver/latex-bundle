@@ -3,27 +3,27 @@
   % Table element
   {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
 
+  {% if caption != null %}
+    \begin{table}[h!]
+    \caption{ {{- caption|latex_escape|raw -}} }
+  {% endif %}
+
   {% if width == '\\textwidth' %}
     \resizebox{\textwidth}{!}{
   {% endif %}
     \begin{tabular{% if tabularx %}x}{ {{- width -}}{% endif %}}{ {%- for row in rows %}{{ row }} {% endfor %}}
 
-      {% if caption != null %}
-        \caption{ {{- caption|latex_escape|raw -}} }
-      {% endif %}
-
-
       {% for rowData in data %}
         {% if rowData['newRule'] == false %}
           {{ rowData['data'] }}
         {% else %}
-          {% set first = true %}
+
           {% for cellData in rowData['data'] %}
-            {% if not first %}&{% endif %}
-              {{ cellData|latex_escape|raw }}
-            {% set first = false %}
+            {% if not loop.first %}&{% endif %}
+            {{ cellData|latex_escape|raw }}
           {% endfor %}
           \\
+
         {% endif %}
       {% endfor %}
 
@@ -31,6 +31,10 @@
 
   {% if width == '\\textwidth' %}
     }
+  {% endif %}
+
+  {% if caption != null %}
+    \end{table}
   {% endif %}
 
 {% endblock bobv_latex_table_element %}
