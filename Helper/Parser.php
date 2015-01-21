@@ -153,7 +153,7 @@ class Parser {
     // Replace link with url{} by removing a tags
     $text = preg_replace("/\<a\b[^\>]*\>/smui", "", $text);
     $text = preg_replace("/\<\/a\b[^\>]*\>/smui", "", $text);
-    $text = preg_replace("/((https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?)/smui", '\\url{$1}', $text);
+    $text = preg_replace("/(https?:\/\/)?([\da-z\.-]+)(\.|@)([a-z\.]{2,6})([\/\w\.-]*[\/\w-])*\/?/smui", '\\url{$0}', $text);
 
     // Remove paragraphs and replace the closing tag with a simple \n
     $text = preg_replace("/\<p\b[^\>]*\>/smui", "", $text);
