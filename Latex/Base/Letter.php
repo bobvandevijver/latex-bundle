@@ -24,20 +24,21 @@ class Letter extends LatexBase
     $this->template = 'BobVLatexBundle:Base:letter.tex.twig';
     $datetime = new \DateTime();
     $this->params   = array(
-        'pagenumber'     => 'false', // Whether to print pagenumbers from page 2 and forward
-        'parskip'        => 'full',  // Spacing between paragraphs (full, half, ..)
-        'fromalign'      => 'right', // Alignment of the from address
-        'foldmarks'      => 'false', // Whether to print folding marks
-        'addrfield'      => 'true',  // Whether to print the address field
-        'paper'          => 'a4',    // Paper size
-        'firstfoot'      => 'false', // First page footer
+        'pagenumber'     => 'false',     // Whether to print pagenumbers from page 2 and forward
+        'parskip'        => 'full',      // Spacing between paragraphs (full, half, ..)
+        'fromalign'      => 'right',     // Alignment of the from address
+        'foldmarks'      => 'false',     // Whether to print folding marks
+        'addrfield'      => 'true',      // Whether to print the address field
+        'refline'        => 'dateright', // Position of the date, can be dateleft, dateright, narrow, nodate or wide.
+        'paper'          => 'a4',        // Paper size
+        'firstfoot'      => 'false',     // First page footer
 
-        'left'           => '2cm',   // Page margins
+        'left'           => '2cm',       // Page margins
         'right'          => '2cm',
         'top'            => '1cm',
         'bottom'         => '2cm',
 
-        'toaddrvpos'     => '3cm',   // Positioning
+        'toaddrvpos'     => '3cm',       // Positioning
         'toaddrhpos'     => '2.5cm',
         'refvpos'        => '7.5cm',
 
