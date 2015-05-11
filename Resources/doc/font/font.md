@@ -104,9 +104,11 @@ Content:
 You will (at least) need to install the tfm files to the latex directory and rebuild the database. This can be done by the following commands from the fonts dir (Debian 7): 
 
 ```
-sudo mkdir /usr/share/texlive/texmf-dist/fonts/tfm/KIC
-sudo mkdir /usr/share/texlive/texmf-dist/fonts/KIC
-sudo cp *.tfm /usr/share/texlive/texmf-dist/fonts/tfm/KIC/
-sudo cp *.ttf /usr/share/texlive/texmf-dist/fonts/KIC/
+sudo mkdir /usr/share/texlive/texmf-dist/fonts/tfm/GSMT
+sudo mkdir /usr/share/texlive/texmf-dist/fonts/GSMT
+sudo cp *.tfm /usr/share/texlive/texmf-dist/fonts/tfm/GSMT/
+sudo cp *.ttf /usr/share/texlive/texmf-dist/fonts/GSMT/
 sudo texhash /usr/share/texlive/texmf-dist
 ```
+
+I used the directoy GSMT to install the fonts so that I can identify them in the installation later. The choice of the directory is completely up to you.
