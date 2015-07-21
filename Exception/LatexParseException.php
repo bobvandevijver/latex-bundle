@@ -37,19 +37,21 @@ class LatexParseException extends LatexException
    */
   protected function findErrors(array $errorOutput)
   {
+    $refWarning = strtolower('LaTeX Warning: Reference');
     $filteredErrors   = array();
     $filteredErrors[] = "\n\n----------------------------------------------------------------------\n\n";
 
-    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$filteredErrors) {
+    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$filteredErrors, $refWarning) {
 
       // Find lines with an error
       if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$/ui', $value) > 0) {
-
-        // Get the five lines surround the error
-        for ($i = self::START_FROM; $i <= self::END_AT; $i++) {
-          $filteredErrors[] = $errorOutput[$key + $i];
+        if (substr(strtolower($errorOutput[$key]), 0, strlen($refWarning)) !== $refWarning){
+          // Get the five lines surround the error
+          for ($i = self::START_FROM; $i <= self::END_AT; $i++) {
+            $filteredErrors[] = $errorOutput[$key + $i];
+          }
+          $filteredErrors[] = "\n\n----------------------------------------------------------------------\n\n";
         }
-        $filteredErrors[] = "\n\n----------------------------------------------------------------------\n\n";
       }
 
     });
