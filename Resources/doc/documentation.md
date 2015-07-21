@@ -66,6 +66,14 @@ You can install them on Debian by issuing the following command:
 sudo apt-get install texlive-base texlive-latex-base texlive-latex-extra texlive-fonts-recommended poppler-utils
 ```
 
+The default latex installation does not contain the `ulem` package, which is needed for correct wrapping of underlined lines (see [tex.stackexchange.com](http://tex.stackexchange.com/questions/9550/why-does-underlined-text-not-get-wrapped-once-it-hits-the-end-of-a-line). To install the package, run the following (again, assuming Debian):
+
+```
+sudo mkdir /usr/share/texmf/tex/latex/ulem
+sudo wget https://raw.githubusercontent.com/bobvandevijver/latex-bundle/master/Resources/packages/ulem.sty -P /usr/share/texmf/tex/latex/ulem
+sudo texhash
+```
+
 That's it!
 
 ## Usage

@@ -126,7 +126,7 @@ class Parser {
     $text = preg_replace("/\<em\b[^\>]*\>/smui", "\\textit{", $text);
 
     // Replace underline with \textbb{
-    $text = preg_replace("/\<u\b[^\>]*\>/smui", "\\underline{", $text);
+    $text = preg_replace("/\<u\b[^\>]*\>/smui", "\\uline{", $text);
 
     // Replace superscript with \textsuperscript{
     $text = preg_replace("/\<sup\b[^\>]*\>/smui", "\\textsuperscript{", $text);

@@ -53,7 +53,7 @@ class Article extends LatexBase
         'tocdepth'       => '2', // TOC depth
 
         'extra_commands' => array(), //Define extra commands if needed
-        'packages'       => array(), // Define extra packages to use
+        'packages'       => array('ulem'), // Define extra packages to use
     );
 
     // Call parent constructor
