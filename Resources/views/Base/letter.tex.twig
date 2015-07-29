@@ -20,8 +20,9 @@
   \usepackage[english]{babel}
 
   % Added packages
-  {% for package in packages %}\usepackage{ {{- package -}} }
-  {% endfor %}
+  {% for package in packages -%}
+    \usepackage[ {{- package.o -}} ]{ {{- package.p -}} }
+  {%- endfor %}
 
   \makeatletter
   \@setplength{toaddrvpos}{ {{- toaddrvpos -}} }

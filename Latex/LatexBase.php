@@ -132,10 +132,11 @@ class LatexBase extends LatexParams implements LatexBaseInterface
    * Add an package to include
    *
    * @param $package
+   * @param $options
    *
    * @return LatexInterface $this
    */
-  public function addPackage($package)
+  public function addPackage($package, $options = '')
   {
     $matches = array();
     preg_match_all('/\\\usepackage\{([^}]+)\}/u', $package, $matches);
@@ -143,7 +144,10 @@ class LatexBase extends LatexParams implements LatexBaseInterface
       $package = $matches[1][0];
     }
 
-    $this->setParam('packages', $package);
+    $this->params['packages'][] = array(
+        'p' => $package,
+        'o' => $options
+    );
 
     return $this;
   }

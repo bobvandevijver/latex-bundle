@@ -44,13 +44,13 @@ new Book($filename)
 
     'tocdepth'       => '2', // TOC depth
 
-    'extra_commands' => array(), //Define extra commands if needed
+    'extra_commands' => array(), // Define extra commands if needed
     'packages'       => array(), // Define extra packages to use
 ```
 
 ### Add package
 
-This class also has an `addPackage($package)` method. Use this if you need to include extra packages.
+This class also has an `addPackage($package, $options = '')` method. Use this if you need to include extra packages.
 
 ### Add dependency
 

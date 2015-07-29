@@ -8,8 +8,9 @@
   \usepackage{titling} % Required for multiple title pages
 
   % Added packages
-  {% for package in packages %}\usepackage{ {{- package -}} }
-  {% endfor %}
+  {% for package in packages -%}
+    \usepackage[ {{- package.o -}} ]{ {{- package.p -}} }
+  {%- endfor %}
 
   % Margins
   \topmargin={{- topmargin  }}

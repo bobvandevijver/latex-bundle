@@ -9,6 +9,9 @@ This bundle provides basic LaTeX support to ensure flexible PDF rendering in you
 ## Documentation
 The complete documentation can be found in the `Resources/doc` directory! Start by reading the [table of contents](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/documentation.md).
 
+## Upgrade notes
+Upgrade notes can be found in the [UPGRADE.MD](https://github.com/bobvandevijver/latex-bundle/blob/master/UPGRADE.md) file.
+
 ## Features
 * Generate LaTeX (.tex) files using object oriënted programming
 * Generate PDF files from .tex files

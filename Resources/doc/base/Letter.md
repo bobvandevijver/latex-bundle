@@ -39,7 +39,7 @@ new Letter($filename)
 
 ### Add package
 
-This class also has an `addPackage($package)` method. Use this if you need to include extra packages.
+This class also has an `addPackage($package, $options = '')` method. Use this if you need to include extra packages.
 
 ### Add dependency
 

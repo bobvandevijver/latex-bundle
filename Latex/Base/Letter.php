@@ -45,8 +45,11 @@ class Letter extends LatexBase
         'date'           => $datetime->format('d-m-Y'),
 
         'extra_commands' => array(), // Define extra commands if needed
-        'packages'       => array('ulem'), // Define extra packages to use
+        'packages'       => array(), // Define extra packages to use
     );
+
+    // Use the ulem package
+    $this->addPackage('ulem');
 
     // Call parent constructor
     parent::__construct($filename);
