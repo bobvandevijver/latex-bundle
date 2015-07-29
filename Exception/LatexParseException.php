@@ -9,8 +9,8 @@ namespace BobV\LatexBundle\Exception;
 class LatexParseException extends LatexException
 {
 
-  const START_FROM = -2;
-  const END_AT = 2;
+  const START_FROM = -3;
+  const END_AT = 4;
 
   public function __construct($texLocation, $pdfLatexResult, array $pdfLatexOutput = NULL)
   {
