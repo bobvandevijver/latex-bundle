@@ -44,7 +44,7 @@ class LatexParseException extends LatexException
     array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$filteredErrors, $refWarning) {
 
       // Find lines with an error
-      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can't use|invalid/ui', $value) > 0) {
+      if (preg_match_all("/error|missing|not found|undefined|too many|runaway|\$|you can't use|invalid/ui", $value) > 0) {
         if (substr(strtolower($errorOutput[$key]), 0, strlen($refWarning)) !== $refWarning){
           // Get the five lines surround the error
           for ($i = self::START_FROM; $i <= self::END_AT; $i++) {
