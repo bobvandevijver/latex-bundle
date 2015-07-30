@@ -198,7 +198,7 @@ This bundle is shipping with a few exception classes. These are al follows:
 * LatexNotImplementedException: Currently not used, but meant to signal not implemented behaviour
 * LatexParseException: Thrown when the compilation of the tex file to pdf fails. 
 
-The last exception also includes a backtrace in it message which can be used to find the exact point of failure in the tex file.
+The last exception also includes a backtrace in it message which can be used to find the exact point of failure in the tex file. It includes a filtered log and tex file which can be used when required. 
 
 ## Character escaping
 ---------------------------
