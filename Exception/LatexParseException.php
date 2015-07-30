@@ -74,28 +74,28 @@ class LatexParseException extends LatexException
 
           // Get lines before the error
           $temp = array();
-          for($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++){
+          for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
             if (isset($errorOutput[$key - $i])) {
               $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key - $i]));
-              if($value != '') {
+              if ($value != '') {
                 $temp[] = $value;
                 $count++;
               }
-            }else{
+            } else {
               break;
             }
           }
           $filteredErrors = array_merge($filteredErrors, array_reverse($temp));
 
           // Get lines after the error
-          for($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++){
+          for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
             if (isset($errorOutput[$key + $i])) {
               $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key + $i]));
-              if($value != '') {
+              if ($value != '') {
                 $filteredErrors[] = $value;
                 $count++;
               }
-            }else{
+            } else {
               break;
             }
           }
@@ -114,37 +114,37 @@ class LatexParseException extends LatexException
     $this->filteredTexSource[] = "---";
     if ($texLocation !== NULL) {
       $lineNumber = array();
-      $texFile = new \SplFileObject($texLocation);
+      $texFile    = new \SplFileObject($texLocation);
       foreach ($this->filteredLogSource as $logLine) {
         preg_match('/l\.(\d+)/ui', $logLine, $lineNumber);
         if (count($lineNumber) == 2) {
 
           // Get lines before the linenumber
           $temp = array();
-          for($count = 0, $i = 0; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++){
+          for ($count = 0, $i = 0; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
             $texFile->seek($lineNumber[1] - $i);
             if ($texFile->valid()) {
               $value = trim(preg_replace('/\s+/', ' ', $texFile->current()));
-              if($value != '') {
+              if ($value != '') {
                 $temp[] = $value;
                 $count++;
               }
-            }else{
+            } else {
               break;
             }
           }
           $this->filteredTexSource = array_merge($this->filteredTexSource, array($lineNumber[0]), array_reverse($temp));
 
           // Get lines after the line number
-          for($count = 0, $i = 1; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++){
+          for ($count = 0, $i = 1; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
             $texFile->seek($lineNumber[1] + $i);
             if ($texFile->valid()) {
               $value = trim(preg_replace('/\s+/', ' ', $texFile->current()));
-              if($value != '') {
+              if ($value != '') {
                 $this->filteredTexSource[] = $value;
                 $count++;
               }
-            }else{
+            } else {
               break;
             }
           }
@@ -156,14 +156,19 @@ class LatexParseException extends LatexException
     }
   }
 
+  /**
+   * @return string
+   */
   public function getFilteredTexSource()
   {
     return implode("\n", $this->filteredTexSource);
   }
 
+  /**
+   * @return string
+   */
   public function getFilteredLogSource()
   {
-
     return implode("\n", $this->filteredLogSource);
   }
 
