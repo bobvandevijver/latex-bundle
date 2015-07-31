@@ -21,4 +21,4 @@ class SubSection extends LatexSection {
       'extra_commands' => array(), // Define extra commands at the begin of the section
     );
   }
-} 
+}

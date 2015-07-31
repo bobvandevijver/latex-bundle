@@ -12,4 +12,4 @@ class ImageNotFoundException extends \Exception{
     parent::__construct("The image used is not found. Did you provide the complete path? (provided path = $imageLocation)");
   }
 
-} 
+}

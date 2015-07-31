@@ -50,4 +50,4 @@ class LongTable extends LatexElement
     $this->setParam('data', $data);
   }
 
-} 
+}

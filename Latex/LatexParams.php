@@ -49,4 +49,4 @@ class LatexParams {
     }
     return $this;
   }
-} 
+}

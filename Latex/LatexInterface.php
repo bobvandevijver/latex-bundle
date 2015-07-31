@@ -51,4 +51,4 @@ interface LatexInterface
    */
   public function setTemplate($template);
 
-} 
+}

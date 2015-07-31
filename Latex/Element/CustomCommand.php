@@ -27,4 +27,4 @@ class CustomCommand extends LatexElement
     );
   }
 
-} 
+}

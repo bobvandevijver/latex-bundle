@@ -349,5 +349,4 @@ class LatexGenerator
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
-
-} 
+}

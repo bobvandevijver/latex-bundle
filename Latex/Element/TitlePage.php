@@ -39,4 +39,4 @@ class TitlePage extends LatexElement
     );
   }
 
-} 
+}

@@ -28,4 +28,4 @@ class Text extends LatexElement
     );
   }
 
-} 
+}

@@ -69,4 +69,4 @@ class Table extends LatexElement
     $this->setParam('data', $data);
   }
 
-} 
+}

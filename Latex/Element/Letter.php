@@ -33,4 +33,4 @@ class Letter extends LatexElement
     );
   }
 
-} 
+}

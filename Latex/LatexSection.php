@@ -75,4 +75,4 @@ class LatexSection extends LatexParams implements LatexInterface
 
     return $this;
   }
-} 
+}

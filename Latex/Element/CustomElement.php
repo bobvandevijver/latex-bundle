@@ -16,7 +16,7 @@ class CustomElement extends LatexElement
   /**
    * Constructor of the custom element, also defines the defaults
    *
-   * @param string $text
+   * @param string $custom
    */
   public function __construct($custom)
   {
@@ -27,4 +27,4 @@ class CustomElement extends LatexElement
     );
   }
 
-} 
+}

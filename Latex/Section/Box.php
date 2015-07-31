@@ -7,8 +7,6 @@ class Box extends LatexSection {
 
   /**
    * Constructor of the section section, also defines the default
-   *
-   * @param string $sectionTitle
    */
   public function __construct(){
     $this->template = 'BobVLatexBundle:Section:box.tex.twig';
@@ -19,4 +17,4 @@ class Box extends LatexSection {
       'extra_commands' => array(), // Define extra commands at the begin of the section
     );
   }
-} 
+}

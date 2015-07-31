@@ -8,8 +8,6 @@ class MiniPage extends LatexSection
 
   /**
    * Constructor of the section minipage, also defines the default
-   *
-   * @param string $sectionTitle
    */
   public function __construct()
   {
@@ -22,4 +20,4 @@ class MiniPage extends LatexSection
         'extra_commands' => array(), // Define extra commands at the begin of the section
     );
   }
-} 
+}

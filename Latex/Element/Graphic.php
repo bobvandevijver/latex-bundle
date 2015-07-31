@@ -17,6 +17,7 @@ class Graphic extends LatexElement
    * Constructor of the graphic element, also defines the defaults
    *
    * @param string $graphic_location
+   * @param string $caption
    */
   public function __construct($graphic_location, $caption = false)
   {
@@ -34,4 +35,4 @@ class Graphic extends LatexElement
     );
   }
 
-} 
+}

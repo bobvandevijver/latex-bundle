@@ -23,4 +23,4 @@ class BlackTitle extends LatexElement
     );
   }
 
-} 
+}

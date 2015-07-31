@@ -16,7 +16,8 @@ class IncludePdf extends LatexElement
   /**
    * Constructor of the include pdf element, also defines the defaults
    *
-   * @param string $file_location
+   * @param string $fileLocation
+   * @param boolean $skipFirstWallpaper
    */
   public function __construct($fileLocation, $skipFirstWallpaper = true)
   {
@@ -25,6 +26,7 @@ class IncludePdf extends LatexElement
       $totalPages = $this->getPDFPages($fileLocation);
       $pages = '{2-}';
     }else{
+      $totalPages = 0;
       $pages = '{1-}';
     }
 

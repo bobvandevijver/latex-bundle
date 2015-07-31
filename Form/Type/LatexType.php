@@ -110,4 +110,4 @@ class LatexType extends AbstractType
     $resolver->setDefaults(self::getDefaultConfig());
   }
 
-} 
+}

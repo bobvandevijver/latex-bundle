@@ -19,4 +19,4 @@ class TOC extends LatexElement
     // Set defaults
     $this->template = 'BobVLatexBundle:Element:toc.tex.twig';
   }
-} 
+}

@@ -8,4 +8,4 @@ namespace BobV\LatexBundle\Exception;
  */
 class LatexNotImplementedException extends LatexException{
 
-} 
+}

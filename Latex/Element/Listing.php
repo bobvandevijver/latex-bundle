@@ -28,4 +28,4 @@ class Listing extends LatexElement
     );
   }
 
-} 
+}

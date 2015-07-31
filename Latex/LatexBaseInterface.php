@@ -41,4 +41,4 @@ interface LatexBaseInterface extends LatexInterface
    * @return LatexInterface
    */
   public function addDependency($depedency);
-} 
+}
