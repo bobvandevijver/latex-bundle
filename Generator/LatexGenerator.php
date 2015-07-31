@@ -268,9 +268,17 @@ class LatexGenerator
 
     $compile = true;
     $count   = 0;
+    /** @var bool|array $output */
+    $output  = false;
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
+
+      // Always add one pass for when a large TOC is present, but do not check before the first run
+      if ($output !== false && count(array_filter($output, array($this, 'findReferenceError'))) == 0) {
+        $compile = false;
+      }
+      unset($output);
 
       exec("cd " . $this->outputDir . " && pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
 
@@ -279,11 +287,6 @@ class LatexGenerator
         throw new LatexParseException($texLocation, $result, $output);
       }
 
-      if (count(array_filter($output, array($this, 'findReferenceError'))) == 0) {
-        $compile = false;
-      }
-
-      unset($output);
       $count++;
     }
 
