@@ -3,6 +3,8 @@
 
 [![Join the chat at https://gitter.im/bobvandevijver/latex-bundle](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bobvandevijver/latex-bundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
+[![SensioLabsInsight](https://insight.sensiolabs.com/projects/bf9b5c8a-ba70-433d-ab19-5766eeec94e5/big.png)](https://insight.sensiolabs.com/projects/bf9b5c8a-ba70-433d-ab19-5766eeec94e5)
+
 ### For whenever you want more flexibility than with any other PHP-PDF library
 This bundle provides basic LaTeX support to ensure flexible PDF rendering in your Symfony2 application. The project was started as an idea to avoid the standard TCPDF library in the hope that the compilation of LaTeX can be done more efficiently and more consistently across machines. 
 
