@@ -15,8 +15,6 @@ use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Class LatexGenerator
- *
- * @todo: build some sort of cache
  */
 class LatexGenerator
 {
@@ -127,8 +125,6 @@ class LatexGenerator
     }
 
     // Create the compiled tex-file
-    // @todo: uitbreiden compilatie
-
     $texData = $this->twig->render(
         $latex->getTemplate(),
         $latex->getContext()
