@@ -38,14 +38,4 @@ class LongTable extends LatexElement
     return $this;
   }
 
-  private function addRule($rule)
-  {
-    $data   = $this->getParams()['data'];
-    $data[] = array(
-        'newRule' => false,
-        'data'    => $rule,
-    );
-    $this->setParam('data', $data);
-  }
-
 }

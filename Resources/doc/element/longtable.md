@@ -29,7 +29,6 @@ new LongTable($rows)
 The table block defines two extra public functions:
 
 ```
-    addBottomRule() //Add \bottomrule command in the table
     addRow(array()) //Add row data: every array element will be splitted with & and it will be ended with \\
 ```
 
