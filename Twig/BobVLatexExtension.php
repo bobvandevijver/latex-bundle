@@ -37,4 +37,4 @@ class BobVLatexExtension extends \Twig_Extension
     return 'bobv_latex_twig_extension';
   }
 
-} 
+}

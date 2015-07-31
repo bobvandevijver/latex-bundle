@@ -1,7 +1,6 @@
 <?php
 namespace BobV\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Exception\DimensionsNotMatchedException;
 use BobV\LatexBundle\Latex\LatexElement;
 
 class LongTable extends LatexElement
@@ -9,7 +8,6 @@ class LongTable extends LatexElement
 
   /**
    * @param array $rows Alignment rows, for example array(l,r,c)
-   * @param array $data Multidimensional array
    */
   public function __construct($rows = array())
   {

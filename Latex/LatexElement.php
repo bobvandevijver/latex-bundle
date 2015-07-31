@@ -1,8 +1,6 @@
 <?php
 namespace BobV\LatexBundle\Latex;
 
-use BobV\LatexBundle\Exception\LatexException;
-
 class LatexElement extends LatexParams implements LatexInterface
 {
   /** @var string */
