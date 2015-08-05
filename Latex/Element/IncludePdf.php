@@ -3,6 +3,7 @@
 namespace BobV\LatexBundle\Latex\Element;
 
 use BobV\LatexBundle\Latex\LatexElement;
+use Symfony\Component\Process\Process;
 
 /**
  * Class IncludePdf
@@ -55,7 +56,12 @@ class IncludePdf extends LatexElement
    */
   private function getPDFPages($document)
   {
-    exec("pdfinfo $document", $output);
+    $process = new Process("pdfinfo $document");
+    $process->run();
+    if($process->getExitCode() !== 0){
+      return 0;
+    }
+    $output = explode("\n", $process->getOutput());
 
     // Iterate through lines
     $pagecount = 0;

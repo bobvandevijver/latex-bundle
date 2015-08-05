@@ -12,6 +12,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Process\Process;
 
 /**
  * Class LatexGenerator
@@ -276,11 +277,17 @@ class LatexGenerator
       }
       unset($output);
 
-      exec("cd " . $this->outputDir . " && pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"", $output, $result);
+      $process = new Process("cd " . $this->outputDir . " && pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
+      $process->run();
+      $output = explode("\n", $process->getOutput());
 
-      // Check if the result is ok
-      if ($result !== 0) {
-        throw new LatexParseException($texLocation, $result, $output);
+      // Check if the pdflatex command completed succesfully
+      if (!$process->isSuccessful()) {
+        throw new LatexParseException(
+            $texLocation,
+            $process->getExitCode(),
+            $output,
+            $process->getExitCodeText());
       }
 
       $count++;

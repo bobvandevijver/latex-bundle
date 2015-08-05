@@ -21,17 +21,22 @@ class LatexParseException extends LatexException
 
   /**
    * @param string     $texLocation
-   * @param int        $pdfLatexResult
+   * @param int        $exitCode
    * @param array|NULL $pdfLatexOutput
    */
-  public function __construct($texLocation, $pdfLatexResult, array $pdfLatexOutput = NULL)
+  public function __construct($texLocation, $exitCode, array $pdfLatexOutput = NULL, $exitCodeText = NULL)
   {
+    if($exitCodeText !== NULL){
+      $exitCodeText = sprintf(' (%s)', $exitCodeText);
+    }else{
+      $exitCodeText = '';
+    }
 
-    $message = "Something went wrong during the execution of the pdflatex command, as it returned $pdfLatexResult. See the log file (" . explode('.tex', $texLocation)[0] . ".log ) for all details.";
+    $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText. '. See the log file (' . explode('.tex', $texLocation)[0] . '.log ) for all details.';
 
     $this->findErrors($pdfLatexOutput, $texLocation);
 
-    parent::__construct($message, $pdfLatexResult);
+    parent::__construct($message, $exitCode);
   }
 
   /**
