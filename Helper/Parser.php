@@ -2,31 +2,41 @@
 
 namespace BobV\LatexBundle\Helper;
 
-class Parser {
+/**
+ * Class Parser
+ * @author BobV
+ */
+class Parser
+{
 
+  /**
+   * @var array
+   */
   private $htmlCodes;
 
-  public function __construct(){
+  /**
+   * Parser constructor.
+   */
+  public function __construct() {
     $this->htmlCodes = array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES | ENT_HTML5));
   }
 
   /**
    * Parse the text and replace known special latex characters correctly
    *
-   * @param string $text
+   * @param string  $text
    * @param boolean $checkTable
    *
    * @return mixed
    */
-  public function parseText($text, $checkTable = true)
-  {
+  public function parseText($text, $checkTable = true) {
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
     foreach ($matches[0] as $match) {
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
-    $text = str_replace('&sup2;', '\\textsuperscript{2}' , $text);
+    $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
     // Remove remaining HTML entities
     $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
 
@@ -92,14 +102,15 @@ class Parser {
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
-    while($checkTable && FALSE !== ($position = strpos($text, '&', $offset))){
-      if(!(strrpos($text, '\begin{tabular', $position - strlen($text)) < $position
-          && strpos($text, '\end{tabular', $position) > $position)){
-        $text = substr_replace($text, '\\&', $position, 1);
+    while ($checkTable && FALSE !== ($position = strpos($text, '&', $offset))) {
+      if (!(strrpos($text, '\begin{tabular', $position - strlen($text)) < $position
+          && strpos($text, '\end{tabular', $position) > $position)
+      ) {
+        $text     = substr_replace($text, '\\&', $position, 1);
         $position = $position + 3;
       }
       $offset = $position + 1;
-      if($offset > strlen($text)){
+      if ($offset > strlen($text)) {
         break;
       }
     }
@@ -114,52 +125,59 @@ class Parser {
    *
    * @return mixed
    */
-  public static function parseHtml($text){
+  public static function parseHtml($text) {
 
     // Replace UTF-8 nbsp; with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
 
-    // Replace boldface with \textbb{
-    $text = preg_replace("/\<b\b[^\>]*\>|\<strong\b[^\>]*\>/smui", "\\textbf{", $text);
+    // Load the document
+    $DOM = new \DOMDocument();
+    @$DOM->loadHTML($text);
 
-    // Replace boldface with \textbb{
-    $text = preg_replace("/\<em\b[^\>]*\>/smui", "\\textit{", $text);
+    // Replace tags with latex equivalents
+    self::updateNode($DOM, 'b', "\\textbf{");
+    self::updateNode($DOM, 'strong', "\\textbf{");
+    self::updateNode($DOM, 'i', "\\textit{");
+    self::updateNode($DOM, 'u', "\\uline{");
+    self::updateNode($DOM, 'sup', "\\textsuperscript{");
+    self::updateNode($DOM, 'sub', "\\textsubscript{");
+    self::updateNode($DOM, 'ol', "\\begin{enumerate}", "\\end{enumerate}");
+    self::updateNode($DOM, 'ul', "\\begin{itemize}", "\\end{itemize}");
+    self::updateNode($DOM, 'li', "\\item ", "");
+    self::updateNode($DOM, 'p', '', "\n");
+    self::updateNode($DOM, 'a', "\\url{", " }");
 
-    // Replace underline with \textbb{
-    $text = preg_replace("/\<u\b[^\>]*\>/smui", "\\uline{", $text);
+    // Export the new list
+    $text = $DOM->saveHTML();
 
-    // Replace superscript with \textsuperscript{
-    $text = preg_replace("/\<sup\b[^\>]*\>/smui", "\\textsuperscript{", $text);
+    // Replace junk from URL to get it readable
+    $text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z\.-]+)(\.|@)([a-z\.]{2,6})([\/\w\.-]*[\/\w-])*\/?)/smui", '$2', $text);
 
-    // Replace subscript with \textsubscript{
-    // -( needs fixltx2e package )-
-    $text = preg_replace("/\<sub\b[^\>]*\>/smui", "\\textsubscript{", $text);
-
-    // Replace end of boldface/underline/italic with }
-    $text = preg_replace("/(\s*)(\<\/b\b[^\>]*\>|\<\/strong\b[^\>]*\>|\<\/em\b[^\>]*\>|\<\/u\b[^\>]*\>|\<\/sup\b[^\>]*\>|\<\/sub\b[^\>]*\>)(([^a-z\\\<]?)|([a-z]))/smui", '}$4 $5', $text);
-
-    // Replace ol with enumerate
-    $text = preg_replace("/\<ol\b[^\>]*\>/smui", "\\begin{enumerate}", $text);
-    $text = preg_replace("/\<\/ol\b[^\>]*\>/smui", "\\end{enumerate}", $text);
-
-    // Replace ul with itemize
-    $text = preg_replace("/\<ul\b[^\>]*\>/smui", "\\begin{itemize}", $text);
-    $text = preg_replace("/\<\/ul\b[^\>]*\>/smui", "\\end{itemize}", $text);
-
-    // Replace li with /item
-    $text = preg_replace("/\<li\b[^\>]*\>/smui", "\\item ", $text);
-    $text = preg_replace("/\<\/li\b[^\>]*\>/smui", " ", $text);
-
-    // Replace link with url{} by removing a tags
-    $text = preg_replace("/\<a\b[^\>]*\>/smui", "", $text);
-    $text = preg_replace("/\<\/a\b[^\>]*\>/smui", "", $text);
-    $text = preg_replace("/(https?:\/\/)?([\da-z\.-]+)(\.|@)([a-z\.]{2,6})([\/\w\.-]*[\/\w-])*\/?/smui", '\\url{$0}', $text);
-
-    // Remove paragraphs and replace the closing tag with a simple \n
-    $text = preg_replace("/\<p\b[^\>]*\>/smui", "", $text);
-    $text = preg_replace("/\<\s*\/p\b[^\>]*\>/smui", "\n", $text);
-
-    return $text;
+    return strip_tags($text);
   }
 
+  /**
+   * Encapsulate the content of all given tags in the given document with the replacement
+   *
+   * @param \DOMDocument $document
+   * @param string       $tag
+   * @param string       $replacementStart
+   * @param string       $replacementEnd
+   */
+  private static function updateNode(\DOMDocument &$document, $tag, $replacementStart, $replacementEnd = '}') {
+    $elements = $document->getElementsByTagName($tag);
+    /** @var \DOMElement $element */
+    foreach ($elements as $element) {
+
+      // Check if a attribute from the tag is needed for the replacement start
+      $replacementStartNode = $document->createTextNode($replacementStart);
+
+      // Create the replacement end node
+      $replacementEndNode = $document->createTextNode($replacementEnd);
+
+      // Insert the nodes
+      $element->parentNode->insertBefore($replacementStartNode, $element);
+      $element->appendChild($replacementEndNode);
+    }
+  }
 }

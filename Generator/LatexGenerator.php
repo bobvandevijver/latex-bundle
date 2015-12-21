@@ -281,7 +281,7 @@ class LatexGenerator
       $process->run();
       $output = explode("\n", $process->getOutput());
 
-      // Check if the pdflatex command completed succesfully
+      // Check if the pdflatex command completed successfully
       if (!$process->isSuccessful()) {
         throw new LatexParseException(
             $texLocation,
