@@ -112,3 +112,14 @@ sudo texhash /usr/share/texlive/texmf-dist
 ```
 
 I used the directoy GSMT to install the fonts so that I can identify them in the installation later. The choice of the directory is completely up to you.
+
+
+### Problems with fonts
+---------------------------
+
+When running LaTeX on Debian, and you encounter the problem below (or similar):
+```
+!pdfTeX error: pdflatex (file ectt1095): Font ectt1095 at 600 not found
+==> Fatal error occurred, no output PDF file produced!
+```
+execute the following command: `sudo apt-get install cm-fonts`
