@@ -37,6 +37,11 @@ class Parser
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
     $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
+    $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
+
+    $text = str_replace('²', '\\textsuperscript{2}', $text);
+    $text = str_replace('³', '\\textsuperscript{3}', $text);
+
     // Remove remaining HTML entities
     $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
 
