@@ -108,7 +108,7 @@ class LatexType extends AbstractType
    */
   public function getParent()
   {
-    return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Ivory\CKEditorBundle\Form\Bundle\CKEditorType' : 'ckeditor';
+    return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Ivory\CKEditorBundle\Form\Type\CKEditorType' : 'ckeditor';
   }
 
   /**
