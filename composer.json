@@ -19,10 +19,9 @@
     "suggest": {
         "egeloen/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application"
     },
-    "target-dir": "BobV/LatexBundle",
     "autoload": {
-        "psr-0": {
-            "BobV\\LatexBundle": ""
+        "psr-4": {
+            "BobV\\LatexBundle\\": ""
         }
     }
 }

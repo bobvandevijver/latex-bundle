@@ -5,6 +5,7 @@ namespace BobV\LatexBundle\Form\Type;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
+use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
@@ -91,6 +92,14 @@ class LatexType extends AbstractType
    */
   public function getName()
   {
+    return $this->getBlockPrefix();
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function getBlockPrefix()
+  {
     return 'bobv_latex';
   }
 
@@ -99,7 +108,15 @@ class LatexType extends AbstractType
    */
   public function getParent()
   {
-    return 'ckeditor';
+    return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? 'Ivory\CKEditorBundle\Form\Bundle\CKEditorType' : 'ckeditor';
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function configureOptions(OptionsResolver $resolver)
+  {
+    $resolver->setDefaults(self::getDefaultConfig());
   }
 
   /**
@@ -107,7 +124,7 @@ class LatexType extends AbstractType
    */
   public function setDefaultOptions(OptionsResolverInterface $resolver)
   {
-    $resolver->setDefaults(self::getDefaultConfig());
+    $this->configureOptions($resolver);
   }
 
 }
