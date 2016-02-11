@@ -221,9 +221,9 @@ class LatexGenerator
   protected function checkFilesystem()
   {
     // Check if the cache dir exists
-    if (!$this->filesystem->exists($this->cacheDir)) {
+    if (!$this->filesystem->exists($this->getCacheBasePath())) {
       try {
-        $this->filesystem->mkdir($this->cacheDir);
+        $this->filesystem->mkdir($this->getCacheBasePath());
       } catch (IOException $ioe) {
         throw new IOException("An error occurred while creating the cache directory at " . $ioe->getPath() . ". Is the cache writable?");
       }
