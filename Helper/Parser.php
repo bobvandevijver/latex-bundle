@@ -135,9 +135,9 @@ class Parser
     // Replace UTF-8 nbsp; with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
 
-    // Load the document
+    // Load the document, we force the usage of UTF-8
     $DOM = new \DOMDocument();
-    @$DOM->loadHTML($text);
+    @$DOM->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $text);
 
     // Replace tags with latex equivalents
     self::updateNode($DOM, 'b', "\\textbf{");
