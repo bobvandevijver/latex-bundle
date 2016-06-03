@@ -122,4 +122,6 @@ When running LaTeX on Debian, and you encounter the problem below (or similar):
 !pdfTeX error: pdflatex (file ectt1095): Font ectt1095 at 600 not found
 ==> Fatal error occurred, no output PDF file produced!
 ```
-execute the following command: `sudo apt-get install cm-fonts`
+execute the following command: `sudo apt-get install texlive-fonts-extra`
+
+**Note**: Commit #2079747 contains an update which sets the 'HOME' environment variable. If there is no 'HOME' environment variable when fonts need to be generated at runtime, some subscripts of LaTeX might fail. This should not impact working installations.
