@@ -140,17 +140,18 @@ class Parser
     @$DOM->loadHTML('<meta http-equiv="content-type" content="text/html; charset=utf-8">' . $text);
 
     // Replace tags with latex equivalents
-    self::updateNode($DOM, 'b', "\\textbf{");
-    self::updateNode($DOM, 'strong', "\\textbf{");
-    self::updateNode($DOM, 'i', "\\textit{");
-    self::updateNode($DOM, 'u', "\\uline{");
-    self::updateNode($DOM, 'sup', "\\textsuperscript{");
-    self::updateNode($DOM, 'sub', "\\textsubscript{");
-    self::updateNode($DOM, 'ol', "\\begin{enumerate}", "\\end{enumerate}");
-    self::updateNode($DOM, 'ul', "\\begin{itemize}", "\\end{itemize}");
-    self::updateNode($DOM, 'li', "\\item ", "");
+    self::updateNode($DOM, 'b', '\textbf{');
+    self::updateNode($DOM, 'strong', '\textbf{');
+    self::updateNode($DOM, 'i', '\textit{');
+    self::updateNode($DOM, 'u', '\uline{');
+    self::updateNode($DOM, 'sup', '\textsuperscript{');
+    self::updateNode($DOM, 'sub', '\textsubscript{');
+    self::updateNode($DOM, 'ol', '\begin{enumerate}', '\end{enumerate}');
+    self::updateNode($DOM, 'ul', '\begin{itemize}', '\end{itemize}');
+    self::updateNode($DOM, 'li', '\item ', '');
     self::updateNode($DOM, 'p', '', "\n");
-    self::updateNode($DOM, 'a', "\\url{", " }");
+    self::updateNode($DOM, 'br', '\newline', '');
+    self::updateNode($DOM, 'a', '\url{', ' }');
 
     // Export the new list
     $text = $DOM->saveHTML();
