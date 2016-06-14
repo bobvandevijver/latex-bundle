@@ -104,6 +104,16 @@ class Parser
 
     $text = str_replace("#", "\\#", $text);
     $text = str_replace("_", "\\_", $text);
+    $text = str_replace("$", "\\$", $text);
+    $text = str_replace("%", "\\%", $text);
+    $text = str_replace("&", "\\&", $text);
+    $text = str_replace("~", "\\~{}", $text);
+    $text = str_replace("^", "\\^{}", $text);
+    $text = str_replace("{", "\\{", $text);
+    $text = str_replace("}", "\\}", $text);
+    $text = str_replace(">", "\langle", $text);
+    $text = str_replace("<", "\rangle", $text);
+    $text = str_replace("\\", "\textbackslash", $text);
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
