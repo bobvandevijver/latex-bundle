@@ -45,6 +45,9 @@ class Parser
     // Remove remaining HTML entities
     $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
 
+    // Replace those chars first that will later have a different function
+    $text = str_replace("\\", "\textbackslash ", $text);
+
     // Adjust known characters
     $text = str_replace("ä", "\\\"a", $text);
     $text = str_replace("á", "\\'a", $text);
@@ -104,6 +107,15 @@ class Parser
 
     $text = str_replace("#", "\\#", $text);
     $text = str_replace("_", "\\_", $text);
+    $text = str_replace("$", "\\$", $text);
+    $text = str_replace("%", "\\%", $text);
+    $text = str_replace("&", "\\&", $text);
+    $text = str_replace("~", "\\~{}", $text);
+    $text = str_replace("^", "\\^{}", $text);
+    $text = str_replace("{", "\\{", $text);
+    $text = str_replace("}", "\\}", $text);
+//    $text = str_replace(">", "\\textlangle{}", $text);
+//    $text = str_replace("<", "\\textrangle{}", $text);
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
