@@ -216,7 +216,7 @@ If you have any character that generates an error, feel create an issue or creat
 
 This bundle also includes a HTML to LaTeX parser, which will parse basic HTML structures and convert it to basic LaTeX syntax. At the moment the following tags are supported: 
 
-`b, strong, em, u, sup, sub (requires fixltx2e package), ol, ul, li, a and p`
+`b, strong, em, u, sup, sub (requires fixltx2e package), ol, ul, li, a, p and br`
 
 NOTE: The parser assumes that the HTML input is generated using a CK-editor instance. When this is not the case, the behaviour might be unexpected!
 
