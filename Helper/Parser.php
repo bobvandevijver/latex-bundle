@@ -150,7 +150,7 @@ class Parser
     self::updateNode($DOM, 'ul', '\begin{itemize}', '\end{itemize}');
     self::updateNode($DOM, 'li', '\item ', '');
     self::updateNode($DOM, 'p', '', "\n");
-    self::updateNode($DOM, 'br', '\newline', '');
+    self::updateNode($DOM, 'br', '\newline ', '');
     self::updateNode($DOM, 'a', '\url{', ' }');
 
     // Export the new list
