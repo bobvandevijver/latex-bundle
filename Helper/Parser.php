@@ -104,6 +104,14 @@ class Parser
 
     $text = str_replace("#", "\\#", $text);
     $text = str_replace("_", "\\_", $text);
+    $text = str_replace("%", "\\%", $text);
+    $text = str_replace("$", "\\$", $text);
+    $text = str_replace("^", "\\^{}", $text);
+    $text = str_replace("°", "\$^{\\circ}\$", $text);
+
+    $text = str_replace(">", "\\textgreater ", $text);
+    $text = str_replace("<", "\\textless ", $text);
+    $text = str_replace("\n", "\\newline", $text);
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
