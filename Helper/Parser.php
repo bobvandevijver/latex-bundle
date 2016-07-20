@@ -115,7 +115,6 @@ class Parser
     $text = str_replace(PHP_EOL, "\\newline ", $text);
     $text = str_replace("{", "\\{ ", $text);
     $text = str_replace("}", "\\} ", $text);
-    $text = str_replace("|", "\\vert{} ", $text);
     $text = str_replace("~", "\\textasciitilde ", $text);
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
