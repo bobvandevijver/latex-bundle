@@ -36,6 +36,8 @@ class Parser
     foreach ($matches[0] as $match) {
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
+    $text = str_replace("\\", "\\backslash ", $text);
+    
     $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
 
