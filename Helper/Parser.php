@@ -37,7 +37,9 @@ class Parser
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
     $text = str_replace("\\", "\\backslash ", $text);
-    
+    $text = str_replace("{", "\\{ ", $text);
+    $text = str_replace("}", "\\} ", $text);
+
     $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
 
@@ -115,8 +117,6 @@ class Parser
     $text = str_replace("<", "\\textless ", $text);
     $text = str_replace("\\n", "\\newline ", $text);
     $text = str_replace(PHP_EOL, "\\newline ", $text);
-    $text = str_replace("{", "\\{ ", $text);
-    $text = str_replace("}", "\\} ", $text);
     $text = str_replace("~", "\\textasciitilde ", $text);
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
