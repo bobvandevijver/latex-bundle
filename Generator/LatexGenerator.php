@@ -146,7 +146,7 @@ class LatexGenerator
       if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
       }
-      throw new LatexException("Something failed during the creation of the tex file.");
+      throw new LatexException("Something failed during the creation of the tex file.", 0, $e);
     }
 
     // Copy dependencies to working dir
@@ -190,7 +190,7 @@ class LatexGenerator
         throw $e;
       }
 
-      throw new LatexException("Something failed during the compilation of the pdf file. Check the logs for more info. (filename: " . explode('.tex', $texLocation)[0] . ".log )");
+      throw new LatexException("Something failed during the compilation of the pdf file. Check the logs for more info. (filename: " . explode('.tex', $texLocation)[0] . ".log )", 0, $e);
     }
 
     return $pdfLocation;
@@ -225,7 +225,7 @@ class LatexGenerator
       try {
         $this->filesystem->mkdir($this->getCacheBasePath());
       } catch (IOException $ioe) {
-        throw new IOException("An error occurred while creating the cache directory at " . $ioe->getPath() . ". Is the cache writable?");
+        throw new IOException("An error occurred while creating the cache directory at " . $ioe->getPath() . ". Is the cache writable?", 0, $ioe);
       }
     }
   }
@@ -334,7 +334,7 @@ class LatexGenerator
           $texData
       );
     } catch (IOException $ioe) {
-      throw new IOException("An error occurred while creating the tex file at " . $ioe->getPath() . ". Is the cache writable?");
+      throw new IOException("An error occurred while creating the tex file at " . $ioe->getPath() . ". Is the cache writable?", 0, $ioe);
     }
 
     return $texLocation;
