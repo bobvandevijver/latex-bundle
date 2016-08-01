@@ -208,8 +208,19 @@ class LatexGenerator
   }
 
   /**
+   * @param $cacheDir
+   *
+   * @return $this
+   */
+  public function setCacheDir($cacheDir){
+    $this->cacheDir = $cacheDir;
+
+    return $this;
+  }
+
+  /**
    * @param boolean $forceRegenerate
-   * 
+   *
    * @return LatexGenerator
    */
   public function setForceRegenerate($forceRegenerate)
