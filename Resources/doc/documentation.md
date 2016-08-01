@@ -226,6 +226,12 @@ It is recommended to use the `bobv_latex` form type when you are in need for a s
 
 If you have any use-case that generates an error, feel create an issue or create a PR.
 
+## Custom output directory
+
+By default, this bundle uses the `%bobv.latex.cache_dir%` parameter for the caching directory, which is by default set to `"%kernel.cache_dir%"`. If you want to override this directory, simply override the parameter. However, do note that the kernel cache dir is used for a reason: to generate a correct PDF file, all dependencies (if any, like fonts, letterhead, ...) are also placed there. By placing it in the cache, we know it can easily and automatically will be removed so that the disk does not constantly fill up.
+
+By default, the cache directory is appended with `/BobVLatex`. This can be adjusted by extending the `LatexGenerator` class and overwriting the `getCacheBasePath()` method. 
+
 ## Adding extra fonts
 
 See [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/font/font.md).
