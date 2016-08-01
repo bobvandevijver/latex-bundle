@@ -209,18 +209,26 @@ class LatexGenerator
 
   /**
    * @param boolean $forceRegenerate
+   * 
+   * @return LatexGenerator
    */
   public function setForceRegenerate($forceRegenerate)
   {
     $this->forceRegenerate = $forceRegenerate;
+
+    return $this;
   }
 
   /**
    * @param \DateTime $maxAge
+   *
+   * @return LatexGenerator
    */
   public function setMaxAge($maxAge)
   {
     $this->maxAge = $maxAge;
+
+    return $this;
   }
 
   /**
@@ -228,10 +236,14 @@ class LatexGenerator
    * To disable the timeout, set this value to null.
    *
    * @param int|float|null $timeout The timeout in seconds
+   *
+   * @return LatexGenerator
    */
   public function setTimeout($timeout)
   {
     $this->timeout = $timeout;
+
+    return $this;
   }
 
   /**
