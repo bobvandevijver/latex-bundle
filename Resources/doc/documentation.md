@@ -169,7 +169,9 @@ class DefaultController Extends Controller{
 }
 ```
 
-Note that the `generatePdf` also accepts an optional `$compileOptions` array. With this array you can specify extra compile options for the `pdflatex` command.  
+Note that the `generatePdf` also accepts an optional `$compileOptions` array. With this array you can specify extra compile options for the `pdflatex` command.
+
+> Note: If you have extremely large files, you might hit the default Process limit of 60 seconds during the execution of pdflatex (from the Symfony Process component). If so, you can customize the timeout with the `setTimout($timeout)` method on the `LatexGenerator`.
 
 ### 5. Caching
 

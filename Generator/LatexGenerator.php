@@ -12,6 +12,7 @@ use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\StreamedResponse;
+use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
 /**
@@ -34,6 +35,8 @@ class LatexGenerator
   protected $maxAge;
   /** @var string */
   protected $outputDir;
+  /** @var int|float|null */
+  protected $timeout;
   /** @var \Twig_Environment */
   protected $twig;
 
@@ -51,6 +54,9 @@ class LatexGenerator
     $this->maxAge     = new \DateTime();
     $this->maxAge->modify($maxAge);
     $this->forceRegenerate = false;
+
+    // Default timeout from the Symfony Process component
+    $this->timeout = 60;
   }
 
   /**
@@ -190,6 +196,10 @@ class LatexGenerator
         throw $e;
       }
 
+      if($e instanceof ProcessTimedOutException) {
+        throw new LatexException("The execution of the pdflatex command timed out. Is it a extremely large file?", 0, $e);
+      }
+
       throw new LatexException("Something failed during the compilation of the pdf file. Check the logs for more info. (filename: " . explode('.tex', $texLocation)[0] . ".log )", 0, $e);
     }
 
@@ -211,6 +221,17 @@ class LatexGenerator
   public function setMaxAge($maxAge)
   {
     $this->maxAge = $maxAge;
+  }
+
+  /**
+   * Sets the process timeout (max. runtime).
+   * To disable the timeout, set this value to null.
+   *
+   * @param int|float|null $timeout The timeout in seconds
+   */
+  public function setTimeout($timeout)
+  {
+    $this->timeout = $timeout;
   }
 
   /**
@@ -278,6 +299,7 @@ class LatexGenerator
       unset($output);
 
       $process = new Process("cd " . $this->outputDir . " && HOME=\"\$PWD\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
+      $process->setTimeout($this->timeout);
       $process->run();
       $output = explode("\n", $process->getOutput());
 
