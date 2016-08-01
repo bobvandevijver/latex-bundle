@@ -26,16 +26,24 @@ class Parser
    *
    * @param string  $text
    * @param boolean $checkTable
+   * @param boolean $removeLatex
    *
    * @return mixed
    */
-  public function parseText($text, $checkTable = true) {
+  public function parseText($text, $checkTable = true, $removeLatex = false) {
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
     foreach ($matches[0] as $match) {
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
+
+    if ($removeLatex) {
+      $text = str_replace("\\", "\\backslash ", $text);
+      $text = str_replace("{", "\\{ ", $text);
+      $text = str_replace("}", "\\} ", $text);
+    }
+
     $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
 
@@ -104,6 +112,11 @@ class Parser
 
     $text = str_replace("#", "\\#", $text);
     $text = str_replace("_", "\\_", $text);
+
+    if ($removeLatex) {
+      $text = str_replace("%", "\\%", $text);
+      $text = str_replace("$", "\\$", $text);
+    }
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;

@@ -205,11 +205,11 @@ The last exception also includes a backtrace in it message which can be used to 
 ## Character escaping
 ---------------------------
 
-This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text. 
+This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text.
 
 This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. 
 
-The filter takes a single argument, which is by default true. When set to false, the check for the & char is disabled, which might by handy in table environments. 
+The parser takes two arguments: `checkTable` and `removeLatex`. The first is by default `true`, while the second one is by default `false`. If you do not want to use the table checking (the check for the & char is disabled, which might by handy in table environments), set the first argument to true. To remove all Latex commands from the input, set the second parameter to `true`. This disables the possibility to use custom commands from your input.
 
 If you have any character that generates an error, feel create an issue or create a PR.
 
