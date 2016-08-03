@@ -125,3 +125,4 @@ When running LaTeX on Debian, and you encounter the problem below (or similar):
 execute the following command: `sudo apt-get install texlive-fonts-extra`
 
 **Note**: Commit #2079747 contains an update which sets the 'HOME' environment variable. If there is no 'HOME' environment variable when fonts need to be generated at runtime, some subscripts of LaTeX might fail. This should not impact working installations.
+**Note**: Commit #5143e0c changes the value of the HOME variable to /tmp
