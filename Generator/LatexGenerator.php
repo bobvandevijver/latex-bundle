@@ -321,7 +321,7 @@ class LatexGenerator
       }
       unset($output);
 
-      $process = new Process("cd " . $this->outputDir . " && HOME=\"\$PWD\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
+      $process = new Process("cd " . $this->outputDir . " && HOME=\"/tmp\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
       $process->setTimeout($this->timeout);
       $process->run();
       $output = explode("\n", $process->getOutput());
