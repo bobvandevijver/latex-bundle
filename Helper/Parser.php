@@ -132,8 +132,11 @@ class Parser
    */
   public static function parseHtml($text) {
 
-    // Replace UTF-8 nbsp; with normal space
+    // Replace NO-BREAK-SPACE with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
+    
+    // Remove ZERO-WIDTH-SPACE
+    $text = str_replace("\xE2\x80\x8B", '', $text);
 
     // Load the document, we force the usage of UTF-8
     $DOM = new \DOMDocument();
