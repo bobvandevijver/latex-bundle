@@ -328,7 +328,9 @@ class LatexGenerator
 
       // Check if the pdflatex command completed successfully
       if (!$process->isSuccessful()) {
-        throw new LatexParseException(
+        dump($process->getErrorOutput());
+        dump($process->getOutput());
+        throw new LatexParseException(        
             $texLocation,
             $process->getExitCode(),
             $output,
