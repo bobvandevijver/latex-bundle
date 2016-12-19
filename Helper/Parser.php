@@ -24,21 +24,31 @@ class Parser
   /**
    * Parse the text and replace known special latex characters correctly
    *
-   * @param string  $text
-   * @param boolean $checkTable
+   * @param string  $text          The string that needs to be parsed
+   * @param boolean $checkTable    If set, tables should be detected automatically (default true)
+   * @param boolean $removeLatex   If set, all LaTeX commands will be removed (default false)
+   * @param boolean $parseNewLines If set, newline characters will be replaced by LaTeX entities (default false)
    *
    * @return mixed
    */
-  public function parseText($text, $checkTable = true) {
+  public function parseText($text, $checkTable = true, $removeLatex = false, $parseNewLines = false) {
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
     foreach ($matches[0] as $match) {
       $text = str_replace($match, $this->htmlCodes[$match], $text);
     }
+
+    // LaTeX command characters if required
+    if ($removeLatex) {
+      $text = str_replace("\\", "\\backslash ", $text);
+      $text = str_replace("{", "\\{ ", $text);
+      $text = str_replace("}", "\\} ", $text);
+    }
+
+    // Special characters
     $text = str_replace('&sup2;', '\\textsuperscript{2}', $text);
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
-
     $text = str_replace('²', '\\textsuperscript{2}', $text);
     $text = str_replace('³', '\\textsuperscript{3}', $text);
 
@@ -102,8 +112,27 @@ class Parser
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
 
+    // Remaining special characters (cannot be placed with the others,
+    // as then the html entity replace would fail).
     $text = str_replace("#", "\\#", $text);
     $text = str_replace("_", "\\_", $text);
+    $text = str_replace("^", "\\^{}", $text);
+    $text = str_replace("°", "\$^{\\circ}\$", $text);
+    $text = str_replace(">", "\\textgreater ", $text);
+    $text = str_replace("<", "\\textless ", $text);
+    $text = str_replace("~", "\\textasciitilde ", $text);
+
+    // New lines if required
+    if ($parseNewLines) {
+      $text = str_replace("\\n", "\\newline ", $text);
+      $text = str_replace(PHP_EOL, "\\newline ", $text);
+    }
+
+    // Remove last Latex characters if required
+    if ($removeLatex) {
+      $text = str_replace("%", "\\%", $text);
+      $text = str_replace("$", "\\$", $text);
+    }
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;

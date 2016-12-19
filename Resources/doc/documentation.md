@@ -205,13 +205,17 @@ The last exception also includes a backtrace in it message which can be used to 
 ## Character escaping
 ---------------------------
 
-This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text. 
+This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text.
 
-This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. 
+> **Note**: By default, the filter is not meant to remove latex commands! It is meant to convert characters that might be used by your users into a character that LaTeX understands. However, when the parameters are set correctly, you can achieve the remove all behavior.
 
-The filter takes a single argument, which is by default true. When set to false, the check for the & char is disabled, which might by handy in table environments. 
+This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. Note that the filter takes arguments which can change the behavior of the text parser. For the most up-to-date arguments check the [`Parser` class](https://github.com/bobvandevijver/latex-bundle/blob/master/Helper/Parser.php#L34). 
 
-If you have any character that generates an error, feel create an issue or create a PR.
+Next to the `latex_escape` filter, there is also a `latex_escape_all` filter. This should remove all LaTeX commands. 
+
+The parser takes three arguments: `checkTable`, `removeLatex` and `parseNewLines`. The first is by default `true`, while the other two are `false` by default. If you do not want to use the table checking (the check for the & char is disabled, which might by handy in table environments), set the first argument to `false`. To remove all Latex commands from the input, set the second parameter to `true`. This disables the possibility to use custom commands from your input. The third argument can be set to `true` in order to replace all newline characters into LaTeX commands for newlines.
+
+If you have any character that generates an error, feel create [an issue](https://github.com/bobvandevijver/latex-bundle/issues/new) or create a PR.
 
 ## HTML to LaTeX
 ---------------------------
