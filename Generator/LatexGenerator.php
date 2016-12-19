@@ -208,19 +208,38 @@ class LatexGenerator
   }
 
   /**
+   * @param $cacheDir
+   *
+   * @return $this
+   */
+  public function setCacheDir($cacheDir){
+    $this->cacheDir = $cacheDir;
+
+    return $this;
+  }
+
+  /**
    * @param boolean $forceRegenerate
+   *
+   * @return LatexGenerator
    */
   public function setForceRegenerate($forceRegenerate)
   {
     $this->forceRegenerate = $forceRegenerate;
+
+    return $this;
   }
 
   /**
    * @param \DateTime $maxAge
+   *
+   * @return LatexGenerator
    */
   public function setMaxAge($maxAge)
   {
     $this->maxAge = $maxAge;
+
+    return $this;
   }
 
   /**
@@ -228,10 +247,14 @@ class LatexGenerator
    * To disable the timeout, set this value to null.
    *
    * @param int|float|null $timeout The timeout in seconds
+   *
+   * @return LatexGenerator
    */
   public function setTimeout($timeout)
   {
     $this->timeout = $timeout;
+
+    return $this;
   }
 
   /**
@@ -298,7 +321,7 @@ class LatexGenerator
       }
       unset($output);
 
-      $process = new Process("cd " . $this->outputDir . " && HOME=\"\$PWD\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
+      $process = new Process("cd " . $this->outputDir . " && HOME=\"/tmp\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
       $process->setTimeout($this->timeout);
       $process->run();
       $output = explode("\n", $process->getOutput());
