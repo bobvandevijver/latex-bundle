@@ -55,13 +55,27 @@ class Parser
     // Remove remaining HTML entities
     $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
 
+    // Remaining special characters (cannot be placed with the others,
+    // as then the html entity replace would fail).
+    $text = str_replace("#", "\\#", $text);
+    $text = str_replace("_", "\\_", $text);
+    $text = str_replace("^", "\\^{}", $text);
+    $text = str_replace("°", "\$^{\\circ}\$", $text);
+    $text = str_replace(">", "\\textgreater ", $text);
+    $text = str_replace("<", "\\textless ", $text);
+    $text = str_replace("~", "\\textasciitilde ", $text);
+
     // Adjust known characters
     $text = str_replace("ä", "\\\"a", $text);
     $text = str_replace("á", "\\'a", $text);
     $text = str_replace("à", "\\`a", $text);
+    $text = str_replace("â", "\\^a", $text);
+    $text = str_replace("ã", "\\~a", $text);
     $text = str_replace("Ä", "\\\"A", $text);
     $text = str_replace("Á", "\\'A", $text);
     $text = str_replace("À", "\\`A", $text);
+    $text = str_replace("Â", "\\^A", $text);
+    $text = str_replace("Ã", "\\~A", $text);
 
     $text = str_replace("ë", "\\\"e", $text);
     $text = str_replace("é", "\\'e", $text);
@@ -75,25 +89,31 @@ class Parser
     $text = str_replace("ï", "\\\"i", $text);
     $text = str_replace("í", "\\'i", $text);
     $text = str_replace("ì", "\\`i", $text);
+    $text = str_replace("î", "\\^i", $text);
     $text = str_replace("Ï", "\\\"I", $text);
     $text = str_replace("Í", "\\'I", $text);
     $text = str_replace("Ì", "\\`I", $text);
+    $text = str_replace("Î", "\\^I", $text);
 
     $text = str_replace("ö", "\\\"o", $text);
     $text = str_replace("ó", "\\'o", $text);
     $text = str_replace("ò", "\\`o", $text);
+    $text = str_replace("ô", "\\^o", $text);
+    $text = str_replace("õ", "\\~o", $text);
     $text = str_replace("Ö", "\\\"O", $text);
     $text = str_replace("Ó", "\\'O", $text);
     $text = str_replace("Ò", "\\`O", $text);
-    $text = str_replace("õ", "\\~O", $text);
+    $text = str_replace("Ô", "\\^O", $text);
     $text = str_replace("Õ", "\\~O", $text);
 
     $text = str_replace("ü", "\\\"u", $text);
     $text = str_replace("ú", "\\'u", $text);
     $text = str_replace("ù", "\\`u", $text);
+    $text = str_replace("û", "\\^u", $text);
     $text = str_replace("Ü", "\\\"U", $text);
     $text = str_replace("Ú", "\\'U", $text);
     $text = str_replace("Ù", "\\`U", $text);
+    $text = str_replace("Û", "\\^U", $text);
 
     $text = str_replace("ñ", "\\~n", $text);
     $text = str_replace("ß", "{\\ss}", $text);
@@ -111,16 +131,6 @@ class Parser
     $text = str_replace("Š", "\\v{S}", $text);
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
-
-    // Remaining special characters (cannot be placed with the others,
-    // as then the html entity replace would fail).
-    $text = str_replace("#", "\\#", $text);
-    $text = str_replace("_", "\\_", $text);
-    $text = str_replace("^", "\\^{}", $text);
-    $text = str_replace("°", "\$^{\\circ}\$", $text);
-    $text = str_replace(">", "\\textgreater ", $text);
-    $text = str_replace("<", "\\textless ", $text);
-    $text = str_replace("~", "\\textasciitilde ", $text);
 
     // New lines if required
     if ($parseNewLines) {
