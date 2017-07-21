@@ -26,7 +26,7 @@ class LatexParams {
    * Set a specific parameter for the class
    *
    * @param string $param
-   * @param string $value
+   * @param mixed $value
    *
    * @return LatexInterface $this
    * @throws \BobV\LatexBundle\Exception\LatexException

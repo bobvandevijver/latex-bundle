@@ -29,7 +29,7 @@ interface LatexInterface
    * Set a specific param in the context for Twig
    *
    * @param string $param
-   * @param string $value
+   * @param mixed $value
    *
    * @return LatexInterface
    */
