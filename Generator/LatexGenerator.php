@@ -159,7 +159,7 @@ class LatexGenerator
     foreach ($latex->getDependencies() as $dependency) {
       if ($this->filesystem->exists($dependency)) {
         $finder = new Finder();
-        $finder->files()->in($dependency)->depth('== 0');;
+        $finder->files()->in($dependency)->depth('== 0');
         foreach ($finder as $file) {
           /** @var SplFileInfo $file */
           $this->filesystem->copy($file->getRealpath(), $this->outputDir . $file->getFilename(), true);
