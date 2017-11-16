@@ -17,3 +17,4 @@ app/config/parameters.yml
 
 # Composer
 composer.phar
+composer.lock
