@@ -1,5 +1,4 @@
 # Documentation
----------------------------------------
 
 This page contains a full index of all pages contained in this documentation, based on the latest version.
 If you're working with older versions we encourage you to update to latest build.
@@ -12,11 +11,12 @@ If you're getting errors or have trouble with update'ing see [submitting issues]
 * [Exceptions](#exceptions)
 * [Character escaping](#character-escaping)
 * [HTML to LaTeX](#html-to-latex)
+* [Custom output directory](#custom-output-directory)
+* [pdflatex location](#pdflatex-location)
 * [Adding extra fonts](#adding-extra-fonts)
 * [Test the bundle](#test-the-bundle)
 
 ## Installation
---------------------
 
 ### 1. Add to composer
 
@@ -77,7 +77,6 @@ sudo texhash
 That's it!
 
 ## Usage
--------------------------
 
 The usage of this bundle is being kept as simple as possible. You just instantiate an LaTeX object and add blocks/elements to it. Three categories are made: 
 
@@ -191,7 +190,6 @@ $latexGenerator->setMaxAge($dateTime);
 ```
 
 ## Exceptions
----------------------------
 
 This bundle is shipping with a few exception classes. These are al follows:
 
@@ -203,7 +201,6 @@ This bundle is shipping with a few exception classes. These are al follows:
 The last exception also includes a backtrace in it message which can be used to find the exact point of failure in the tex file. It includes a filtered log and tex file which can be used when required. 
 
 ## Character escaping
----------------------------
 
 This bundle includes a simple text parser which can escape most UTF-8 characters like ö to \"o. The method `parseText` in the `Helper/Parser` class takes the text to parse as argument and return the parsed text.
 
@@ -218,7 +215,6 @@ The parser takes three arguments: `checkTable`, `removeLatex` and `parseNewLines
 If you have any character that generates an error, feel create [an issue](https://github.com/bobvandevijver/latex-bundle/issues/new) or create a PR.
 
 ## HTML to LaTeX
----------------------------
 
 This bundle also includes a HTML to LaTeX parser, which will parse basic HTML structures and convert it to basic LaTeX syntax. At the moment the following tags are supported: 
 
@@ -238,12 +234,15 @@ It is also possible to override the cache directory per request, by using the `s
 
 By default, the cache directory is appended with `/BobVLatex`. This can be adjusted by extending the `LatexGenerator` class and overwriting the `getCacheBasePath()` method. 
 
+## pdflatex location
+
+This bundles uses the `%bobv.latex.pdflatex.location%` parameter as pdflatex executable location, which is set to `pdflatex` by default. This means that the executable should be available in your path, which would be the case in the most default installation. If your executable is not available from the path, make sure to put the absolute executable path in your configuration.
+
 ## Adding extra fonts
 
 See [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/font/font.md).
 
 ## Test the bundle
----------------------------
 
 I've added a command which can be run to check if all settings for LaTeX are complete. It should return the pdf location if everything is ok. 
 
