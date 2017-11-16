@@ -97,21 +97,25 @@ class Parser
 
     $text = str_replace("ö", "\\\"o", $text);
     $text = str_replace("ó", "\\'o", $text);
+    $text = str_replace("ő", "\\H{o}", $text);
     $text = str_replace("ò", "\\`o", $text);
     $text = str_replace("ô", "\\^o", $text);
     $text = str_replace("õ", "\\~o", $text);
     $text = str_replace("Ö", "\\\"O", $text);
     $text = str_replace("Ó", "\\'O", $text);
+    $text = str_replace("Ő", "\\H{O}", $text);
     $text = str_replace("Ò", "\\`O", $text);
     $text = str_replace("Ô", "\\^O", $text);
     $text = str_replace("Õ", "\\~O", $text);
 
     $text = str_replace("ü", "\\\"u", $text);
     $text = str_replace("ú", "\\'u", $text);
+    $text = str_replace("ű", "\\H{u}", $text);
     $text = str_replace("ù", "\\`u", $text);
     $text = str_replace("û", "\\^u", $text);
     $text = str_replace("Ü", "\\\"U", $text);
     $text = str_replace("Ú", "\\'U", $text);
+    $text = str_replace("Ű", "\\H{U}", $text);
     $text = str_replace("Ù", "\\`U", $text);
     $text = str_replace("Û", "\\^U", $text);
 
