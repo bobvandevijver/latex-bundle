@@ -4,11 +4,17 @@ parameters:
   bobv.latex.editor.class: BobV\LatexBundle\Form\Type\LatexType
   bobv.latex.cache_dir: "%kernel.cache_dir%"
   bobv.latex.max_age: -1 day
+  bobv.latex.pdflatex.location: "pdflatex"
 
 services:
   bobv.latex.generator:
     class: "%bobv.latex.generator.class%"
-    arguments: [ "%bobv.latex.cache_dir%", "%kernel.environment%" ,"@twig", "%bobv.latex.max_age%" ]
+    arguments:
+      - "%bobv.latex.cache_dir%"
+      - "%kernel.environment%"
+      - "@twig"
+      - "%bobv.latex.max_age%"
+      - "%bobv.latex.pdflatex.location%"
 
   bobv.latex.twig.extension:
     class: "%bobv.latex.twig.extension.class%"

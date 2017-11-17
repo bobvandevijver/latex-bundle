@@ -11,7 +11,6 @@ use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
 use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\StreamedResponse;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
 
@@ -34,6 +33,8 @@ class LatexGenerator
   /** @var \DateTime */
   protected $maxAge;
   /** @var string */
+  protected $pdfLatexLocation;
+  /** @var string */
   protected $outputDir;
   /** @var int|float|null */
   protected $timeout;
@@ -44,16 +45,18 @@ class LatexGenerator
    * @param                   $cacheDir
    * @param                   $env
    * @param \Twig_Environment $twig
+   * @param                   $maxAge
+   * @param                   $pdfLatexLocation
    */
-  public function __construct($cacheDir, $env, \Twig_Environment $twig, $maxAge)
-  {
+  public function __construct($cacheDir, $env, \Twig_Environment $twig, $maxAge, $pdfLatexLocation) {
     $this->cacheDir   = $cacheDir;
     $this->env        = $env;
     $this->twig       = $twig;
     $this->filesystem = new Filesystem();
     $this->maxAge     = new \DateTime();
     $this->maxAge->modify($maxAge);
-    $this->forceRegenerate = false;
+    $this->pdfLatexLocation = $pdfLatexLocation;
+    $this->forceRegenerate  = false;
 
     // Default timeout from the Symfony Process component
     $this->timeout = 60;
@@ -64,10 +67,9 @@ class LatexGenerator
    *
    * @param LatexBaseInterface $latex
    *
-   * @return StreamedResponse
+   * @return BinaryFileResponse
    */
-  public function createPdfResponse(LatexBaseInterface $latex)
-  {
+  public function createPdfResponse(LatexBaseInterface $latex) {
     $pdfLocation = $this->generate($latex);
 
     $response = new BinaryFileResponse($pdfLocation);
@@ -84,8 +86,7 @@ class LatexGenerator
    *
    * @return BinaryFileResponse
    */
-  public function createTexResponse(LatexBaseInterface $latex)
-  {
+  public function createTexResponse(LatexBaseInterface $latex) {
     $texLocation = $this->generateLatex($latex);
 
     $response = new BinaryFileResponse($texLocation);
@@ -102,8 +103,7 @@ class LatexGenerator
    *
    * @return string Location of the PDF document
    */
-  public function generate(LatexBaseInterface $latex)
-  {
+  public function generate(LatexBaseInterface $latex) {
     $this->latex = $latex;
     $texLocation = $this->generateLatex();
 
@@ -120,8 +120,7 @@ class LatexGenerator
    * @throws LatexException
    * @return string Location of the generated LaTeX file
    */
-  public function generateLatex(LatexBaseInterface $latex = NULL)
-  {
+  public function generateLatex(LatexBaseInterface $latex = NULL) {
 
     if ($this->latex === NULL && $latex === NULL) {
       throw new LatexException("No latex file given");
@@ -174,15 +173,14 @@ class LatexGenerator
   /**
    * Generates a PDF from a given LaTeX location
    *
-   * @param string $texLocation Location of the .tex file
-   * @param array $compileOptions Optional compile options for pdflatex
+   * @param string $texLocation    Location of the .tex file
+   * @param array  $compileOptions Optional compile options for pdflatex
    *
    * @return string Location of the generated PDF file
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @throws LatexException
    */
-  public function generatePdf($texLocation, array $compileOptions = array())
-  {
+  public function generatePdf($texLocation, array $compileOptions = array()) {
 
     // Check if the compiled tex file exists
     if (!$this->filesystem->exists($texLocation)) {
@@ -196,7 +194,7 @@ class LatexGenerator
         throw $e;
       }
 
-      if($e instanceof ProcessTimedOutException) {
+      if ($e instanceof ProcessTimedOutException) {
         throw new LatexException("The execution of the pdflatex command timed out. Is it a extremely large file?", 0, $e);
       }
 
@@ -212,7 +210,7 @@ class LatexGenerator
    *
    * @return $this
    */
-  public function setCacheDir($cacheDir){
+  public function setCacheDir($cacheDir) {
     $this->cacheDir = $cacheDir;
 
     return $this;
@@ -223,8 +221,7 @@ class LatexGenerator
    *
    * @return LatexGenerator
    */
-  public function setForceRegenerate($forceRegenerate)
-  {
+  public function setForceRegenerate($forceRegenerate) {
     $this->forceRegenerate = $forceRegenerate;
 
     return $this;
@@ -235,8 +232,7 @@ class LatexGenerator
    *
    * @return LatexGenerator
    */
-  public function setMaxAge($maxAge)
-  {
+  public function setMaxAge($maxAge) {
     $this->maxAge = $maxAge;
 
     return $this;
@@ -250,8 +246,7 @@ class LatexGenerator
    *
    * @return LatexGenerator
    */
-  public function setTimeout($timeout)
-  {
+  public function setTimeout($timeout) {
     $this->timeout = $timeout;
 
     return $this;
@@ -262,8 +257,7 @@ class LatexGenerator
    *
    * @throws IOException
    */
-  protected function checkFilesystem()
-  {
+  protected function checkFilesystem() {
     // Check if the cache dir exists
     if (!$this->filesystem->exists($this->getCacheBasePath())) {
       try {
@@ -278,14 +272,13 @@ class LatexGenerator
    * Compile a PDF from a tex file on a given location
    * If necessary, compilation will be done up to three times for correct references
    *
-   * @param string $texLocation Location of the .tex file
-   * @param array $compileOptions Optional compile options for pdflatex
+   * @param string $texLocation    Location of the .tex file
+   * @param array  $compileOptions Optional compile options for pdflatex
    *
    * @throws \Exception
    * @return string
    */
-  protected function compilePdf($texLocation, array $compileOptions = array())
-  {
+  protected function compilePdf($texLocation, array $compileOptions = array()) {
 
     $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
 
@@ -310,7 +303,7 @@ class LatexGenerator
     $compile = true;
     $count   = 0;
     /** @var bool|array $output */
-    $output  = false;
+    $output = false;
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
@@ -321,7 +314,13 @@ class LatexGenerator
       }
       unset($output);
 
-      $process = new Process("cd " . $this->outputDir . " && HOME=\"/tmp\" pdflatex " . $optionsString . " -interaction=nonstopmode -output-directory=\"" . $this->outputDir . "\" \"$texLocation\"");
+      $process = new Process(sprintf(
+          'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"',
+          $this->outputDir,
+          $this->pdfLatexLocation,
+          $optionsString,
+          $this->outputDir,
+          $texLocation));
       $process->setTimeout($this->timeout);
       $process->run();
       $output = explode("\n", $process->getOutput());
@@ -344,8 +343,7 @@ class LatexGenerator
   /**
    * Returns the cache path
    */
-  protected function getCacheBasePath()
-  {
+  protected function getCacheBasePath() {
     return $this->cacheDir . '/BobVLatex/';
   }
 
@@ -358,8 +356,7 @@ class LatexGenerator
    * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @return string The location of the saved .tex file
    */
-  protected function writeTexFile($texData, $fileName)
-  {
+  protected function writeTexFile($texData, $fileName) {
     $this->checkFilesystem();
     $this->outputDir = $this->getCacheBasePath() . hash('ripemd160', $texData) . '/';
     $texLocation     = $this->outputDir . $fileName . '.tex';
@@ -392,8 +389,7 @@ class LatexGenerator
    *
    * @return bool
    */
-  private function findReferenceError($value)
-  {
+  private function findReferenceError($value) {
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
