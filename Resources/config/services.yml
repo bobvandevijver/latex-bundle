@@ -14,7 +14,7 @@ services:
       - "%kernel.environment%"
       - "@twig"
       - "%bobv.latex.max_age%"
-      - "%bobv.latex.pdflatex.location"
+      - "%bobv.latex.pdflatex.location%"
 
   bobv.latex.twig.extension:
     class: "%bobv.latex.twig.extension.class%"
