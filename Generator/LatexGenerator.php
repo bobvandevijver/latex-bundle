@@ -166,8 +166,7 @@ class LatexGenerator
       }
     }
 
-    return $texLocation;
-
+    return $this->normalizeStringForWindows($texLocation);
   }
 
   /**
@@ -280,7 +279,7 @@ class LatexGenerator
    */
   protected function compilePdf($texLocation, array $compileOptions = array()) {
 
-    $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
+      $pdfLocation = preg_replace('#\.tex$#', '', $texLocation) . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
     if ($this->filesystem->exists($pdfLocation)
@@ -292,7 +291,7 @@ class LatexGenerator
     }
 
     // Get the output directory from the tex file
-    $this->outputDir = dirname($texLocation);
+    $this->outputDir = $this->normalizeStringForWindows(dirname($texLocation));
 
     // Process extra options
     $optionsString = '';
@@ -314,8 +313,15 @@ class LatexGenerator
       }
       unset($output);
 
+      // Normalizing command for windows OS
+      if ($this->isWindowsOS()) {
+          $cmd = 'cd %s && %s %s -interaction=nonstopmode -output-directory="%s" "%s"';
+      } else {
+          $cmd = 'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"';
+      }
+
       $process = new Process(sprintf(
-          'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"',
+          $cmd,
           $this->outputDir,
           $this->pdfLatexLocation,
           $optionsString,
@@ -358,8 +364,10 @@ class LatexGenerator
    */
   protected function writeTexFile($texData, $fileName) {
     $this->checkFilesystem();
-    $this->outputDir = $this->getCacheBasePath() . hash('ripemd160', $texData) . '/';
-    $texLocation     = $this->outputDir . $fileName . '.tex';
+    $this->outputDir = $this->normalizeStringForWindows(
+      $this->getCacheBasePath() . hash('ripemd160', $texData) . '/'
+    );
+    $texLocation = $this->outputDir . $fileName . '.tex';
     try {
 
       // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
@@ -393,4 +401,30 @@ class LatexGenerator
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
+  /**
+   * Replace windows path backslash with common backslash if needed
+   * @param $string
+   * @return mixed
+   */
+  private function normalizeStringForWindows($string)
+  {
+    if ($this->isWindowsOS()) {
+      return str_replace('\\', '/', $string);
+    }
+
+    return $string;
+  }
+
+  /**
+   * Check if we are on a windows OS
+   * @return bool
+   */
+  private function isWindowsOS()
+  {
+    if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+      return true;
+    }
+
+    return false;
+  }
 }
