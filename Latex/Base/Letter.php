@@ -21,7 +21,7 @@ class Letter extends LatexBase
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = 'BobVLatexBundle:Base:letter.tex.twig';
+    $this->template = '@BobVLatex/Base/letter.tex.twig';
     $datetime = new \DateTime();
     $this->params   = array(
         'pagenumber'     => 'false',     // Whether to print pagenumbers from page 2 and forward

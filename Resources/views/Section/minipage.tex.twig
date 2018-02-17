@@ -3,11 +3,11 @@
   % Section minipage
   {% if newpage %}\newpage{% endif %}
 
-  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+  {% include '@BobVLatex/extra_commands.twig.twig' %}
 
   \begin{minipage}{ {{- width -}} }
 
-  {% include 'BobVLatexBundle::elements.twig.twig' %}
+  {% include '@BobVLatex/elements.twig.twig' %}
 
   \end{minipage}
 {% endblock bobv_latex_section_minipage %}

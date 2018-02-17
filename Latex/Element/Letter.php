@@ -23,7 +23,7 @@ class Letter extends LatexElement
   public function __construct($address, $opening, $text)
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:letter.tex.twig';
+    $this->template = '@BobVLatex/Element/letter.tex.twig';
     $this->params   = array(
         'address'        => $address, // Address
         'opening'        => $opening, // Opening of the letter

@@ -32,7 +32,7 @@ class IncludePdf extends LatexElement
     }
 
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:includepdf.tex.twig';
+    $this->template = '@BobVLatex/Element/includepdf.tex.twig';
     $this->params   = array(
         'totalPages'           => $totalPages,
         'skip_first_wallpaper' => $skipFirstWallpaper,

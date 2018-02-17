@@ -19,7 +19,7 @@ class Book extends Base
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = 'BobVLatexBundle:Base:book.tex.twig';
+    $this->template = '@BobVLatex/Base/book.tex.twig';
 
     // Call parent constructor
     parent::__construct($filename);

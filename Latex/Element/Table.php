@@ -13,7 +13,7 @@ class Table extends LatexElement
   {
 
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:table.tex.twig';
+    $this->template = '@BobVLatex/Element/table.tex.twig';
     $this->params   = array(
         'tabularx'       => true,
         'caption'        => null,

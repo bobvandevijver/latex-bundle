@@ -17,6 +17,6 @@ class TOC extends LatexElement
   public function __construct()
   {
     // Set defaults
-    $this->template = 'BobVLatexBundle:Element:toc.tex.twig';
+    $this->template = '@BobVLatex/Element/toc.tex.twig';
   }
 }

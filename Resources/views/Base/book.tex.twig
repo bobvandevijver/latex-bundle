@@ -43,11 +43,11 @@
   \setcounter{secnumdepth}{ {{- secnumdepth -}} } % Removes default section numbers
   \setcounter{tocdepth}{ {{- tocdepth -}} } % No subsections in the ToC
 
-  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+  {% include '@BobVLatex/extra_commands.twig.twig' %}
 
   \begin{document}
 
-  {% include 'BobVLatexBundle::elements.twig.twig' %}
+  {% include '@BobVLatex/elements.twig.twig' %}
 
   \end{document}
 {% endblock bobv_latex_book %}

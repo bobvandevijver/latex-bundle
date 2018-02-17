@@ -21,7 +21,7 @@ class Text extends LatexElement
   public function __construct($text)
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:text.tex.twig';
+    $this->template = '@BobVLatex/Element/text.tex.twig';
     $this->params   = array(
         'text'           => $text,
         'extra_commands' => array(),

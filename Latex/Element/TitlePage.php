@@ -24,7 +24,7 @@ class TitlePage extends LatexElement
   public function __construct($title, $subtitle='', $author='', $date = '')
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:titlepage.tex.twig';
+    $this->template = '@BobVLatex/Element/titlepage.tex.twig';
     $this->params   = array(
         'title'           => $title,
         'subtitle'        => $subtitle,

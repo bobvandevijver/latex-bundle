@@ -16,7 +16,7 @@ class BlackTitle extends LatexElement
    */
   public function __construct($title)
   {
-    $this->template = 'BobVLatexBundle:Element:blacktitle.tex.twig';
+    $this->template = '@BobVLatex/Element/blacktitle.tex.twig';
     $this->params   = array(
         'title'          => $title,
         'extra_commands' => array(),

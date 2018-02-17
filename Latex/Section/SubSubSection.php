@@ -11,7 +11,7 @@ class SubSubSection extends LatexSection {
    * @param string $subsubsectionTitle
    */
   public function __construct($subsubsectionTitle = ''){
-    $this->template = 'BobVLatexBundle:Section:sub_sub_section.tex.twig';
+    $this->template = '@BobVLatex/Section/sub_sub_section.tex.twig';
     $this->params = array(
       'subsubsectionTitle' => $subsubsectionTitle,
       'includeTOC' => true,

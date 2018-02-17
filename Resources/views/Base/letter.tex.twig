@@ -32,11 +32,11 @@
 
   \date{ {{- date|latex_escape|raw -}} }
 
-  {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+  {% include '@BobVLatex/extra_commands.twig.twig' %}
 
   \begin{document}
 
-  {% include 'BobVLatexBundle::elements.twig.twig' %}
+  {% include '@BobVLatex/elements.twig.twig' %}
 
   \end{document}
 {% endblock bobv_latex_letter %}

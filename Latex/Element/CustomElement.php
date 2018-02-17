@@ -21,7 +21,7 @@ class CustomElement extends LatexElement
   public function __construct($custom)
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:custom_element.tex.twig';
+    $this->template = '@BobVLatex/Element/custom_element.tex.twig';
     $this->params   = array(
         'custom'           => $custom,
     );

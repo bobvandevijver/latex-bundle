@@ -19,7 +19,7 @@ class Article extends Base
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = 'BobVLatexBundle:Base:article.tex.twig';
+    $this->template = '@BobVLatex/Base/article.tex.twig';
 
     // Call parent constructor
     parent::__construct($filename);

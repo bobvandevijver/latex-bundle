@@ -21,7 +21,7 @@ class Listing extends LatexElement
   public function __construct($list)
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:listing.tex.twig';
+    $this->template = '@BobVLatex/Element/listing.tex.twig';
     $this->params   = array(
         'list'           => $list,
         'extra_commands' => array(),

@@ -11,7 +11,7 @@ class MiniPage extends LatexSection
    */
   public function __construct()
   {
-    $this->template = 'BobVLatexBundle:Section:minipage.tex.twig';
+    $this->template = '@BobVLatex/Section/minipage.tex.twig';
     $this->params   = array(
         'width'          => '\textwidth', // Width of the minipage
 

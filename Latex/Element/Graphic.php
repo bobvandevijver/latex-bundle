@@ -22,7 +22,7 @@ class Graphic extends LatexElement
   public function __construct($graphic_location, $caption = false)
   {
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:graphic.tex.twig';
+    $this->template = '@BobVLatex/Element/graphic.tex.twig';
     $this->params   = array(
         'placement'      => 'ht!',
         'centering'      => true,

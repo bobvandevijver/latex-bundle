@@ -2,7 +2,7 @@
 
   % List element
   \begin{itemize}
-    {% include 'BobVLatexBundle::extra_commands.twig.twig' %}
+    {% include '@BobVLatex/extra_commands.twig.twig' %}
     {% for item in list %}
       \item {{ item|latex_escape|raw }}
     {% endfor %}

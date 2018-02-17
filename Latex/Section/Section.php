@@ -11,7 +11,7 @@ class Section extends LatexSection {
    * @param string $sectionTitle
    */
   public function __construct($sectionTitle = ''){
-    $this->template = 'BobVLatexBundle:Section:section.tex.twig';
+    $this->template = '@BobVLatex/Section/section.tex.twig';
     $this->params = array(
       'sectionTitle' => $sectionTitle,
       'includeTOC' => true,

@@ -13,7 +13,7 @@ class LongTable extends LatexElement
   {
 
     // Define defaults
-    $this->template = 'BobVLatexBundle:Element:longtable.tex.twig';
+    $this->template = '@BobVLatex/Element/longtable.tex.twig';
     $this->params   = array(
         'caption'        => NULL,
         'firsthead'      => NULL,
