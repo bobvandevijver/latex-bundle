@@ -172,6 +172,18 @@ Note that the `generatePdf` also accepts an optional `$compileOptions` array. Wi
 
 > Note: If you have extremely large files, you might hit the default Process limit of 60 seconds during the execution of pdflatex (from the Symfony Process component). If so, you can customize the timeout with the `setTimout($timeout)` method on the `LatexGenerator`.
 
+If you're using a Symfony version which has autowiring enabled, you can also autowire the generator by using the `LatexGeneratorInterface` interface!
+
+```php
+use BobV\LatexBundle\Latex\Base\Article;
+use BobV\LatexBundle\Generator\LatexGeneratorInterface;
+
+public function renderLatex(LatexGeneratorInterface $generator){
+  $latex = new Article();
+  return $generator->createPdfResponse($latex);
+}
+```
+
 ### 5. Caching
 
 By default, this latexbundle will not dump the texfile or regenerate the PDF file if the file already exists. This is done by using a hash of the tex contents to ensure that when a file is changed, the generation will be done always.

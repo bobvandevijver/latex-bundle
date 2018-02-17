@@ -17,7 +17,7 @@ use Symfony\Component\Process\Process;
 /**
  * Class LatexGenerator
  */
-class LatexGenerator
+class LatexGenerator implements LatexGeneratorInterface
 {
 
   /** @var string */
@@ -68,6 +68,12 @@ class LatexGenerator
    * @param LatexBaseInterface $latex
    *
    * @return BinaryFileResponse
+   *
+   * @throws ImageNotFoundException
+   * @throws LatexException
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
   public function createPdfResponse(LatexBaseInterface $latex) {
     $pdfLocation = $this->generate($latex);
@@ -85,6 +91,11 @@ class LatexGenerator
    * @param LatexBaseInterface $latex
    *
    * @return BinaryFileResponse
+   * @throws ImageNotFoundException
+   * @throws LatexException
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
   public function createTexResponse(LatexBaseInterface $latex) {
     $texLocation = $this->generateLatex($latex);
@@ -102,6 +113,12 @@ class LatexGenerator
    * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
    *
    * @return string Location of the PDF document
+   *
+   * @throws ImageNotFoundException
+   * @throws LatexException
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
   public function generate(LatexBaseInterface $latex) {
     $this->latex = $latex;
@@ -115,10 +132,13 @@ class LatexGenerator
    *
    * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
    *
-   * @throws IOException
+   * @return string Location of the generated LaTeX file
+   *
    * @throws ImageNotFoundException
    * @throws LatexException
-   * @return string Location of the generated LaTeX file
+   * @throws \Twig_Error_Loader
+   * @throws \Twig_Error_Runtime
+   * @throws \Twig_Error_Syntax
    */
   public function generateLatex(LatexBaseInterface $latex = NULL) {
 

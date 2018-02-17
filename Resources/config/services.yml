@@ -7,6 +7,9 @@ parameters:
   bobv.latex.pdflatex.location: "pdflatex"
 
 services:
+  BobV\LatexBundle\Generator\LatexGeneratorInterface:
+    alias: bobv.latex.generator
+
   bobv.latex.generator:
     class: "%bobv.latex.generator.class%"
     arguments:
