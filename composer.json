@@ -27,7 +27,8 @@
         "twig/twig": ">= 1.9.0"
     },
     "suggest": {
-        "egeloen/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application"
+        "egeloen/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application",
+        "spatie/pdf-to-image": "Allows you to convert PDF output into a image."
     },
     "autoload": {
         "psr-4": {

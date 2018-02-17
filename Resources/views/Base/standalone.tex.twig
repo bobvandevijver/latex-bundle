@@ -1,0 +1,12 @@
+{% block bobv_latex_standalone %}
+  \documentclass[{{- mode -}},border={{- border -}}]{standalone}
+
+  % Added packages
+  {% for package in packages -%}
+    \usepackage[ {{- package.o -}} ]{ {{- package.p -}} }
+  {%- endfor %}
+
+  \begin{document}
+  {% include '@BobVLatex/elements.twig.twig' %}
+  \end{document}
+{% endblock %}

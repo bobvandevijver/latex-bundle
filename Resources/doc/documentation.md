@@ -226,6 +226,40 @@ The parser takes three arguments: `checkTable`, `removeLatex` and `parseNewLines
 
 If you have any character that generates an error, feel create [an issue](https://github.com/bobvandevijver/latex-bundle/issues/new) or create a PR.
 
+## PDF to image
+
+If you want this bundle to render for example LaTeX-equations as image, you can use the following code (this does require you to have [spatie/pdf-to-image](https://github.com/spatie/pdf-to-image) installed). For example:
+
+```php
+use BobV\LatexBundle\Generator\LatexGeneratorInterface;
+use BobV\LatexBundle\Latex\Base\Standalone;
+use BobV\LatexBundle\Latex\Element\CustomCommand;
+use Spatie\PdfToImage\Pdf;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+
+public function renderLatex(LatexGeneratorInterface $generator)
+{
+  // Create latex object
+  $content = '$ x^2 = y^2 = x^2 $';
+  $document = (new Standalone(md5($content)))
+      ->addElement(new CustomCommand($content));
+
+  // Generate pdf output
+  $pdfLocation = $generator->generate($document);
+
+  // Determine output location
+  $imageLocation = str_replace('.pdf', '.jpg', $pdfLocation);
+
+  // Convert to image
+  $pdf = new Pdf($pdfLocation);
+  $pdf->setOutputFormat('jpg');
+  $pdf->saveImage($imageLocation);
+
+  // Return image
+  return new BinaryFileResponse($imageLocation);
+}
+```
+
 ## HTML to LaTeX
 
 This bundle also includes a HTML to LaTeX parser, which will parse basic HTML structures and convert it to basic LaTeX syntax. At the moment the following tags are supported: 
