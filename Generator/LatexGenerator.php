@@ -314,10 +314,15 @@ class LatexGenerator implements LatexGeneratorInterface
     // Get the output directory from the tex file
     $this->outputDir = dirname($texLocation);
 
-    // Process extra options
+    // Process extra options for security
     $optionsString = '';
     foreach ($compileOptions as $option => $value) {
-      $optionsString .= ' -' . $option . (($value) ? ' ' . $value . ' ' : ' ');
+      $optionsString .= sprintf(' -%s %s', $option, $value ? $value : '');
+    }
+
+    // Add -no-shell-escape
+    if (!array_key_exists('shell-escape', $compileOptions)){
+      $optionsString .= ' -no-shell-escape';
     }
 
     $compile = true;

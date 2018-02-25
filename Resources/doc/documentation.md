@@ -284,6 +284,12 @@ By default, the cache directory is appended with `/BobVLatex`. This can be adjus
 
 This bundles uses the `%bobv.latex.pdflatex.location%` parameter as pdflatex executable location, which is set to `pdflatex` by default. This means that the executable should be available in your path, which would be the case in the most default installation. If your executable is not available from the path, make sure to put the absolute executable path in your configuration.
 
+## No shell escape
+
+By default, the `pdflatex` command is called with `-no-shell-escape`, in order to disallow arbitrary program execution outside of the LaTeX file. If you do require this, simply pass `shell-escape` as option. 
+
+> **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
+
 ## Adding extra fonts
 
 See [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/font/font.md).
