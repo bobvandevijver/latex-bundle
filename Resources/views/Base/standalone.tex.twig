@@ -1,5 +1,5 @@
 {% block bobv_latex_standalone %}
-  \documentclass[{{- mode -}},border={{- border -}}]{standalone}
+  \documentclass[{{- mode -}},border={{- border -}},varwidth={{- varwidth ? "true" : "false" -}}]{standalone}
 
   % Added packages
   {% for package in packages -%}

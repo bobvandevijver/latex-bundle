@@ -16,6 +16,7 @@ new Standalone($filename)
 ```
     'mode'           => 'crop',  // Define the standalone mode
     'border'         => '1pt',   // Content border
+    'varwidth'       => true,    // Variable width mode
     
     'extra_commands' => array(), // Define extra commands if needed
     'packages'       => array(), // Define extra packages to use
