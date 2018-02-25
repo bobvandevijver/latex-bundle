@@ -1,4 +1,5 @@
 <?php
+
 namespace BobV\LatexBundle\Latex;
 
 interface LatexBaseInterface extends LatexInterface
@@ -22,7 +23,7 @@ interface LatexBaseInterface extends LatexInterface
    *
    * @param string $fileName
    *
-   * @return LatexInterface
+   * @return LatexBaseInterface
    */
   public function setFileName($fileName);
 
@@ -36,9 +37,38 @@ interface LatexBaseInterface extends LatexInterface
   /**
    * To add an dependency location
    *
-   * @param $depedency
+   * @param $dependency
    *
-   * @return LatexInterface
+   * @return LatexBaseInterface
    */
-  public function addDependency($depedency);
+  public function addDependency($dependency);
+
+  /**
+   * To add multiple dependencies locations
+   *
+   * @param $dependencies
+   *
+   * @return LatexBaseInterface
+   */
+  public function addDependencies($dependencies);
+
+  /**
+   * Add an package to include
+   *
+   * @param $package
+   * @param $options
+   *
+   * @return LatexBaseInterface $this
+   */
+  public function addPackage($package, $options = '');
+
+  /**
+   * Add multiple packages to include (without options)
+   *
+   * @param $packages
+   *
+   * @return mixed
+   */
+  public function addPackages($packages);
+
 }

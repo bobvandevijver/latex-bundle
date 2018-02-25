@@ -1,4 +1,5 @@
 <?php
+
 namespace BobV\LatexBundle\Latex;
 
 use BobV\LatexBundle\Exception\LatexException;
@@ -16,8 +17,6 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 
   /**
    * @param string $filename
-   *
-   * @throws \BobV\LatexBundle\Exception\LatexException
    */
   public function __construct($filename)
   {
@@ -81,7 +80,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   /**
    * @param string $fileName
    *
-   * @return LatexInterface $this
+   * @return LatexBaseInterface $this
    */
   public function setFileName($fileName)
   {
@@ -101,7 +100,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   /**
    * @param string $template
    *
-   * @return LatexInterface $this
+   * @return LatexBaseInterface $this
    */
   public function setTemplate($template)
   {
@@ -113,17 +112,35 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   /**
    * @return array
    */
-  public function getDependencies(){
+  public function getDependencies()
+  {
     return $this->dependencies;
   }
 
   /**
    * @param $dependency
    *
-   * @return LatexInterface $this
+   * @return LatexBaseInterface $this
    */
-  public function addDependency($dependency){
+  public function addDependency($dependency)
+  {
     $this->dependencies[] = $dependency;
+
+    return $this;
+  }
+
+  /**
+   * To add multiple dependencies locations
+   *
+   * @param $dependencies
+   *
+   * @return LatexBaseInterface
+   */
+  public function addDependencies($dependencies)
+  {
+    foreach ($dependencies as $dependency) {
+      $this->addDependency($dependency);
+    }
 
     return $this;
   }
@@ -134,7 +151,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
    * @param $package
    * @param $options
    *
-   * @return LatexInterface $this
+   * @return LatexBaseInterface $this
    */
   public function addPackage($package, $options = '')
   {
@@ -146,8 +163,24 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 
     $this->params['packages'][] = array(
         'p' => $package,
-        'o' => $options
+        'o' => $options,
     );
+
+    return $this;
+  }
+
+  /**
+   * Add multiple packages to include (without options)
+   *
+   * @param $packages
+   *
+   * @return mixed
+   */
+  public function addPackages($packages)
+  {
+    foreach ($packages as $package) {
+      $this->addPackage($package);
+    }
 
     return $this;
   }

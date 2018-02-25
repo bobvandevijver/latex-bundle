@@ -10,8 +10,6 @@ class Standalone extends LatexBase
    * Article constructor, sets defaults
    *
    * @param string $filename
-   *
-   * @throws \BobV\LatexBundle\Exception\LatexException
    */
   public function __construct($filename) {
     // Define standard values
