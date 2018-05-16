@@ -7,7 +7,7 @@ use BobV\LatexBundle\Latex\LatexBase;
 class Standalone extends LatexBase
 {
   /**
-   * Article constructor, sets defaults
+   * Standalone constructor, sets defaults
    *
    * @param string $filename
    */
