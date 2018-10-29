@@ -418,4 +418,48 @@ class LatexGenerator implements LatexGeneratorInterface
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
+    /**
+     * This method will create a PDF from a given tex template.
+     *
+     * @param String $template TEX template to compile
+     * @param String $filename Name of the PDF
+     *
+     * @return String Location to the compiled PDF file.
+     *
+     * @throws \Symfony\Component\Filesystem\Exception\IOException
+     * @throws LatexException
+     */
+  public function createPdfFromTemplate($template, $filename) {
+      // save the tex file
+      // look writeTexfile()
+      $texLocation = $this->writeTexFile($template, $filename);
+
+      // compile it
+      $pdfLocation = $this->generatePdf($texLocation);
+
+      return $pdfLocation;
+  }
+
+    /**
+     * This method will generate a BinaryFileResposnse for a compiled PDF
+     *
+     * @param String $pdfLocation Location to the PDF file.
+     * @param String $filename PDF file name
+     *
+     * @return BinaryFileResponse
+     *
+     * @throws ImageNotFoundException
+     * @throws LatexException
+     * @throws \Twig_Error_Loader
+     * @throws \Twig_Error_Runtime
+     * @throws \Twig_Error_Syntax
+     */
+  public function createResponse($pdfLocation, $filename) {
+      $response = new BinaryFileResponse($pdfLocation);
+      $response->headers->set('Content-Type', 'application/pdf;charset=utf-8');
+      $response->headers->set('Content-Disposition', 'attachment;filename="' . $filename . '.pdf"');
+
+      return $response;
+  }
+
 }
