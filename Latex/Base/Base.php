@@ -12,7 +12,7 @@ use BobV\LatexBundle\Latex\LatexBase;
  *
  * @author BobV
  */
-class Base extends LatexBase
+abstract class Base extends LatexBase
 {
 
   /**
