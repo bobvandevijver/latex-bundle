@@ -2,7 +2,7 @@
 
 This page contains a full index of all pages contained in this documentation, based on the latest version.
 If you're working with older versions we encourage you to update to latest build.
-If you're getting errors or have trouble with update'ing see [submitting issues][1] and open a ticket on github.
+If you're getting errors or have trouble with updating see [submitting issues][1] and open a ticket on github.
 
 [1]: https://github.com/bobv/latex-bundle/blob/master/Resources/doc/support/submitting-issues.md
 
@@ -203,7 +203,7 @@ $latexGenerator->setMaxAge($dateTime);
 
 ## Exceptions
 
-This bundle is shipping with a few exception classes. These are al follows:
+This bundle is shipping with a few exception classes. These are as follows:
 
 * ImageNotFoundException: Thrown when a image in the generated tex file is not located on the disk.
 * LatexException: Base LaTeX exception class, thrown with explaining message

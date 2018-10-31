@@ -5,7 +5,7 @@ namespace BobV\LatexBundle\Latex;
 interface LatexBaseInterface extends LatexInterface
 {
   /**
-   * Constructur
+   * Constructor
    *
    * @param string $fileName
    */
