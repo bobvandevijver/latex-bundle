@@ -8,7 +8,7 @@ If you're getting errors or have trouble with updating see [submitting issues][1
 
 * [Installation](#installation)
 * [Usage](#usage)
-* [Cookboox](#cookbook)
+* [Cookbook](#cookbook)
 * [Exceptions](#exceptions)
 * [Character escaping](#character-escaping)
 * [HTML to LaTeX](#html-to-latex)

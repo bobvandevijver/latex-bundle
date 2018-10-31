@@ -36,3 +36,5 @@ return $latexGenerator->createPdfResponse(
     ->setContext(array('articles' => $articles))
 ));
 ```
+
+This class is based on the question and answer in [#30](https://github.com/bobvandevijver/latex-bundle/issues/30).
