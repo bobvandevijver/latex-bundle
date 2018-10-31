@@ -8,6 +8,7 @@ If you're getting errors or have trouble with updating see [submitting issues][1
 
 * [Installation](#installation)
 * [Usage](#usage)
+* [Cookboox](#cookbook)
 * [Exceptions](#exceptions)
 * [Character escaping](#character-escaping)
 * [HTML to LaTeX](#html-to-latex)
@@ -200,6 +201,11 @@ $latexGenerator->setForceRegenerate(true);
 $dateTime = new \DateTime();
 $latexGenerator->setMaxAge($dateTime);
 ```
+
+## Cookbook
+
+You can easily extend the existing templates with you custom defined one, although most you will need is already available.
+Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
 
 ## Exceptions
 
