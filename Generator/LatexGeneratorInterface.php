@@ -12,19 +12,23 @@ interface LatexGeneratorInterface
    * Generate a response containing a PDF document
    *
    * @param LatexBaseInterface $latex
+   * @param bool               $download If set to false, the attachment value will be omitted from the
+   *                                     Content-Disposition field. Defaults to true.
    *
    * @return BinaryFileResponse
    */
-  public function createPdfResponse(LatexBaseInterface $latex);
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true);
 
   /**
    * Generate a response containing a generated .tex file
    *
    * @param LatexBaseInterface $latex
+   * @param bool               $download If set to false, the attachment value will be omitted from the
+   *                                     Content-Disposition field. Defaults to true.
    *
    * @return BinaryFileResponse
    */
-  public function createTexResponse(LatexBaseInterface $latex);
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true);
 
   /**
    * Compile a LaTeX object into the wanted PDF file

@@ -66,6 +66,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * Generate a response containing a PDF document
    *
    * @param LatexBaseInterface $latex
+   * @param bool               $download
    *
    * @return BinaryFileResponse
    *
@@ -75,12 +76,13 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws \Twig_Error_Runtime
    * @throws \Twig_Error_Syntax
    */
-  public function createPdfResponse(LatexBaseInterface $latex) {
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true) {
     $pdfLocation = $this->generate($latex);
 
     $response = new BinaryFileResponse($pdfLocation);
     $response->headers->set('Content-Type', 'application/pdf;charset=utf-8');
-    $response->headers->set('Content-Disposition', 'attachment;filename="' . $latex->getFileName() . '.pdf"');
+    $response->headers->set('Content-Disposition',
+        sprintf('%sfilename="%s.pdf"', $download ? 'attachment;' : '', $latex->getFileName()));
 
     return $response;
   }
@@ -89,6 +91,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * Generate a response containing a generated .tex file
    *
    * @param LatexBaseInterface $latex
+   * @param bool               $download
    *
    * @return BinaryFileResponse
    * @throws ImageNotFoundException
@@ -97,12 +100,13 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws \Twig_Error_Runtime
    * @throws \Twig_Error_Syntax
    */
-  public function createTexResponse(LatexBaseInterface $latex) {
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true) {
     $texLocation = $this->generateLatex($latex);
 
     $response = new BinaryFileResponse($texLocation);
     $response->headers->set('Content-Type', 'application/x-tex;charset=utf-8');
-    $response->headers->set('Content-Disposition', 'attachment;filename="' . $latex->getFileName() . '.tex"');
+    $response->headers->set('Content-Disposition',
+        sprintf('%sfilename="%s.tex"', $download ? 'attachment;' : '', $latex->getFileName()));
 
     return $response;
   }
@@ -321,7 +325,7 @@ class LatexGenerator implements LatexGeneratorInterface
     }
 
     // Add -no-shell-escape
-    if (!array_key_exists('shell-escape', $compileOptions)){
+    if (!array_key_exists('shell-escape', $compileOptions)) {
       $optionsString .= ' -no-shell-escape';
     }
 
