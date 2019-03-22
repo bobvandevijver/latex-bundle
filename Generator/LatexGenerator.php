@@ -162,8 +162,8 @@ class LatexGenerator implements LatexGeneratorInterface
 
     // Check if there are undefined images
     $matches = array();
-    preg_match_all('/\\includegraphics\[.+\]\{([^}]+)\}/u', $texData, $matches);
-    foreach ($matches[1] as $imageLocation) {
+    preg_match_all('/\\\\includegraphics(\[.+\])?\{([^}]+)\}/u', $texData, $matches);
+    foreach ($matches[2] as $imageLocation) {
       if (!$this->filesystem->exists($imageLocation)) {
         throw new ImageNotFoundException($imageLocation);
       }
