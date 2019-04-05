@@ -5,10 +5,12 @@ The list block defines a standard itemize block directly printed in the document
 
 ### Constructor
 
-The constructor takes a array which will be directly printed as items in the LaTeX file.
+The constructor takes an array which will be directly printed as items in the LaTeX file. When the
+second parameter is set to true, it will use an 'enumerate' instead of the 'listing' environment.
 
 ```php
 new Listing($list)
+new Listing($list, false)
 ```
 
 ### Params
@@ -16,6 +18,7 @@ new Listing($list)
 ```
     'list'           => $list,
     'extra_commands' => array(),
+    'enumerate'      => $enumerate
 ```
 
 ### Template
