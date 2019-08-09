@@ -22,11 +22,11 @@ class BobVLatexExtension extends \Twig_Extension
    * @return array
    */
   public function getFilters() {
-    return array(
-        new \Twig_SimpleFilter('latex_escape', array($this->parser, 'parseText')),
-        new \Twig_SimpleFilter('latex_escape_all', array($this, 'latexEscapeAll')),
-        new \Twig_SimpleFilter('latex_parse_html', array($this->parser, 'parseHtml')),
-    );
+    return [
+        new \Twig_SimpleFilter('latex_escape', [$this->parser, 'parseText'], ['is_safe' => ['all']]),
+        new \Twig_SimpleFilter('latex_escape_all', [$this, 'latexEscapeAll'], ['is_safe' => ['all']]),
+        new \Twig_SimpleFilter('latex_parse_html', [$this->parser, 'parseHtml'], ['is_safe' => ['all']]),
+    ];
   }
 
   /**

@@ -8,9 +8,9 @@
       \centering
     {% endif %}
     {% if caption != false %}
-      \caption{ {{- caption|latex_escape|raw -}} }
+      \caption{ {{- caption|latex_escape -}} }
     {% endif %}
-    \label{ {{- label|latex_escape|raw -}} }
+    \label{ {{- label|latex_escape -}} }
   \end{figure}
 
 {% endblock bobv_latex_graphic_element %}

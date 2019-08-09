@@ -1,14 +1,14 @@
 {% block bobv_latex_letter_element %}
 
 
-  \begin{letter}{ {{- address|latex_escape|raw -}} }
+  \begin{letter}{ {{- address|latex_escape -}} }
 
   % Letter element
   {% include '@BobVLatex/extra_commands.twig.twig' %}
 
-  \opening{ {{- opening|latex_escape|raw -}},}
+  \opening{ {{- opening|latex_escape -}},}
 
-  {{ text|latex_escape|raw }}
+  {{ text|latex_escape }}
 
   \end{letter}
 

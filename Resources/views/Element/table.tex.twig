@@ -5,7 +5,7 @@
 
   {% if caption != null %}
     \begin{table}[h!]
-    \caption{ {{- caption|latex_escape|raw -}} }
+    \caption{ {{- caption|latex_escape -}} }
   {% endif %}
 
   {% if width == '\\textwidth' %}
@@ -20,7 +20,7 @@
 
           {% for cellData in rowData['data'] %}
             {% if not loop.first %}&{% endif %}
-            {{ cellData|latex_escape|raw }}
+            {{ cellData|latex_escape }}
           {% endfor %}
           \\
 

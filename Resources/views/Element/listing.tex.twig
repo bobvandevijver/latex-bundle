@@ -4,7 +4,7 @@
   {{ enumerate ? '\\begin{enumerate}' : '\\begin{itemize}' }}
     {% include '@BobVLatex/extra_commands.twig.twig' %}
     {% for item in list %}
-      \item {{ item|latex_escape|raw }}
+      \item {{ item|latex_escape }}
     {% endfor %}
   {{ enumerate ? '\\end{enumerate}' : '\\end{itemize}' }}
 
