@@ -274,7 +274,7 @@ This bundle also includes a HTML to LaTeX parser, which will parse basic HTML st
 
 NOTE: The parser assumes that the HTML input is generated using a CK-editor instance. When this is not the case, the behaviour might be unexpected!
 
-It is recommended to use the `bobv_latex` form type when you are in need for a stylable input to LaTeX. This form field type will be updated with new functions when available. Note that to use this form field, you will need to require the suggested `egeloen/ckeditor-bundle` in your `composer.json`.  
+It is recommended to use the `bobv_latex` form type when you are in need for a stylable input to LaTeX. This form field type will be updated with new functions when available. Note that to use this form field, you will need to require the suggested `friendsofsymfony/ckeditor-bundle` in your `composer.json`.  
 
 If you have any use-case that generates an error, feel create an issue or create a PR.
 
