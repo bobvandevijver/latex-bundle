@@ -135,6 +135,7 @@ class Parser
     $text = str_replace("Š", "\\v{S}", $text);
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
+    $text = str_replace("Ω", "\\ensuremath{\\Omega}", $text);
 
     // New lines if required
     if ($parseNewLines) {
