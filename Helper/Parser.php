@@ -51,6 +51,7 @@ class Parser
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
     $text = str_replace('²', '\\textsuperscript{2}', $text);
     $text = str_replace('³', '\\textsuperscript{3}', $text);
+    $text = str_replace('€', '\\euro{}', $text);
 
     // Remove remaining HTML entities
     $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
