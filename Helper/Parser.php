@@ -147,6 +147,11 @@ class Parser
     if ($removeLatex) {
       $text = str_replace("%", "\\%", $text);
       $text = str_replace("$", "\\$", $text);
+      
+      // Only replace & characters if remove latex is set, and table detection is disabled
+      if (!$checkTable){
+        $text = str_replace("&", "\\&", $text);
+      }
     }
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
