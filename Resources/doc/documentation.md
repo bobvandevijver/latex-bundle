@@ -149,6 +149,7 @@ class DefaultController Extends Controller{
     $latex->addElement(new TitlePage('BobV Latex Test', 'a subtitle', 'an author', '\today'));
     $latex->addElement(new TOC());
     
+    // Or, when using autowiring, the interface LatexGeneratorInterface can be used
     $latexGenerator = $this->get('bobv.latex.generator');
     
     // Return a PDF Response from a LaTeX object
@@ -184,6 +185,8 @@ public function renderLatex(LatexGeneratorInterface $generator){
   return $generator->createPdfResponse($latex);
 }
 ```
+
+If you're in need of ensuring only a single latex generator can run at the same time, you can use the `LockedLatexGenerator` (alias `bobv.latex.generator.locked`). This service behaves exactly the same as the normal generator, but it requires you to call the `acquireLock` method before calling any generate method. You can release the lock afterward by calling `releaseLock`, or it will be released automatically when the HTTP request is finished.
 
 ### 5. Caching
 
