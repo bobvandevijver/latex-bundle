@@ -61,21 +61,21 @@ interface LatexGeneratorInterface
   /**
    * @param $cacheDir
    *
-   * @return $this
+   * @return LatexGeneratorInterface
    */
   public function setCacheDir($cacheDir);
 
   /**
    * @param boolean $forceRegenerate
    *
-   * @return LatexGenerator
+   * @return LatexGeneratorInterface
    */
   public function setForceRegenerate($forceRegenerate);
 
   /**
    * @param \DateTime $maxAge
    *
-   * @return LatexGenerator
+   * @return LatexGeneratorInterface
    */
   public function setMaxAge($maxAge);
 
@@ -85,7 +85,7 @@ interface LatexGeneratorInterface
    *
    * @param int|float|null $timeout The timeout in seconds
    *
-   * @return LatexGenerator
+   * @return LatexGeneratorInterface
    */
   public function setTimeout($timeout);
 }
