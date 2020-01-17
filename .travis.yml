@@ -1,21 +1,16 @@
 language: php
 
 php:
-    - 5.6
+    - 7.0
     - 7.1
     - 7.2
     - 7.3
+    - 7.4
 
 env:
-    - SYMFONY_VERSION=origin/2.8
     - SYMFONY_VERSION=origin/3.4
-    - SYMFONY_VERSION=origin/4.2
-
-matrix:
-    exclude:
-        - php: 5.6
-          env: SYMFONY_VERSION=origin/4.2
-      
+    - SYMFONY_VERSION=origin/4.4
+    - SYMFONY_VERSION=origin/5.0
 
 before_script:
     - composer self-update 
