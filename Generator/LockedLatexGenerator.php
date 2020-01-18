@@ -80,7 +80,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
   public function createTexResponse(LatexBaseInterface $latex, bool $download = true) {
     $this->ensureLock();
 
-    return $this->createTexResponse($latex, $download);
+    return $this->generator->createTexResponse($latex, $download);
   }
 
   /**
