@@ -15,10 +15,60 @@ class Parser
   private $htmlCodes;
 
   /**
+   * @var string[]
+   */
+  private $greekMap;
+
+  /**
    * Parser constructor.
    */
   public function __construct() {
     $this->htmlCodes = array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES | ENT_HTML5));
+
+    // Based on the list from https://jblevins.org/log/greek
+    $this->greekMap  = [
+        "α" => "alpha",
+        "β" => "beta",
+        "γ" => "gamma",
+        "Γ" => "Gamma",
+        "δ" => "delta",
+        "Δ" => "Delta",
+        "ϵ" => "epsilon",
+        "ε" => "epsilon",
+        "ζ" => "zeta",
+        "η" => "eta",
+        "θ" => "theta",
+        "ϑ" => "theta",
+        "Θ" => "Theta",
+        "ι" => "iota",
+        "κ" => "kappa",
+        "ϰ" => "kappa",
+        "λ" => "lambda",
+        "Λ" => "Lambda",
+        "μ" => "mu",
+        "ν" => "nu",
+        "ξ" => "xi",
+        "Ξ" => "Xi",
+        "π" => "pi",
+        "ϖ" => "pi",
+        "Π" => "Pi",
+        "ρ" => "rho",
+        "ϱ" => "rho",
+        "σ" => "sigma",
+        "ς" => "sigma",
+        "Σ" => "Sigma",
+        "τ" => "tau",
+        "υ" => "upsilon",
+        "Υ" => "Upsilon",
+        "ϕ" => "phi",
+        "φ" => "phi",
+        "Φ" => "Phi",
+        "χ" => "chi",
+        "ψ" => "psi",
+        "Ψ" => "Psi",
+        "ω" => "omega",
+        "Ω"  => "Omega",
+    ];
   }
 
   /**
@@ -31,7 +81,7 @@ class Parser
    *
    * @return mixed
    */
-  public function parseText($text, $checkTable = true, $removeLatex = false, $parseNewLines = false) {
+  public function parseText($text, $checkTable = true, $removeLatex = false, $parseNewLines = false, $removeGreek = false) {
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
@@ -136,7 +186,13 @@ class Parser
     $text = str_replace("Š", "\\v{S}", $text);
     $text = str_replace("Ø", "{\\O}", $text);
     $text = str_replace("ø", "{\\o}", $text);
-    $text = str_replace("Ω", "\\ensuremath{\\Omega}", $text);
+
+    // Greek alphabet
+    if ($removeGreek) {
+      foreach ($this->greekMap as $symbol => $replacement) {
+        $text = str_replace($symbol, "\\ensuremath{\\$replacement}", $text);
+      }
+    }
 
     // New lines if required
     if ($parseNewLines) {
@@ -148,16 +204,16 @@ class Parser
     if ($removeLatex) {
       $text = str_replace("%", "\\%", $text);
       $text = str_replace("$", "\\$", $text);
-      
+
       // Only replace & characters if remove latex is set, and table detection is disabled
-      if (!$checkTable){
+      if (!$checkTable) {
         $text = str_replace("&", "\\&", $text);
       }
     }
 
     // Check for & characters. Inside a tabular(x) env they should not be replaced
     $offset = 0;
-    while ($checkTable && FALSE !== ($position = strpos($text, '&', $offset))) {
+    while ($checkTable && false !== ($position = strpos($text, '&', $offset))) {
       if (!(strrpos($text, '\begin{tabular', $position - strlen($text)) < $position
           && strpos($text, '\end{tabular', $position) > $position)
       ) {
@@ -184,7 +240,7 @@ class Parser
 
     // Replace NO-BREAK-SPACE with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
-    
+
     // Remove ZERO-WIDTH-SPACE
     $text = str_replace("\xE2\x80\x8B", '', $text);
 
