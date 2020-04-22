@@ -45,7 +45,7 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
    * @return mixed
    */
   public function latexEscapeAll($text) {
-    return $this->parser->parseText($text, false, true, true);
+    return $this->parser->parseText($text, false, true, true, true);
   }
 
 }
