@@ -6,6 +6,8 @@ use BobV\LatexBundle\Exception\ImageNotFoundException;
 use BobV\LatexBundle\Exception\LatexException;
 use BobV\LatexBundle\Exception\LatexParseException;
 use BobV\LatexBundle\Latex\LatexBaseInterface;
+use DateTime;
+use Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
 use Symfony\Component\Finder\Finder;
@@ -13,6 +15,10 @@ use Symfony\Component\Finder\SplFileInfo;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Process\Exception\ProcessTimedOutException;
 use Symfony\Component\Process\Process;
+use Twig\Environment;
+use Twig\Error\LoaderError;
+use Twig\Error\RuntimeError;
+use Twig\Error\SyntaxError;
 
 /**
  * Class LatexGenerator
@@ -30,7 +36,7 @@ class LatexGenerator implements LatexGeneratorInterface
   protected $forceRegenerate;
   /** @var LatexBaseInterface */
   protected $latex;
-  /** @var \DateTime */
+  /** @var DateTime */
   protected $maxAge;
   /** @var string */
   protected $pdfLatexLocation;
@@ -38,22 +44,22 @@ class LatexGenerator implements LatexGeneratorInterface
   protected $outputDir;
   /** @var int|float|null */
   protected $timeout;
-  /** @var \Twig_Environment */
+  /** @var Environment */
   protected $twig;
 
   /**
-   * @param                   $cacheDir
-   * @param                   $env
-   * @param \Twig_Environment $twig
-   * @param                   $maxAge
-   * @param                   $pdfLatexLocation
+   * @param string      $cacheDir
+   * @param string      $env
+   * @param Environment $twig
+   * @param DateTime    $maxAge
+   * @param string      $pdfLatexLocation
    */
-  public function __construct($cacheDir, $env, \Twig_Environment $twig, $maxAge, $pdfLatexLocation) {
+  public function __construct($cacheDir, $env, $twig, $maxAge, $pdfLatexLocation) {
     $this->cacheDir   = $cacheDir;
     $this->env        = $env;
     $this->twig       = $twig;
     $this->filesystem = new Filesystem();
-    $this->maxAge     = new \DateTime();
+    $this->maxAge     = new DateTime();
     $this->maxAge->modify($maxAge);
     $this->pdfLatexLocation = $pdfLatexLocation;
     $this->forceRegenerate  = false;
@@ -72,9 +78,9 @@ class LatexGenerator implements LatexGeneratorInterface
    *
    * @throws ImageNotFoundException
    * @throws LatexException
-   * @throws \Twig_Error_Loader
-   * @throws \Twig_Error_Runtime
-   * @throws \Twig_Error_Syntax
+   * @throws LoaderError
+   * @throws RuntimeError
+   * @throws SyntaxError
    */
   public function createPdfResponse(LatexBaseInterface $latex, bool $download = true) {
     $pdfLocation = $this->generate($latex);
@@ -96,9 +102,9 @@ class LatexGenerator implements LatexGeneratorInterface
    * @return BinaryFileResponse
    * @throws ImageNotFoundException
    * @throws LatexException
-   * @throws \Twig_Error_Loader
-   * @throws \Twig_Error_Runtime
-   * @throws \Twig_Error_Syntax
+   * @throws LoaderError
+   * @throws RuntimeError
+   * @throws SyntaxError
    */
   public function createTexResponse(LatexBaseInterface $latex, bool $download = true) {
     $texLocation = $this->generateLatex($latex);
@@ -114,15 +120,15 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Compile a LaTeX object into the wanted PDF file
    *
-   * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
+   * @param LatexBaseInterface $latex
    *
    * @return string Location of the PDF document
    *
    * @throws ImageNotFoundException
    * @throws LatexException
-   * @throws \Twig_Error_Loader
-   * @throws \Twig_Error_Runtime
-   * @throws \Twig_Error_Syntax
+   * @throws LoaderError
+   * @throws RuntimeError
+   * @throws SyntaxError
    */
   public function generate(LatexBaseInterface $latex) {
     $this->latex = $latex;
@@ -134,15 +140,15 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Generates a latex file for the given LaTeX object
    *
-   * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
+   * @param LatexBaseInterface $latex
    *
    * @return string Location of the generated LaTeX file
    *
    * @throws ImageNotFoundException
    * @throws LatexException
-   * @throws \Twig_Error_Loader
-   * @throws \Twig_Error_Runtime
-   * @throws \Twig_Error_Syntax
+   * @throws LoaderError
+   * @throws RuntimeError
+   * @throws SyntaxError
    */
   public function generateLatex(LatexBaseInterface $latex = NULL) {
 
@@ -171,7 +177,7 @@ class LatexGenerator implements LatexGeneratorInterface
 
     try {
       $texLocation = $this->writeTexFile($texData, $latex->getFileName());
-    } catch (\Exception $e) {
+    } catch (Exception $e) {
       if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
       }
@@ -201,7 +207,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param array  $compileOptions Optional compile options for pdflatex
    *
    * @return string Location of the generated PDF file
-   * @throws \Symfony\Component\Filesystem\Exception\IOException
+   * @throws IOException
    * @throws LatexException
    */
   public function generatePdf($texLocation, array $compileOptions = array()) {
@@ -213,8 +219,8 @@ class LatexGenerator implements LatexGeneratorInterface
 
     try {
       $pdfLocation = $this->compilePdf($texLocation, $compileOptions);
-    } catch (\Exception $e) {
-      if ($e instanceof IOException || $e instanceOf LatexException) {
+    } catch (Exception $e) {
+      if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
       }
 
@@ -252,7 +258,7 @@ class LatexGenerator implements LatexGeneratorInterface
   }
 
   /**
-   * @param \DateTime $maxAge
+   * @param DateTime $maxAge
    *
    * @return LatexGenerator
    */
@@ -299,8 +305,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param string $texLocation    Location of the .tex file
    * @param array  $compileOptions Optional compile options for pdflatex
    *
-   * @throws \Exception
    * @return string
+   * @throws Exception
    */
   protected function compilePdf($texLocation, array $compileOptions = array()) {
 
@@ -382,8 +388,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param string $texData
    * @param        $fileName
    *
-   * @throws \Symfony\Component\Filesystem\Exception\IOException
    * @return string The location of the saved .tex file
+   * @throws IOException
    */
   protected function writeTexFile($texData, $fileName) {
     $this->checkFilesystem();
