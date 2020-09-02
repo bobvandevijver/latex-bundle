@@ -56,7 +56,13 @@ class IncludePdf extends LatexElement
    */
   private function getPDFPages($document)
   {
-    $process = new Process("pdfinfo $document");
+    $commandLine     = sprintf('pdfinfo %s', $document);
+    if (method_exists(Process::class, 'fromShellCommandline')) {
+      $process = Process::fromShellCommandline($commandLine);
+    } else {
+      $process = new Process($commandLine);
+    }
+
     $process->run();
     if($process->getExitCode() !== 0){
       return 0;

@@ -349,13 +349,19 @@ class LatexGenerator implements LatexGeneratorInterface
       }
       unset($output);
 
-      $process = new Process(sprintf(
+      $commandLine = sprintf(
           'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"',
           $this->outputDir,
           $this->pdfLatexLocation,
           $optionsString,
           $this->outputDir,
-          $texLocation));
+          $texLocation);
+      if (method_exists(Process::class, 'fromShellCommandline')) {
+        $process = Process::fromShellCommandline($commandLine);
+      } else {
+        $process = new Process($commandLine);
+      }
+
       $process->setTimeout($this->timeout);
       $process->run();
       $output = explode("\n", $process->getOutput());
