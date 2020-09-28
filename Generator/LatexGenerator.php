@@ -374,6 +374,20 @@ class LatexGenerator implements LatexGeneratorInterface
             $output,
             $process->getExitCodeText());
       }
+      
+/// NEW
+      if($count===0){
+      $bibLocation = explode('.tex', $texLocation)[0];
+      $commandLine =   'biber  '.$bibLocation;
+      
+            if (method_exists(Process::class, 'fromShellCommandline')) {
+        $process = Process::fromShellCommandline($commandLine);
+      } else {
+        $process = new Process($commandLine);
+      }
+     $process->run();
+ }  
+ //// END NEW
 
       $count++;
     }
