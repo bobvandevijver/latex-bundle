@@ -2,6 +2,7 @@
 
 namespace BobV\LatexBundle\Generator;
 
+use BobV\LatexBundle\Exception\BibliographyGenerationException;
 use BobV\LatexBundle\Exception\ImageNotFoundException;
 use BobV\LatexBundle\Exception\LatexException;
 use BobV\LatexBundle\Exception\LatexParseException;
@@ -39,7 +40,9 @@ class LatexGenerator implements LatexGeneratorInterface
   /** @var DateTime */
   protected $maxAge;
   /** @var string */
-  protected $pdfLatexLocation;
+  protected $pdfLatexBinaryLocation;
+  /** @var string */
+  protected $bibliographyBinaryLocation;
   /** @var string */
   protected $outputDir;
   /** @var int|float|null */
@@ -52,17 +55,21 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param string      $env
    * @param Environment $twig
    * @param DateTime    $maxAge
-   * @param string      $pdfLatexLocation
+   * @param string      $pdfLatexBinaryLocation
+   * @param string      $bibliographyBinaryLocation
    */
-  public function __construct($cacheDir, $env, $twig, $maxAge, $pdfLatexLocation) {
+  public function __construct($cacheDir, $env, $twig, $maxAge, $pdfLatexBinaryLocation, $bibliographyBinaryLocation) {
     $this->cacheDir   = $cacheDir;
     $this->env        = $env;
     $this->twig       = $twig;
     $this->filesystem = new Filesystem();
     $this->maxAge     = new DateTime();
     $this->maxAge->modify($maxAge);
-    $this->pdfLatexLocation = $pdfLatexLocation;
-    $this->forceRegenerate  = false;
+
+    $this->pdfLatexBinaryLocation     = $pdfLatexBinaryLocation;
+    $this->bibliographyBinaryLocation = $bibliographyBinaryLocation;
+
+    $this->forceRegenerate = false;
 
     // Default timeout from the Symfony Process component
     $this->timeout = 60;
@@ -309,7 +316,6 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws Exception
    */
   protected function compilePdf($texLocation, array $compileOptions = array()) {
-
     $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
@@ -352,19 +358,12 @@ class LatexGenerator implements LatexGeneratorInterface
       $commandLine = sprintf(
           'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"',
           $this->outputDir,
-          $this->pdfLatexLocation,
+          $this->pdfLatexBinaryLocation,
           $optionsString,
           $this->outputDir,
           $texLocation);
-      if (method_exists(Process::class, 'fromShellCommandline')) {
-        $process = Process::fromShellCommandline($commandLine);
-      } else {
-        $process = new Process($commandLine);
-      }
-
-      $process->setTimeout($this->timeout);
-      $process->run();
-      $output = explode("\n", $process->getOutput());
+      $process     = $this->runProcess($commandLine);
+      $output      = explode("\n", $process->getOutput());
 
       // Check if the pdflatex command completed successfully
       if (!$process->isSuccessful()) {
@@ -374,20 +373,25 @@ class LatexGenerator implements LatexGeneratorInterface
             $output,
             $process->getExitCodeText());
       }
-      
-/// NEW
-      if($count===0){
-      $bibLocation = explode('.tex', $texLocation)[0];
-      $commandLine =   'biber  '.$bibLocation;
-      
-            if (method_exists(Process::class, 'fromShellCommandline')) {
-        $process = Process::fromShellCommandline($commandLine);
-      } else {
-        $process = new Process($commandLine);
+
+      // Run bibliography tooling when enabled
+      if ($count === 0 && !empty($this->bibliographyBinaryLocation)) {
+        $bibLocation = explode('.tex', $texLocation)[0];
+        $commandLine = sprintf(
+            'cd %s && HOME="/tmp" %s "%s"',
+            $this->outputDir,
+            $this->bibliographyBinaryLocation,
+            $bibLocation);
+        $process     = $this->runProcess($commandLine);
+
+        // Check whether the pdflatex command completed successfully
+        if (!$process->isSuccessful()) {
+          throw new BibliographyGenerationException(
+              $texLocation,
+              $process->getExitCode(),
+              $process->getExitCodeText());
+        }
       }
-     $process->run();
- }  
- //// END NEW
 
       $count++;
     }
@@ -448,4 +452,23 @@ class LatexGenerator implements LatexGeneratorInterface
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
+  /**
+   * Run a latex process
+   *
+   * @param string $commandLine
+   *
+   * @return Process
+   */
+  private function runProcess(string $commandLine) {
+    if (method_exists(Process::class, 'fromShellCommandline')) {
+      $process = Process::fromShellCommandline($commandLine);
+    } else {
+      $process = new Process($commandLine);
+    }
+
+    $process->setTimeout($this->timeout);
+    $process->run();
+
+    return $process;
+  }
 }
