@@ -14,6 +14,7 @@ If you're getting errors or have trouble with updating see [submitting issues][1
 * [HTML to LaTeX](#html-to-latex)
 * [Custom output directory](#custom-output-directory)
 * [pdflatex location](#pdflatex-location)
+* [bibliography support](#bibliography-support)
 * [Adding extra fonts](#adding-extra-fonts)
 * [Test the bundle](#test-the-bundle)
 
@@ -292,6 +293,10 @@ By default, the cache directory is appended with `/BobVLatex`. This can be adjus
 ## pdflatex location
 
 This bundles uses the `%bobv.latex.pdflatex.location%` parameter as pdflatex executable location, which is set to `pdflatex` by default. This means that the executable should be available in your path, which would be the case in the most default installation. If your executable is not available from the path, make sure to put the absolute executable path in your configuration.
+
+## bibliography support
+
+If you need to run a bibliography processor on your latex file, you can configure the bibliography binary location in the `%bobv.latex.bibliography_binary.location%` parameter. The same notes on the location as for the pdflatex location hold for this location.
 
 ## No shell escape
 
