@@ -6,6 +6,7 @@ parameters:
   bobv.latex.cache_dir: "%kernel.cache_dir%"
   bobv.latex.max_age: -1 day
   bobv.latex.pdflatex.location: "pdflatex"
+  bobv.latex.bibliography_binary.location: ""
 
 services:
   BobV\LatexBundle\Generator\LatexGeneratorInterface:
@@ -22,6 +23,7 @@ services:
       - "@twig"
       - "%bobv.latex.max_age%"
       - "%bobv.latex.pdflatex.location%"
+      - "%bobv.latex.bibliography_binary.location%"
 
   bobv.latex.generator.locked:
     class: "%bobv.latex.generator.locked.class%"
