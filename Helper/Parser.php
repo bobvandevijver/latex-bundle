@@ -78,6 +78,7 @@ class Parser
    * @param boolean $checkTable    If set, tables should be detected automatically (default true)
    * @param boolean $removeLatex   If set, all LaTeX commands will be removed (default false)
    * @param boolean $parseNewLines If set, newline characters will be replaced by LaTeX entities (default false)
+   * @param bool    $removeGreek   If set, any greek character will be replace by their LaTeX math equivalent (default false)
    *
    * @return mixed
    */
