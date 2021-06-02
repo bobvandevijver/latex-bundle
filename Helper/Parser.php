@@ -45,7 +45,8 @@ class Parser
         "ϰ" => "kappa",
         "λ" => "lambda",
         "Λ" => "Lambda",
-        "μ" => "mu",
+        "μ" => "mu", // https://www.compart.com/en/unicode/U+03BC
+        "µ" => "mu", // https://www.compart.com/en/unicode/U+00B5
         "ν" => "nu",
         "ξ" => "xi",
         "Ξ" => "Xi",
@@ -102,6 +103,7 @@ class Parser
     $text = str_replace('&sup3;', '\\textsuperscript{3}', $text);
     $text = str_replace('²', '\\textsuperscript{2}', $text);
     $text = str_replace('³', '\\textsuperscript{3}', $text);
+    $text = str_replace('±', '\\ensuremath{\\pm}', $text);
     $text = str_replace('€', '\\euro{}', $text);
 
     // Remove remaining HTML entities
