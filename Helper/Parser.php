@@ -94,10 +94,10 @@ class Parser
     // LaTeX command characters if required
     if ($removeLatex) {
       $text = str_replace("\\", "\\textbackslash ", $text);
-      $text = str_replace("{", "\\{ ", $text);
-      $text = str_replace("}", "\\} ", $text);
-      $text = str_replace("[", "\\[ ", $text);
-      $text = str_replace("]", "\\] ", $text);
+      $text = str_replace("{", "\\{", $text);
+      $text = str_replace("}", "\\}", $text);
+      $text = str_replace("[", "{[}", $text);
+      $text = str_replace("]", "{]}", $text);
     }
 
     // Special characters
