@@ -1,10 +1,9 @@
 {
     "name": "bobv/latex-bundle",
-    "minimum-stability": "RC",
     "description": "Latex and pdf generator for Symfony 2",
     "keywords": ["latex", "pdf", "generator", "symfony"],
     "type": "symfony-bundle",
-    "homepage": "http://github.com/bobvandevijver/latex-bundle",
+    "homepage": "https://github.com/bobvandevijver/latex-bundle",
     "license": "MIT",
     "authors": [
         {
@@ -33,10 +32,10 @@
         "phpunit/phpunit": "^9.5"
     },
     "suggest": {
-        "symfony/lock": "Allows you to generate the pdf file under lock with the LockedLatexGeneratorInterface",
-        "symfony/string": "Allows for extended unicode character escaping, available from Symfony 5.4.x-dev and above",
         "friendsofsymfony/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application",
-        "spatie/pdf-to-image": "Allows you to convert PDF output into a image."
+        "spatie/pdf-to-image": "Allows you to convert PDF output into a image.",
+        "symfony/lock": "Allows you to generate the pdf file under lock with the LockedLatexGeneratorInterface",
+        "symfony/string": "Allows for extended unicode character escaping, available from Symfony 5.4.x-dev and above"
     },
     "config": {
         "sort-packages": true
