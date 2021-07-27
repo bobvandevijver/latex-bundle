@@ -37,9 +37,6 @@
         "symfony/lock": "Allows you to generate the pdf file under lock with the LockedLatexGeneratorInterface",
         "symfony/string": "Allows for extended unicode character escaping, available from Symfony 5.4.x-dev and above"
     },
-    "config": {
-        "sort-packages": true
-    },
     "autoload": {
         "psr-4": {
             "BobV\\LatexBundle\\": "src/"
