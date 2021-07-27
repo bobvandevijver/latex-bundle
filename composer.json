@@ -29,7 +29,8 @@
     },
     "require-dev": {
         "symfony/string": "~5.0",
-        "symfony/lock": "~3.4 || ~4.3 || ~5.0"
+        "symfony/lock": "~3.4 || ~4.3 || ~5.0",
+        "phpunit/phpunit": "^9.5"
     },
     "suggest": {
         "symfony/lock": "Allows you to generate the pdf file under lock with the LockedLatexGeneratorInterface",
@@ -37,9 +38,15 @@
         "friendsofsymfony/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application",
         "spatie/pdf-to-image": "Allows you to convert PDF output into a image."
     },
+    "config": {
+        "sort-packages": true
+    },
     "autoload": {
         "psr-4": {
             "BobV\\LatexBundle\\": "src/"
         }
+    },
+    "scripts": {
+        "test": "phpunit"
     }
 }

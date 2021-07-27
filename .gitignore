@@ -18,3 +18,6 @@ app/config/parameters.yml
 # Composer
 composer.phar
 composer.lock
+
+# phpunit
+.phpunit.result.cache
