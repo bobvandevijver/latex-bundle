@@ -4,7 +4,7 @@ This page contains a full index of all pages contained in this documentation, ba
 If you're working with older versions we encourage you to update to latest build.
 If you're getting errors or have trouble with updating see [submitting issues][1] and open a ticket on github.
 
-[1]: https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/doc/support/submitting-issues.md
+[1]: https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/doc/support-and-contribution/submitting-issues.md
 
 * [Installation](#installation)
 * [Usage](#usage)
