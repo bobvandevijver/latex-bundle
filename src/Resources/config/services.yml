@@ -7,6 +7,7 @@ parameters:
   bobv.latex.max_age: -1 day
   bobv.latex.pdflatex.location: "pdflatex"
   bobv.latex.bibliography_binary.location: ""
+  bobv.latex.use_symfony_string: false
 
 services:
   BobV\LatexBundle\Generator\LatexGeneratorInterface:
@@ -32,6 +33,8 @@ services:
 
   bobv.latex.twig.extension:
     class: "%bobv.latex.twig.extension.class%"
+    arguments:
+      - "%bobv.latex.use_symfony_string%"
     tags:
       - { name: twig.extension }
 
