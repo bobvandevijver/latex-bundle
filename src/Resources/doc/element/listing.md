@@ -23,4 +23,4 @@ new Listing($list, false)
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/Resources/views/Element/listing.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/listing.tex.twig).

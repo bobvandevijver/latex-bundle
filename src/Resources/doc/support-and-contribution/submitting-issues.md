@@ -1,10 +1,10 @@
 # Submitting issues
 ---------------------------------------
-(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/Resources/doc/support-and-contribution/submitting-issues.md) (copied for ease, adjusted)
+(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/src/Resources/doc/support-and-contribution/submitting-issues.md) (copied for ease, adjusted)
 
 [go back to Table of contents][back-to-index]
 
-[back-to-index]: https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/Resources/doc/documentation.md#2-support-and-contribution
+[back-to-index]: https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/src/Resources/doc/documentation.md#2-support-and-contribution
 
 ### Step 1: check existing issues
 

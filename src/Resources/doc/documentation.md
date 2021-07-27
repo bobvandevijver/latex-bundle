@@ -4,7 +4,7 @@ This page contains a full index of all pages contained in this documentation, ba
 If you're working with older versions we encourage you to update to latest build.
 If you're getting errors or have trouble with updating see [submitting issues][1] and open a ticket on github.
 
-[1]: https://github.com/bobv/latex-bundle/blob/master/Resources/doc/support/submitting-issues.md
+[1]: https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/doc/support/submitting-issues.md
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -228,7 +228,7 @@ This bundle includes a simple text parser which can escape most UTF-8 characters
 
 > **Note**: By default, the filter is not meant to remove latex commands! It is meant to convert characters that might be used by your users into a character that LaTeX understands. However, when the parameters are set correctly, you can achieve the remove all behavior.
 
-This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. Note that the filter takes arguments which can change the behavior of the text parser. For the most up-to-date arguments check the [`Parser` class](https://github.com/bobvandevijver/latex-bundle/blob/master/Helper/Parser.php#L34). 
+This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. Note that the filter takes arguments which can change the behavior of the text parser. For the most up-to-date arguments check the [`Parser` class](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Helper/Parser.php#L34). 
 
 Next to the `latex_escape` filter, there is also a `latex_escape_all` filter. This should remove all LaTeX commands. 
 

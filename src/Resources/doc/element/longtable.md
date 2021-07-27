@@ -34,4 +34,4 @@ The table block defines two extra public functions:
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/Resources/views/Element/longtable.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/longtable.tex.twig).

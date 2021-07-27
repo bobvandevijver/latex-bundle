@@ -10,6 +10,10 @@ parameters:
   bobv.latex.use_symfony_string: false
 
 services:
+  BobV\LatexBundle\Command\LatexTestCommand:
+    arguments:
+      - "@bobv.latex.generator"
+
   BobV\LatexBundle\Generator\LatexGeneratorInterface:
     alias: bobv.latex.generator
 

@@ -20,4 +20,4 @@ new Text($text)
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/Resources/views/Element/text.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/text.tex.twig).
