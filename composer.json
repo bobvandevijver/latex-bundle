@@ -37,7 +37,7 @@
     },
     "autoload": {
         "psr-4": {
-            "BobV\\LatexBundle\\": ""
+            "BobV\\LatexBundle\\": "src/"
         }
     }
 }
