@@ -28,10 +28,12 @@
         "twig/twig": "~1.9.0 || ~2.0 || ~3.0"
     },
     "require-dev": {
+        "symfony/string": "~5.0",
         "symfony/lock": "~3.4 || ~4.3 || ~5.0"
     },
     "suggest": {
         "symfony/lock": "Allows you to generate the pdf file under lock with the LockedLatexGeneratorInterface",
+        "symfony/string": "Allows for extended unicode character escaping, available from Symfony 5.4.x-dev and above",
         "friendsofsymfony/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application",
         "spatie/pdf-to-image": "Allows you to convert PDF output into a image."
     },

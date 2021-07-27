@@ -17,18 +17,31 @@ class Configuration implements ConfigurationInterface
    * {@inheritDoc}
    */
   public function getConfigTreeBuilder() {
-    $treeBuilder = new TreeBuilder('bob_v_latex');
+    $treeBuilder = new TreeBuilder('bobv_latex');
 
     if (method_exists($treeBuilder, 'getRootNode')) {
       $rootNode = $treeBuilder->getRootNode();
     } else {
       // for symfony/config 4.1 and older
-      $rootNode = $treeBuilder->root('bob_v_latex');
+      $rootNode = $treeBuilder->root('bobv_latex');
     }
 
     // Here you should define the parameters that are allowed to
     // configure your bundle. See the documentation linked above for
     // more information on that topic.
+
+    $rootNode
+        ->children()
+          ->arrayNode('escaping')
+            ->addDefaultsIfNotSet()
+            ->children()
+              ->booleanNode('use_symfony_string')
+                ->info('When set to true, the Symfony String component will be used to transliterate the remaining unicode characters')
+                ->defaultFalse()
+              ->end()
+            ->end()
+          ->end()
+        ->end();
 
     return $treeBuilder;
   }
