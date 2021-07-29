@@ -18,7 +18,8 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
   /** @var bool */
   private $useSymfonyString;
 
-  public function __construct(bool $useSymfonyString) {
+  public function __construct(bool $useSymfonyString)
+  {
     $this->parser           = new Parser();
     $this->useSymfonyString = $useSymfonyString;
   }
@@ -26,7 +27,8 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
   /**
    * @return array
    */
-  public function getFilters() {
+  public function getFilters()
+  {
     $filterClass = class_exists('\\Twig\\TwigFilter') ? '\\Twig\\TwigFilter' : '\\Twig_SimpleFilter';
 
     return [
@@ -39,11 +41,13 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
   /**
    * @return string
    */
-  public function getName() {
+  public function getName()
+  {
     return 'bobv_latex_twig_extension';
   }
 
-  private function passThroughSfString($text) {
+  private function passThroughSfString($text)
+  {
     if (!$this->useSymfonyString) {
       return $text;
     }
@@ -56,9 +60,10 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
    *
    * @return string
    */
-  public function latexEscape($text) {
+  public function latexEscape($text, $checkTable = true, $removeLatex = false, $parseNewLines = false, $removeGreek = false)
+  {
     return $this->passThroughSfString(
-        $this->parser->parseText($text)
+        $this->parser->parseText($text, $checkTable, $removeLatex, $parseNewLines, $removeGreek)
     );
   }
 
@@ -69,7 +74,8 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
    *
    * @return string
    */
-  public function latexEscapeAll($text) {
+  public function latexEscapeAll($text)
+  {
     return $this->passThroughSfString(
         $this->parser->parseText($text, false, true, true, true)
     );
@@ -80,7 +86,8 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
    *
    * @return string
    */
-  public function latexParseHtml($text) {
+  public function latexParseHtml($text)
+  {
     return $this->passThroughSfString(
         $this->parser::parseHtml($text)
     );
