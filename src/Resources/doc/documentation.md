@@ -72,7 +72,7 @@ The default latex installation does not contain the `ulem` package, which is nee
 
 ```
 sudo mkdir /usr/share/texmf/tex/latex/ulem
-sudo wget https://raw.githubusercontent.com/bobvandevijver/latex-bundle/master/Resources/packages/ulem.sty -P /usr/share/texmf/tex/latex/ulem
+sudo wget https://raw.githubusercontent.com/bobvandevijver/latex-bundle/master/src/Resources/packages/ulem.sty -P /usr/share/texmf/tex/latex/ulem
 sudo texhash
 ```
 
