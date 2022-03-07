@@ -34,7 +34,7 @@ class BobVLatexExtension extends AbstractBobVLatexExtension
     return [
         new $filterClass('latex_escape', [$this, 'latexEscape'], ['is_safe' => ['all']]),
         new $filterClass('latex_escape_all', [$this, 'latexEscapeAll'], ['is_safe' => ['all']]),
-        new $filterClass('latex_parse_html', [$this->parser, 'latexParseHtml'], ['is_safe' => ['all']]),
+        new $filterClass('latex_parse_html', [$this, 'latexParseHtml'], ['is_safe' => ['all']]),
     ];
   }
 
