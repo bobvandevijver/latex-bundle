@@ -1,0 +1,28 @@
+{# Macro to split long words #}
+{%- macro split_words(text, cutoff) -%}
+  {%- set cutoff = cutoff|default(20) -%}
+  {%- set output = text|latex_escape_all -%}
+  {%- set splittedOutput = output|split(' ') %}
+  {%- if splittedOutput|length == 1 -%}
+    \seqsplit{ {{- output|raw -}} }
+  {%- else -%}
+    {%- for splittedPart in splittedOutput -%}
+      {%- set splittedDash = splittedPart|split('-') -%}
+      {%- if splittedDash|length == 1 and splittedPart|length >= cutoff-%}
+        \seqsplit{ {{- splittedPart|raw -}} }
+      {%- elseif splittedDash|length > 1 -%}
+        {%- for splittedDashPart in splittedDash -%}
+          {%- if splittedDashPart|length >= cutoff -%}
+            \seqsplit{ {{- splittedDashPart|raw -}} }
+          {%- else -%}
+            {{- splittedDashPart|raw -}}
+          {%- endif -%}
+          {%- if not loop.last -%}{{- '-' -}}{%- endif -%}
+        {%- endfor -%}
+      {%- else -%}
+        {{- splittedPart|raw -}}
+      {%- endif -%}
+      {%- if not loop.last %} {% endif -%}
+    {%- endfor -%}
+  {%- endif -%}
+{%- endmacro -%}
