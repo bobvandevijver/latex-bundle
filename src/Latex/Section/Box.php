@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex\Section;
+namespace Bobv\LatexBundle\Latex\Section;
 
-use BobV\LatexBundle\Latex\LatexSection;
+use Bobv\LatexBundle\Latex\LatexSection;
 
 class Box extends LatexSection {
 
@@ -9,7 +9,7 @@ class Box extends LatexSection {
    * Constructor of the section section, also defines the default
    */
   public function __construct(){
-    $this->template = '@BobVLatex/Section/box.tex.twig';
+    $this->template = '@BobvLatex/Section/box.tex.twig';
     $this->params = array(
 
       'newpage' => false, // Standard a section starts on a new page

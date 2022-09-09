@@ -1,9 +1,9 @@
 <?php
 
-namespace BobV\LatexBundle\Generator;
+namespace Bobv\LatexBundle\Generator;
 
-use BobV\LatexBundle\Exception\LatexNotLockedException;
-use BobV\LatexBundle\Latex\LatexBaseInterface;
+use Bobv\LatexBundle\Exception\LatexNotLockedException;
+use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use LogicException;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\LockFactory;

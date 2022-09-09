@@ -3,9 +3,9 @@
   % Section section
   {% if newpage %}\newpage{% endif %}
 
-  {% include '@BobVLatex/extra_commands.twig.twig' %}
+  {% include '@BobvLatex/extra_commands.twig.twig' %}
 
   \section {%- if not includeTOC %}*{% endif -%} { {{- sectionTitle|latex_escape -}} }
 
-  {% include '@BobVLatex/elements.twig.twig' %}
+  {% include '@BobvLatex/elements.twig.twig' %}
 {% endblock bobv_latex_section_section %}

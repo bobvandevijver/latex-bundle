@@ -1,16 +1,16 @@
 <?php
 
-namespace BobV\LatexBundle\Twig;
+namespace Bobv\LatexBundle\Twig;
 
-use BobV\LatexBundle\Helper\Parser;
+use Bobv\LatexBundle\Helper\Parser;
 use function Symfony\Component\String\u;
 
 /**
- * Class BobVLatexExtension
+ * Class BobvLatexExtension
  *
  * @author BobV
  */
-class BobVLatexExtension extends AbstractBobVLatexExtension
+class BobvLatexExtension extends AbstractBobvLatexExtension
 {
 
   /** @var Parser */

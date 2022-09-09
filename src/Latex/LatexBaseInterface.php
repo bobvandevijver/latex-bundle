@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Latex;
+namespace Bobv\LatexBundle\Latex;
 
 interface LatexBaseInterface extends LatexInterface
 {

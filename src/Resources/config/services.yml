@@ -1,8 +1,8 @@
 parameters:
-  bobv.latex.generator.class: BobV\LatexBundle\Generator\LatexGenerator
-  bobv.latex.generator.locked.class: BobV\LatexBundle\Generator\LockedLatexGenerator
-  bobv.latex.twig.extension.class: BobV\LatexBundle\Twig\BobVLatexExtension
-  bobv.latex.editor.class: BobV\LatexBundle\Form\Type\LatexType
+  bobv.latex.generator.class: Bobv\LatexBundle\Generator\LatexGenerator
+  bobv.latex.generator.locked.class: Bobv\LatexBundle\Generator\LockedLatexGenerator
+  bobv.latex.twig.extension.class: Bobv\LatexBundle\Twig\BobvLatexExtension
+  bobv.latex.editor.class: Bobv\LatexBundle\Form\Type\LatexType
   bobv.latex.cache_dir: "%kernel.cache_dir%"
   bobv.latex.max_age: -1 day
   bobv.latex.pdflatex.location: "pdflatex"
@@ -10,16 +10,16 @@ parameters:
   bobv.latex.use_symfony_string: false
 
 services:
-  BobV\LatexBundle\Command\LatexTestCommand:
+  Bobv\LatexBundle\Command\LatexTestCommand:
     arguments:
       - "@bobv.latex.generator"
     tags:
       - { name: console.command }
 
-  BobV\LatexBundle\Generator\LatexGeneratorInterface:
+  Bobv\LatexBundle\Generator\LatexGeneratorInterface:
     alias: bobv.latex.generator
 
-  BobV\LatexBundle\Generator\LockedLatexGeneratorInterface:
+  Bobv\LatexBundle\Generator\LockedLatexGeneratorInterface:
     alias: bobv.latex.generator.locked
 
   bobv.latex.generator:

@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 class Table extends LatexElement
 {
@@ -13,7 +13,7 @@ class Table extends LatexElement
   {
 
     // Define defaults
-    $this->template = '@BobVLatex/Element/table.tex.twig';
+    $this->template = '@BobvLatex/Element/table.tex.twig';
     $this->params   = array(
         'tabularx'       => true,
         'caption'        => null,

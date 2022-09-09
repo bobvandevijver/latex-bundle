@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
  * Class Listing
@@ -21,7 +21,7 @@ class Listing extends LatexElement
    */
   public function __construct(array $list, bool $enumerate = false) {
     // Define defaults
-    $this->template = '@BobVLatex/Element/listing.tex.twig';
+    $this->template = '@BobvLatex/Element/listing.tex.twig';
     $this->params   = array(
         'list'           => $list,
         'extra_commands' => array(),

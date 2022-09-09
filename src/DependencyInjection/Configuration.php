@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\DependencyInjection;
+namespace Bobv\LatexBundle\DependencyInjection;
 
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;

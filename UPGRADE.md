@@ -1,7 +1,20 @@
-# BobV Latex Bundle - Upgrade notes
+# Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
 [![Join the chat at https://gitter.im/bobvandevijver/latex-bundle](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bobvandevijver/latex-bundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
+### Upgrade from 2.x to 3.x
+
+The namespace has changed from `BobV\LatexBundle` to `Bobv\LatexBundle` (note the capital `V`) in order to be consistent over with stringification of the bundle name. This means you will have to change your usages where applicatable:
+
+- PHP namespace: `BobV\LatexBundle` => `Bobv\LatexBundle`
+- Twig bundle: `@BobVLatex` => `@BobvLatex`
+- Configuration key: `bob_v_latex` => `bobv_latex`
+- Couple of classes within `Bobv\LatexBundle`:
+  - `BobVLatexBundle` => `BobvLatexBundle`  
+  - `DependencyInjection/BobVLatexExtension` => `DependencyInjection/BobvLatexExtension`  
+  - `Twig/AbstractBobVLatexExtension` => `Twig/AbstractBobvLatexExtension`
+  - `Twig/BobVLatexExtension` => `Twig/BobvLatexExtension`
 
 ### Upgrade from 1.x to 2.x
 

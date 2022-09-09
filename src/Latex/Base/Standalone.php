@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Base;
+namespace Bobv\LatexBundle\Latex\Base;
 
-use BobV\LatexBundle\Latex\LatexBase;
+use Bobv\LatexBundle\Latex\LatexBase;
 
 class Standalone extends LatexBase
 {
@@ -13,7 +13,7 @@ class Standalone extends LatexBase
    */
   public function __construct($filename) {
     // Define standard values
-    $this->template = '@BobVLatex/Base/standalone.tex.twig';
+    $this->template = '@BobvLatex/Base/standalone.tex.twig';
     $this->params   = array(
         'mode'           => 'crop',  // Define the standalone mode
         'border'         => '1pt',   // Content border

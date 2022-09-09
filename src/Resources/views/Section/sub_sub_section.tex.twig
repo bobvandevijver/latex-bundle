@@ -3,9 +3,9 @@
   % Subsubsection section
   {% if newpage %}\newpage{% endif %}
 
-  {% include '@BobVLatex/extra_commands.twig.twig' %}
+  {% include '@BobvLatex/extra_commands.twig.twig' %}
 
   \subsubsection {%- if not includeTOC %}*{% endif -%} { {{- subsubsectionTitle|latex_escape -}} }
 
-  {% include '@BobVLatex/elements.twig.twig' %}
+  {% include '@BobvLatex/elements.twig.twig' %}
 {% endblock bobv_latex_subsubsection_section %}

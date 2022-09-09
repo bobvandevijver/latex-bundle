@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 use Symfony\Component\Process\Process;
 
 /**
@@ -32,7 +32,7 @@ class IncludePdf extends LatexElement
     }
 
     // Define defaults
-    $this->template = '@BobVLatex/Element/includepdf.tex.twig';
+    $this->template = '@BobvLatex/Element/includepdf.tex.twig';
     $this->params   = array(
         'totalPages'           => $totalPages,
         'skip_first_wallpaper' => $skipFirstWallpaper,

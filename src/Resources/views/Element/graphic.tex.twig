@@ -2,7 +2,7 @@
 
   % Graphic element
   \begin{figure}[{{ placement }}]
-    {% include '@BobVLatex/extra_commands.twig.twig' %}
+    {% include '@BobvLatex/extra_commands.twig.twig' %}
     \includegraphics[{% if width != null %}width={{ width }}{% if options != '' %},{% endif %}{% endif %}{{ options }}]{ {{- location -}} }
     {% if centering%}
       \centering

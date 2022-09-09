@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Base;
+namespace Bobv\LatexBundle\Latex\Base;
 
-use BobV\LatexBundle\Latex\LatexBase;
+use Bobv\LatexBundle\Latex\LatexBase;
 
 /**
  * Class LatexLetter
@@ -21,7 +21,7 @@ class Letter extends LatexBase
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = '@BobVLatex/Base/letter.tex.twig';
+    $this->template = '@BobvLatex/Base/letter.tex.twig';
     $datetime = new \DateTime();
     $this->params   = array(
         'pagenumber'     => 'false',     // Whether to print pagenumbers from page 2 and forward

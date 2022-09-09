@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
  * Class Letter
@@ -23,7 +23,7 @@ class Letter extends LatexElement
   public function __construct($address, $opening, $text)
   {
     // Define defaults
-    $this->template = '@BobVLatex/Element/letter.tex.twig';
+    $this->template = '@BobvLatex/Element/letter.tex.twig';
     $this->params   = array(
         'address'        => $address, // Address
         'opening'        => $opening, // Opening of the letter

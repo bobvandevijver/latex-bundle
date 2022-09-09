@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Base;
+namespace Bobv\LatexBundle\Latex\Base;
 
 /**
  * Class LatexArticle
@@ -19,7 +19,7 @@ class Article extends Base
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = '@BobVLatex/Base/article.tex.twig';
+    $this->template = '@BobvLatex/Base/article.tex.twig';
 
     // Call parent constructor
     parent::__construct($filename);
