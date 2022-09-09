@@ -24,7 +24,7 @@
         "symfony/http-kernel": "~3.4 || ~4.3 || ~5.0 || ~6.0",
         "symfony/options-resolver": "~3.4 || ~4.3 || ~5.0 || ~6.0",
         "symfony/process": "~3.4 || ~4.3 || ~5.0 || ~6.0",
-        "twig/twig": "~1.38.0 || ~2.7.0 || ~3.0"
+        "twig/twig": "~1.38 || ~2.15 || ~3.0"
     },
     "require-dev": {
         "symfony/string": "~5.0",
