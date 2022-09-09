@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
  * Class TOC
@@ -17,6 +17,6 @@ class TOC extends LatexElement
   public function __construct()
   {
     // Set defaults
-    $this->template = '@BobVLatex/Element/toc.tex.twig';
+    $this->template = '@BobvLatex/Element/toc.tex.twig';
   }
 }

@@ -8,7 +8,7 @@ Below examples are given of how you can extend the bundle. Note that not all of 
 
 You can use the `DirectTwig` class below:
 ```php
-use BobV\LatexBundle\Latex\LatexBase;
+use Bobv\LatexBundle\Latex\LatexBase;
 
 class DirectTwig extends LatexBase
 {

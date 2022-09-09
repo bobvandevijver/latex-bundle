@@ -2,17 +2,17 @@
 
 namespace Twig;
 
-use BobV\LatexBundle\Twig\BobVLatexExtension;
+use Bobv\LatexBundle\Twig\BobvLatexExtension;
 use PHPUnit\Framework\TestCase;
 
-class BobVLatexExtensionTest extends TestCase
+class BobvLatexExtensionTest extends TestCase
 {
   /**
    * @dataProvider transliterateProvider
    */
   public function testTransliteration(bool $useSymfonyString, string $input, string $expectedOutput): void
   {
-    $parser = new BobVLatexExtension($useSymfonyString);
+    $parser = new BobvLatexExtension($useSymfonyString);
 
     $this->assertEquals($expectedOutput, $parser->latexEscape($input));
   }
@@ -22,7 +22,7 @@ class BobVLatexExtensionTest extends TestCase
    */
   public function testTransliterateWithTableOff(bool $useSymfonyString, string $input, string $expectedOutput): void
   {
-    $parser = new BobVLatexExtension($useSymfonyString);
+    $parser = new BobvLatexExtension($useSymfonyString);
 
     $this->assertEquals($expectedOutput, $parser->latexEscape($input, false));
   }

@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Generator;
+namespace Bobv\LatexBundle\Generator;
 
-use BobV\LatexBundle\Latex\LatexBaseInterface;
+use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 interface LatexGeneratorInterface
@@ -33,7 +33,7 @@ interface LatexGeneratorInterface
   /**
    * Compile a LaTeX object into the wanted PDF file
    *
-   * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
+   * @param \Bobv\LatexBundle\Latex\LatexBaseInterface $latex
    *
    * @return string Location of the PDF document
    */
@@ -42,7 +42,7 @@ interface LatexGeneratorInterface
   /**
    * Generates a latex file for the given LaTeX object
    *
-   * @param \BobV\LatexBundle\Latex\LatexBaseInterface $latex
+   * @param \Bobv\LatexBundle\Latex\LatexBaseInterface $latex
    *
    * @return string Location of the generated LaTeX file
    */

@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Base;
+namespace Bobv\LatexBundle\Latex\Base;
 
-use BobV\LatexBundle\Latex\LatexBase;
+use Bobv\LatexBundle\Latex\LatexBase;
 
 /**
  * Class Base

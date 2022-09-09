@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Base;
+namespace Bobv\LatexBundle\Latex\Base;
 
 /**
  * Class LatexBook
@@ -19,7 +19,7 @@ class Book extends Base
   public function __construct($filename)
   {
     // Define standard values
-    $this->template = '@BobVLatex/Base/book.tex.twig';
+    $this->template = '@BobvLatex/Base/book.tex.twig';
 
     // Call parent constructor
     parent::__construct($filename);

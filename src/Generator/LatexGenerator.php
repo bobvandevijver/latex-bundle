@@ -1,12 +1,12 @@
 <?php
 
-namespace BobV\LatexBundle\Generator;
+namespace Bobv\LatexBundle\Generator;
 
-use BobV\LatexBundle\Exception\BibliographyGenerationException;
-use BobV\LatexBundle\Exception\ImageNotFoundException;
-use BobV\LatexBundle\Exception\LatexException;
-use BobV\LatexBundle\Exception\LatexParseException;
-use BobV\LatexBundle\Latex\LatexBaseInterface;
+use Bobv\LatexBundle\Exception\BibliographyGenerationException;
+use Bobv\LatexBundle\Exception\ImageNotFoundException;
+use Bobv\LatexBundle\Exception\LatexException;
+use Bobv\LatexBundle\Exception\LatexParseException;
+use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use DateTime;
 use Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
@@ -403,7 +403,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * Returns the cache path
    */
   protected function getCacheBasePath() {
-    return $this->cacheDir . '/BobVLatex/';
+    return $this->cacheDir . '/BobvLatex/';
   }
 
   /**

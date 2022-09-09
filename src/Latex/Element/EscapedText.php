@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
  * Class EscapedText
@@ -21,7 +21,7 @@ class EscapedText extends LatexElement
   public function __construct($text)
   {
     // Define defaults
-    $this->template = '@BobVLatex/Element/escaped_text.tex.twig';
+    $this->template = '@BobvLatex/Element/escaped_text.tex.twig';
     $this->params   = array(
         'text'           => $text,
         'extra_commands' => array(),

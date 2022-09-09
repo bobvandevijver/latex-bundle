@@ -1,7 +1,7 @@
 <?php
 
-namespace BobV\LatexBundle\Latex;
-use BobV\LatexBundle\Exception\LatexException;
+namespace Bobv\LatexBundle\Latex;
+use Bobv\LatexBundle\Exception\LatexException;
 
 /**
  * Class LatexContext
@@ -29,7 +29,7 @@ class LatexParams {
    * @param mixed $value
    *
    * @return LatexInterface $this
-   * @throws \BobV\LatexBundle\Exception\LatexException
+   * @throws \Bobv\LatexBundle\Exception\LatexException
    */
   public function setParam($param, $value){
     if(array_key_exists($param, $this->params)){

@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex;
+namespace Bobv\LatexBundle\Latex;
 
-use BobV\LatexBundle\Exception\LatexException;
+use Bobv\LatexBundle\Exception\LatexException;
 
 class LatexSection extends LatexParams implements LatexInterface
 {
@@ -14,7 +14,7 @@ class LatexSection extends LatexParams implements LatexInterface
    * @param LatexInterface $latexInterface
    *
    * @return $this
-   * @throws \BobV\LatexBundle\Exception\LatexException
+   * @throws \Bobv\LatexBundle\Exception\LatexException
    */
   public function addElement(LatexInterface $latexInterface)
   {

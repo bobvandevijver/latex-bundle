@@ -1,12 +1,12 @@
 <?php
 
-namespace BobV\LatexBundle\Latex;
+namespace Bobv\LatexBundle\Latex;
 
 /**
  * Interface LatexInterface
  * All Latex objects should implement this class
  *
- * @package BobV\LatexBundle\Latex
+ * @package Bobv\LatexBundle\Latex
  */
 interface LatexInterface
 {

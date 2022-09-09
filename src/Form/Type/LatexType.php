@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Form\Type;
+namespace Bobv\LatexBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormInterface;

@@ -1,7 +1,7 @@
 {% block bobv_latex_longtable_element %}
 
   % Longtable element
-  {% include '@BobVLatex/extra_commands.twig.twig' %}
+  {% include '@BobvLatex/extra_commands.twig.twig' %}
 
   \begin{longtable}{ {%- for row in rows %}{{ row }} {% endfor -%} }
 

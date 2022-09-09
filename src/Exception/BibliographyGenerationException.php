@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Exception;
+namespace Bobv\LatexBundle\Exception;
 
 use Throwable;
 

@@ -1,8 +1,8 @@
 <?php
 
-namespace BobV\LatexBundle\Latex\Element;
+namespace Bobv\LatexBundle\Latex\Element;
 
-use BobV\LatexBundle\Latex\LatexElement;
+use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
  * Class TitlePage
@@ -24,7 +24,7 @@ class TitlePage extends LatexElement
   public function __construct($title, $subtitle='', $author='', $date = '')
   {
     // Define defaults
-    $this->template = '@BobVLatex/Element/titlepage.tex.twig';
+    $this->template = '@BobvLatex/Element/titlepage.tex.twig';
     $this->params   = array(
         'title'           => $title,
         'subtitle'        => $subtitle,

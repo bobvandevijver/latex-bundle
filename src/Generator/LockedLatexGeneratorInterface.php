@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Generator;
+namespace Bobv\LatexBundle\Generator;
 
 /**
  * Class LockedLatexGenerator

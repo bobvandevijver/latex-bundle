@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex\Section;
+namespace Bobv\LatexBundle\Latex\Section;
 
-use BobV\LatexBundle\Latex\LatexSection;
+use Bobv\LatexBundle\Latex\LatexSection;
 
 class SubSubSection extends LatexSection {
 
@@ -11,7 +11,7 @@ class SubSubSection extends LatexSection {
    * @param string $subsubsectionTitle
    */
   public function __construct($subsubsectionTitle = ''){
-    $this->template = '@BobVLatex/Section/sub_sub_section.tex.twig';
+    $this->template = '@BobvLatex/Section/sub_sub_section.tex.twig';
     $this->params = array(
       'subsubsectionTitle' => $subsubsectionTitle,
       'includeTOC' => true,

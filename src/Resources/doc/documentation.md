@@ -41,7 +41,7 @@ public function registerBundles()
 {
     $bundles = array(
         // ...
-        new BobV\LatexBundle\BobVLatexBundle(),
+        new Bobv\LatexBundle\BobvLatexBundle(),
     );
 }
 ```
@@ -101,9 +101,9 @@ If you have any block to add to this bundle, please make a PR. Keep this categor
 To create a valid LaTeX object you should start by creating a new Base element, like `Article`. Every Base element needs to extend the `LatexBase` object. An example: 
 
 ```php
-use BobV\LatexBundle\Latex\Base\Article;
+use Bobv\LatexBundle\Latex\Base\Article;
 
-$latex = new Article('BobV Latex Bundle');
+$latex = new Article('Bobv Latex Bundle');
 ```
 
 For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/base).
@@ -113,7 +113,7 @@ For all possible Base classes check [here](https://github.com/bobvandevijver/lat
 Sections can easily be add to your LaTeX object by calling the addElement method. An example: 
 
 ```php
-use BobV\LatexBundle\Latex\Section\TOC;
+use Bobv\LatexBundle\Latex\Section\TOC;
 
 $latex->addElement(new TOC());
 ```
@@ -125,7 +125,7 @@ For all possible sections check [here](https://github.com/bobvandevijver/latex-b
 Elements can easily be added to your base LaTeX object. Just call the addElement method with any LaTeX (except Base) object. An example: 
 
 ```php
-use BobV\LatexBundle\Latex\Element\TitlePage;
+use Bobv\LatexBundle\Latex\Element\TitlePage;
 
 $latex->addElement(new TitlePage('Test title'));
 ```
@@ -134,20 +134,20 @@ For all possible elements check [here](https://github.com/bobvandevijver/latex-b
 
 ### 4. Generate the latex/pdf files/response
 
-This bundle can generate .tex files from the LaTeX objects, and can then generate pdf files from these .tex files. These files are generated in your cache directory, so make sure those are writable (doh). The files are placed at `{cache_dir}/BobVLatex/{hashed_content_string}/{filename}.{pdf/tex/log/aux/..}`. 
+This bundle can generate .tex files from the LaTeX objects, and can then generate pdf files from these .tex files. These files are generated in your cache directory, so make sure those are writable (doh). The files are placed at `{cache_dir}/BobvLatex/{hashed_content_string}/{filename}.{pdf/tex/log/aux/..}`. 
 
 To create any of those files or send them in requests just use one of the following lines in one of your controllers: 
 
 ```php
-use BobV\LatexBundle\Latex\Base\Article;
-use BobV\LatexBundle\Latex\Element\TitlePage;
-use BobV\LatexBundle\Latex\Element\TOC;
+use Bobv\LatexBundle\Latex\Base\Article;
+use Bobv\LatexBundle\Latex\Element\TitlePage;
+use Bobv\LatexBundle\Latex\Element\TOC;
 
 class DefaultController Extends Controller{
   public function sendPdf(Request $request){
     $latex = new Article();
     // Subtitle, author, date are optional
-    $latex->addElement(new TitlePage('BobV Latex Test', 'a subtitle', 'an author', '\today'));
+    $latex->addElement(new TitlePage('Bobv Latex Test', 'a subtitle', 'an author', '\today'));
     $latex->addElement(new TOC());
     
     // Or, when using autowiring, the interface LatexGeneratorInterface can be used
@@ -178,8 +178,8 @@ Note that the `generatePdf` also accepts an optional `$compileOptions` array. Wi
 If you're using a Symfony version which has autowiring enabled, you can also autowire the generator by using the `LatexGeneratorInterface` interface!
 
 ```php
-use BobV\LatexBundle\Latex\Base\Article;
-use BobV\LatexBundle\Generator\LatexGeneratorInterface;
+use Bobv\LatexBundle\Latex\Base\Article;
+use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
 
 public function renderLatex(LatexGeneratorInterface $generator){
   $latex = new Article();
@@ -241,9 +241,9 @@ If you have any character that generates an error, feel create [an issue](https:
 If you want this bundle to render for example LaTeX-equations as image, you can use the following code (this does require you to have [spatie/pdf-to-image](https://github.com/spatie/pdf-to-image) installed). For example:
 
 ```php
-use BobV\LatexBundle\Generator\LatexGeneratorInterface;
-use BobV\LatexBundle\Latex\Base\Standalone;
-use BobV\LatexBundle\Latex\Element\CustomCommand;
+use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
+use Bobv\LatexBundle\Latex\Base\Standalone;
+use Bobv\LatexBundle\Latex\Element\CustomCommand;
 use Spatie\PdfToImage\Pdf;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -288,7 +288,7 @@ By default, this bundle uses the `%bobv.latex.cache_dir%` parameter for the cach
 
 It is also possible to override the cache directory per request, by using the `setCacheDir()` method on the `LatexGenerator`.
 
-By default, the cache directory is appended with `/BobVLatex`. This can be adjusted by extending the `LatexGenerator` class and overwriting the `getCacheBasePath()` method. 
+By default, the cache directory is appended with `/BobvLatex`. This can be adjusted by extending the `LatexGenerator` class and overwriting the `getCacheBasePath()` method. 
 
 ## pdflatex location
 

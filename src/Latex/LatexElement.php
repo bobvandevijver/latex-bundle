@@ -1,5 +1,5 @@
 <?php
-namespace BobV\LatexBundle\Latex;
+namespace Bobv\LatexBundle\Latex;
 
 class LatexElement extends LatexParams implements LatexInterface
 {

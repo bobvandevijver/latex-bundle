@@ -1,6 +1,6 @@
 <?php
 
-namespace BobV\LatexBundle\Helper;
+namespace Bobv\LatexBundle\Helper;
 
 /**
  * Class Parser

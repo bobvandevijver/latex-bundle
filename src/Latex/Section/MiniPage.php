@@ -1,7 +1,7 @@
 <?php
-namespace BobV\LatexBundle\Latex\Section;
+namespace Bobv\LatexBundle\Latex\Section;
 
-use BobV\LatexBundle\Latex\LatexSection;
+use Bobv\LatexBundle\Latex\LatexSection;
 
 class MiniPage extends LatexSection
 {
@@ -11,7 +11,7 @@ class MiniPage extends LatexSection
    */
   public function __construct()
   {
-    $this->template = '@BobVLatex/Section/minipage.tex.twig';
+    $this->template = '@BobvLatex/Section/minipage.tex.twig';
     $this->params   = array(
         'width'          => '\textwidth', // Width of the minipage
 

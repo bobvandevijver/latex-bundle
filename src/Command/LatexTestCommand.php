@@ -1,16 +1,16 @@
 <?php
 
-namespace BobV\LatexBundle\Command;
+namespace Bobv\LatexBundle\Command;
 
-use BobV\LatexBundle\Generator\LatexGeneratorInterface;
-use BobV\LatexBundle\Latex\Base\Article;
-use BobV\LatexBundle\Latex\Element\CustomElement;
-use BobV\LatexBundle\Latex\Element\Text;
-use BobV\LatexBundle\Latex\Element\TitlePage;
-use BobV\LatexBundle\Latex\Element\TOC;
-use BobV\LatexBundle\Latex\Section\Box;
-use BobV\LatexBundle\Latex\Section\Section;
-use BobV\LatexBundle\Latex\Section\SubSection;
+use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
+use Bobv\LatexBundle\Latex\Base\Article;
+use Bobv\LatexBundle\Latex\Element\CustomElement;
+use Bobv\LatexBundle\Latex\Element\Text;
+use Bobv\LatexBundle\Latex\Element\TitlePage;
+use Bobv\LatexBundle\Latex\Element\TOC;
+use Bobv\LatexBundle\Latex\Section\Box;
+use Bobv\LatexBundle\Latex\Section\Section;
+use Bobv\LatexBundle\Latex\Section\SubSection;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -37,9 +37,9 @@ class LatexTestCommand extends Command
   }
 
   protected function execute(InputInterface $input, OutputInterface $output) {
-    $latex          = new Article('BobVLatexTest');
+    $latex          = new Article('BobvLatexTest');
     $latex->addPackage('lipsum');
-    $latex->addElement(new TitlePage('BobV Latex Test', 'a subtitle', 'an author'));
+    $latex->addElement(new TitlePage('Bobv Latex Test', 'a subtitle', 'an author'));
     $latex->addElement(new TOC());
 
     $section1 = new Section('Test Title');
