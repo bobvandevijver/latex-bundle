@@ -89,7 +89,7 @@ class LatexType extends AbstractType
   /**
    * {@inheritdoc}
    */
-  public function getName()
+  public function getName(): string
   {
     return $this->getBlockPrefix();
   }
@@ -97,7 +97,7 @@ class LatexType extends AbstractType
   /**
    * {@inheritdoc}
    */
-  public function getBlockPrefix()
+  public function getBlockPrefix() : string
   {
     return 'bobv_latex';
   }
@@ -105,7 +105,7 @@ class LatexType extends AbstractType
   /**
    * {@inheritdoc}
    */
-  public function getParent()
+  public function getParent(): ?string
   {
     $ivory_form_class = 'Ivory\CKEditorBundle\Form\Type\CKEditorType';
     $fos_form_class   = 'FOS\CKEditorBundle\Form\Type\CKEditorType';
@@ -121,13 +121,4 @@ class LatexType extends AbstractType
   {
     $resolver->setDefaults(self::getDefaultConfig());
   }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setDefaultOptions(OptionsResolver $resolver)
-  {
-    $this->configureOptions($resolver);
-  }
-
 }
