@@ -257,6 +257,7 @@ class Parser
     self::updateNode($DOM, 'b', '\textbf{');
     self::updateNode($DOM, 'strong', '\textbf{');
     self::updateNode($DOM, 'i', '\textit{');
+    self::updateNode($DOM, 'em', '\textit{');
     self::updateNode($DOM, 'u', '\uline{');
     self::updateNode($DOM, 'sup', '\textsuperscript{');
     self::updateNode($DOM, 'sub', '\textsubscript{');
