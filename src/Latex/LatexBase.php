@@ -6,30 +6,20 @@ use Bobv\LatexBundle\Exception\LatexException;
 
 class LatexBase extends LatexParams implements LatexBaseInterface
 {
-  /** @var array */
-  protected $elements = array();
-  /** @var string */
-  protected $fileName;
-  /** @var string */
-  protected $template;
-  /** @var array */
-  protected $dependencies = array();
+  protected array $elements = [];
+  protected string $fileName; // Set in constructor
+  protected ?string $template = null;
+  protected array $dependencies = [];
 
-  /**
-   * @param string $filename
-   */
-  public function __construct($filename)
+  public function __construct(string $filename)
   {
     $this->setFileName($filename);
   }
 
   /**
-   * @param LatexInterface $latexInterface
-   *
-   * @return $this
-   * @throws \Bobv\LatexBundle\Exception\LatexException
+   * @throws LatexException
    */
-  public function addElement(LatexInterface $latexInterface)
+  public function addElement(LatexInterface $latexInterface): self
   {
     if ($latexInterface instanceof LatexBaseInterface) {
       throw new LatexException("A base LaTeX object can not have another base LaTeX object as element!");
@@ -40,89 +30,56 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this;
   }
 
-  /**
-   * @return array
-   */
-  public function getContext()
+  public function getContext(): array
   {
     return array_merge(
         $this->getParams(),
-        array(
+        [
             'elements' => $this->getElements(),
-        )
+        ]
     );
   }
 
-  /**
-   * @return array
-   */
-  public function getElements()
+  public function getElements(): array
   {
     return $this->elements;
   }
 
-  /**
-   * @param array $elements
-   */
-  public function setElements($elements)
+  public function setElements(array $elements): void
   {
     $this->elements = $elements;
   }
 
-  /**
-   * @return string
-   */
-  public function getFileName()
+  public function getFileName(): string
   {
     return $this->fileName;
   }
 
-  /**
-   * @param string $fileName
-   *
-   * @return LatexBaseInterface $this
-   */
-  public function setFileName($fileName)
+  public function setFileName(string $fileName): self
   {
     $this->fileName = $fileName;
 
     return $this;
   }
 
-  /**
-   * @return string
-   */
-  public function getTemplate()
+  public function getTemplate(): string
   {
     return $this->template;
   }
 
-  /**
-   * @param string $template
-   *
-   * @return LatexBaseInterface $this
-   */
-  public function setTemplate($template)
+  public function setTemplate(string $template): self
   {
     $this->template = $template;
 
     return $this;
   }
 
-  /**
-   * @return array
-   */
-  public function getDependencies()
+  public function getDependencies(): array
   {
     return $this->dependencies;
   }
 
-  /**
-   * @param $dependency
-   *
-   * @return LatexBaseInterface $this
-   */
-  public function addDependency($dependency)
+  public function addDependency(mixed $dependency): self
   {
     $this->dependencies[] = $dependency;
 
@@ -131,12 +88,8 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 
   /**
    * To add multiple dependencies locations
-   *
-   * @param $dependencies
-   *
-   * @return LatexBaseInterface
    */
-  public function addDependencies($dependencies)
+  public function addDependencies(iterable $dependencies): self
   {
     foreach ($dependencies as $dependency) {
       $this->addDependency($dependency);
@@ -146,17 +99,12 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   }
 
   /**
-   * Add an package to include
-   *
-   * @param $package
-   * @param $options
-   *
-   * @return LatexBaseInterface $this
+   * Add a package to include
    */
-  public function addPackage($package, $options = '')
+  public function addPackage(mixed $package, string $options = ''): self
   {
     $matches = array();
-    preg_match_all('/\\\usepackage\{([^}]+)\}/u', $package, $matches);
+    preg_match_all('/\\\usepackage\{([^}]+)}/u', $package, $matches);
     if (count($matches[1]) > 0) {
       $package = $matches[1][0];
     }
@@ -171,12 +119,8 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 
   /**
    * Add multiple packages to include (without options)
-   *
-   * @param $packages
-   *
-   * @return mixed
    */
-  public function addPackages($packages)
+  public function addPackages(iterable $packages): self
   {
     foreach ($packages as $package) {
       $this->addPackage($package);

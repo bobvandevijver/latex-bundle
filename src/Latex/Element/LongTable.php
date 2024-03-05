@@ -5,34 +5,32 @@ use Bobv\LatexBundle\Latex\LatexElement;
 
 class LongTable extends LatexElement
 {
-
   /**
    * @param array $rows Alignment rows, for example array(l,r,c)
    */
-  public function __construct($rows = array())
+  public function __construct(array $rows = [])
   {
-
     // Define defaults
     $this->template = '@BobvLatex/Element/longtable.tex.twig';
-    $this->params   = array(
+    $this->params   = [
         'caption'        => NULL,
         'firsthead'      => NULL,
         'head'           => NULL,
         'foot'           => NULL,
         'lastfoot'       => NULL,
         'rows'           => $rows,
-        'data'           => array(),
-        'extra_commands' => array(),
-    );
+        'data'           => [],
+        'extra_commands' => [],
+    ];
   }
 
-  public function addRow($row)
+  public function addRow($row): self
   {
     $data   = $this->getParams()['data'];
-    $data[] = array(
+    $data[] = [
         'newRule' => true,
         'data'    => $row,
-    );
+    ];
     $this->setParam('data', $data);
 
     return $this;

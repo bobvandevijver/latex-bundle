@@ -5,18 +5,13 @@ use Bobv\LatexBundle\Exception\LatexException;
 
 class LatexSection extends LatexParams implements LatexInterface
 {
-  /** @var array */
-  protected $elements = array();
-  /** @var string */
-  protected $template;
+  protected array $elements = [];
+  protected string $template;
 
   /**
-   * @param LatexInterface $latexInterface
-   *
-   * @return $this
    * @throws \Bobv\LatexBundle\Exception\LatexException
    */
-  public function addElement(LatexInterface $latexInterface)
+  public function addElement(LatexInterface $latexInterface): self
   {
     if ($latexInterface instanceof LatexBaseInterface) {
       throw new LatexException("A base LaTeX object can not have another base LaTeX object as element!");
@@ -27,49 +22,32 @@ class LatexSection extends LatexParams implements LatexInterface
     return $this;
   }
 
-  /**
-   * @return array
-   */
-  public function getContext()
+  public function getContext(): array
   {
     return array_merge(
         $this->getParams(),
-        array(
+        [
             'elements' => $this->getElements(),
-        )
+        ]
     );
   }
 
-  /**
-   * @return array
-   */
-  public function getElements()
+  public function getElements(): array
   {
     return $this->elements;
   }
 
-  /**
-   * @param array $elements
-   */
-  public function setElements($elements)
+  public function setElements(array $elements): void
   {
     $this->elements = $elements;
   }
 
-  /**
-   * @return string
-   */
-  public function getTemplate()
+  public function getTemplate(): string
   {
     return $this->template;
   }
 
-  /**
-   * @param string $template
-   *
-   * @return LatexInterface $this
-   */
-  public function setTemplate($template)
+  public function setTemplate(string $template): self
   {
     $this->template = $template;
 

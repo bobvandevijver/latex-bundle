@@ -6,28 +6,18 @@ use Bobv\LatexBundle\Helper\Parser;
 use function Symfony\Component\String\u;
 
 /**
- * Class BobvLatexExtension
- *
  * @author BobV
  */
 class BobvLatexExtension extends AbstractBobvLatexExtension
 {
+  private Parser $parser; // Set in constructor
 
-  /** @var Parser */
-  private $parser;
-  /** @var bool */
-  private $useSymfonyString;
-
-  public function __construct(bool $useSymfonyString)
+  public function __construct(private readonly bool $useSymfonyString)
   {
-    $this->parser           = new Parser();
-    $this->useSymfonyString = $useSymfonyString;
+    $this->parser = new Parser();
   }
 
-  /**
-   * @return array
-   */
-  public function getFilters()
+  public function getFilters(): array
   {
     $filterClass = class_exists('\\Twig\\TwigFilter') ? '\\Twig\\TwigFilter' : '\\Twig_SimpleFilter';
 
@@ -38,15 +28,12 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
     ];
   }
 
-  /**
-   * @return string
-   */
-  public function getName()
+  public function getName(): string
   {
     return 'bobv_latex_twig_extension';
   }
 
-  private function passThroughSfString($text)
+  private function passThroughSfString(?string $text): ?string
   {
     if (!$this->useSymfonyString) {
       return $text;
@@ -55,12 +42,7 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
     return u($text)->ascii()->toString();
   }
 
-  /**
-   * @param string $text
-   *
-   * @return string
-   */
-  public function latexEscape($text, $checkTable = true, $removeLatex = false, $parseNewLines = false, $removeGreek = false)
+  public function latexEscape(?string $text, bool $checkTable = true, bool $removeLatex = false, bool $parseNewLines = false, bool $removeGreek = false): string
   {
     return $this->passThroughSfString(
         $this->parser->parseText($text, $checkTable, $removeLatex, $parseNewLines, $removeGreek)
@@ -69,24 +51,15 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
 
   /**
    * Proxy method to set some params for the parseText call
-   *
-   * @param string $text
-   *
-   * @return string
    */
-  public function latexEscapeAll($text)
+  public function latexEscapeAll(?string $text): ?string
   {
     return $this->passThroughSfString(
         $this->parser->parseText($text, false, true, true, true)
     );
   }
 
-  /**
-   * @param string $text
-   *
-   * @return string
-   */
-  public function latexParseHtml($text)
+  public function latexParseHtml(?string $text): ?string
   {
     return $this->passThroughSfString(
         $this->parser::parseHtml($text)

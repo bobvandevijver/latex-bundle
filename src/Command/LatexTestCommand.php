@@ -22,7 +22,7 @@ class LatexTestCommand extends Command
     parent::__construct();
   }
 
-  protected function configure() {
+  protected function configure(): void {
     $this
         ->setName('bobv:latex:test')
         ->setDescription('Generate a test LaTeX file (+ pdf)')
@@ -56,6 +56,6 @@ class LatexTestCommand extends Command
 
     $output->writeln($generatedLocation);
 
-    return 0; // Success
+    return Command::SUCCESS;
   }
 }

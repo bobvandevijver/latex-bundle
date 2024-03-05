@@ -3,25 +3,17 @@
 namespace Bobv\LatexBundle\Helper;
 
 /**
- * Class Parser
  * @author BobV
  */
 class Parser
 {
-
-  /**
-   * @var array
-   */
-  private $htmlCodes;
+  private array $htmlCodes; // Set in constructor
 
   /**
    * @var string[]
    */
-  private $greekMap;
+  private array $greekMap;
 
-  /**
-   * Parser constructor.
-   */
   public function __construct() {
     $this->htmlCodes = array_flip(get_html_translation_table(HTML_ENTITIES, ENT_QUOTES | ENT_HTML5));
 
@@ -75,15 +67,13 @@ class Parser
   /**
    * Parse the text and replace known special latex characters correctly
    *
-   * @param string  $text          The string that needs to be parsed
-   * @param boolean $checkTable    If set, tables should be detected automatically (default true)
-   * @param boolean $removeLatex   If set, all LaTeX commands will be removed (default false)
-   * @param boolean $parseNewLines If set, newline characters will be replaced by LaTeX entities (default false)
-   * @param bool    $removeGreek   If set, any greek character will be replace by their LaTeX math equivalent (default false)
-   *
-   * @return mixed
+   * @param string|null $text          The string that needs to be parsed
+   * @param boolean     $checkTable    If set, tables should be detected automatically (default true)
+   * @param boolean     $removeLatex   If set, all LaTeX commands will be removed (default false)
+   * @param boolean     $parseNewLines If set, newline characters will be replaced by LaTeX entities (default false)
+   * @param bool        $removeGreek   If set, any greek character will be replaced by their LaTeX math equivalent (default false)
    */
-  public function parseText($text, $checkTable = true, $removeLatex = false, $parseNewLines = false, $removeGreek = false) {
+  public function parseText(?string $text, bool $checkTable = true, bool $removeLatex = false, bool $parseNewLines = false, bool $removeGreek = false): string {
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
@@ -236,12 +226,8 @@ class Parser
 
   /**
    * Parse the html input and create latex code of it
-   *
-   * @param $text
-   *
-   * @return mixed
    */
-  public static function parseHtml($text) {
+  public static function parseHtml(?string $text): ?string {
 
     // Replace NO-BREAK-SPACE with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
@@ -272,25 +258,20 @@ class Parser
     $text = $DOM->saveHTML();
 
     // Replace junk from URL to get it readable
-    $text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z\.-]+)(\.|@)([a-z\.]{2,6})([\/\w\.-]*[\/\w-])*\/?)/smui", '$2', $text);
+    $text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text);
 
     return strip_tags($text);
   }
 
   /**
    * Encapsulate the content of all given tags in the given document with the replacement
-   *
-   * @param \DOMDocument $document
-   * @param string       $tag
-   * @param string       $replacementStart
-   * @param string       $replacementEnd
    */
-  private static function updateNode(\DOMDocument &$document, $tag, $replacementStart, $replacementEnd = '}') {
+  private static function updateNode(\DOMDocument &$document, string $tag, string $replacementStart, string $replacementEnd = '}'): void {
     $elements = $document->getElementsByTagName($tag);
     /** @var \DOMElement $element */
     foreach ($elements as $element) {
 
-      // Check if a attribute from the tag is needed for the replacement start
+      // Check if an attribute from the tag is needed for the replacement start
       $replacementStartNode = $document->createTextNode($replacementStart);
 
       // Create the replacement end node

@@ -5,7 +5,6 @@ namespace Bobv\LatexBundle\Latex\Element;
 use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
- * Class Graphic
  * Base graphic element
  *
  * @author BobV
@@ -15,15 +14,12 @@ class Graphic extends LatexElement
 
   /**
    * Constructor of the graphic element, also defines the defaults
-   *
-   * @param string $graphic_location
-   * @param string $caption
    */
-  public function __construct($graphic_location, $caption = false)
+  public function __construct(string $graphic_location, string|bool $caption = false)
   {
     // Define defaults
     $this->template = '@BobvLatex/Element/graphic.tex.twig';
-    $this->params   = array(
+    $this->params   = [
         'placement'      => 'ht!',
         'centering'      => true,
         'location'       => $graphic_location,
@@ -31,8 +27,8 @@ class Graphic extends LatexElement
         'options'        => '',
         'caption'        => $caption,
         'label'          => 'fig:' . basename($graphic_location),
-        'extra_commands' => array(),
-    );
+        'extra_commands' => [],
+    ];
   }
 
 }

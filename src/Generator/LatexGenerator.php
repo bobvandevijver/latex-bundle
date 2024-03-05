@@ -8,6 +8,7 @@ use Bobv\LatexBundle\Exception\LatexException;
 use Bobv\LatexBundle\Exception\LatexParseException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use DateTime;
+use DateTimeInterface;
 use Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -21,67 +22,29 @@ use Twig\Error\LoaderError;
 use Twig\Error\RuntimeError;
 use Twig\Error\SyntaxError;
 
-/**
- * Class LatexGenerator
- */
 class LatexGenerator implements LatexGeneratorInterface
 {
+  protected Filesystem $filesystem;
+  protected bool $forceRegenerate = false;
+  protected ?LatexBaseInterface $latex = null;
+  protected ?string $outputDir = null;
+  protected int|float|null $timeout = 60; // Default timeout from the Symfony Process component
+  protected DateTimeInterface $maxAge;
 
-  /** @var string */
-  protected $cacheDir;
-  /** @var string */
-  protected $env;
-  /** @var Filesystem */
-  protected $filesystem;
-  /** @var bool */
-  protected $forceRegenerate;
-  /** @var LatexBaseInterface */
-  protected $latex;
-  /** @var DateTime */
-  protected $maxAge;
-  /** @var string */
-  protected $pdfLatexBinaryLocation;
-  /** @var string */
-  protected $bibliographyBinaryLocation;
-  /** @var string */
-  protected $outputDir;
-  /** @var int|float|null */
-  protected $timeout;
-  /** @var Environment */
-  protected $twig;
-
-  /**
-   * @param string      $cacheDir
-   * @param string      $env
-   * @param Environment $twig
-   * @param DateTime    $maxAge
-   * @param string      $pdfLatexBinaryLocation
-   * @param string      $bibliographyBinaryLocation
-   */
-  public function __construct($cacheDir, $env, $twig, $maxAge, $pdfLatexBinaryLocation, $bibliographyBinaryLocation) {
-    $this->cacheDir   = $cacheDir;
-    $this->env        = $env;
-    $this->twig       = $twig;
+  public function __construct(
+      protected string $cacheDir,
+      protected readonly string $env,
+      protected readonly Environment $twig,
+      string $maxAge,
+      protected readonly string $pdfLatexBinaryLocation,
+      protected readonly string $bibliographyBinaryLocation) {
     $this->filesystem = new Filesystem();
     $this->maxAge     = new DateTime();
     $this->maxAge->modify($maxAge);
-
-    $this->pdfLatexBinaryLocation     = $pdfLatexBinaryLocation;
-    $this->bibliographyBinaryLocation = $bibliographyBinaryLocation;
-
-    $this->forceRegenerate = false;
-
-    // Default timeout from the Symfony Process component
-    $this->timeout = 60;
   }
 
   /**
    * Generate a response containing a PDF document
-   *
-   * @param LatexBaseInterface $latex
-   * @param bool               $download
-   *
-   * @return BinaryFileResponse
    *
    * @throws ImageNotFoundException
    * @throws LatexException
@@ -89,7 +52,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws RuntimeError
    * @throws SyntaxError
    */
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true) {
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse {
     $pdfLocation = $this->generate($latex);
 
     $response = new BinaryFileResponse($pdfLocation);
@@ -103,17 +66,13 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Generate a response containing a generated .tex file
    *
-   * @param LatexBaseInterface $latex
-   * @param bool               $download
-   *
-   * @return BinaryFileResponse
    * @throws ImageNotFoundException
    * @throws LatexException
    * @throws LoaderError
    * @throws RuntimeError
    * @throws SyntaxError
    */
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true) {
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse {
     $texLocation = $this->generateLatex($latex);
 
     $response = new BinaryFileResponse($texLocation);
@@ -127,8 +86,6 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Compile a LaTeX object into the wanted PDF file
    *
-   * @param LatexBaseInterface $latex
-   *
    * @return string Location of the PDF document
    *
    * @throws ImageNotFoundException
@@ -137,7 +94,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws RuntimeError
    * @throws SyntaxError
    */
-  public function generate(LatexBaseInterface $latex) {
+  public function generate(LatexBaseInterface $latex): string {
     $this->latex = $latex;
     $texLocation = $this->generateLatex();
 
@@ -147,8 +104,6 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Generates a latex file for the given LaTeX object
    *
-   * @param LatexBaseInterface $latex
-   *
    * @return string Location of the generated LaTeX file
    *
    * @throws ImageNotFoundException
@@ -157,7 +112,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws RuntimeError
    * @throws SyntaxError
    */
-  public function generateLatex(LatexBaseInterface $latex = NULL) {
+  public function generateLatex(LatexBaseInterface $latex = NULL): string {
 
     if ($this->latex === NULL && $latex === NULL) {
       throw new LatexException("No latex file given");
@@ -175,7 +130,7 @@ class LatexGenerator implements LatexGeneratorInterface
 
     // Check if there are undefined images
     $matches = array();
-    preg_match_all('/\\\\includegraphics(\[.+\])?\{([^}]+)\}/u', $texData, $matches);
+    preg_match_all('/\\\\includegraphics(\[.+])?\{([^}]+)}/u', $texData, $matches);
     foreach ($matches[2] as $imageLocation) {
       if (!$this->filesystem->exists($imageLocation)) {
         throw new ImageNotFoundException($imageLocation);
@@ -217,7 +172,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws IOException
    * @throws LatexException
    */
-  public function generatePdf($texLocation, array $compileOptions = array()) {
+  public function generatePdf(string $texLocation, array $compileOptions = []): string {
 
     // Check if the compiled tex file exists
     if (!$this->filesystem->exists($texLocation)) {
@@ -242,34 +197,19 @@ class LatexGenerator implements LatexGeneratorInterface
 
   }
 
-  /**
-   * @param $cacheDir
-   *
-   * @return $this
-   */
-  public function setCacheDir($cacheDir) {
+  public function setCacheDir(string $cacheDir): self {
     $this->cacheDir = $cacheDir;
 
     return $this;
   }
 
-  /**
-   * @param boolean $forceRegenerate
-   *
-   * @return LatexGenerator
-   */
-  public function setForceRegenerate($forceRegenerate) {
+  public function setForceRegenerate(bool $forceRegenerate): self {
     $this->forceRegenerate = $forceRegenerate;
 
     return $this;
   }
 
-  /**
-   * @param DateTime $maxAge
-   *
-   * @return LatexGenerator
-   */
-  public function setMaxAge($maxAge) {
+  public function setMaxAge(DateTimeInterface $maxAge): self {
     $this->maxAge = $maxAge;
 
     return $this;
@@ -280,10 +220,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * To disable the timeout, set this value to null.
    *
    * @param int|float|null $timeout The timeout in seconds
-   *
-   * @return LatexGenerator
    */
-  public function setTimeout($timeout) {
+  public function setTimeout(int|float|null $timeout): self {
     $this->timeout = $timeout;
 
     return $this;
@@ -294,7 +232,7 @@ class LatexGenerator implements LatexGeneratorInterface
    *
    * @throws IOException
    */
-  protected function checkFilesystem() {
+  protected function checkFilesystem(): void {
     // Check if the cache dir exists
     if (!$this->filesystem->exists($this->getCacheBasePath())) {
       try {
@@ -312,10 +250,9 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param string $texLocation    Location of the .tex file
    * @param array  $compileOptions Optional compile options for pdflatex
    *
-   * @return string
    * @throws Exception
    */
-  protected function compilePdf($texLocation, array $compileOptions = array()) {
+  protected function compilePdf(string $texLocation, array $compileOptions = []): string {
     $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
@@ -399,23 +336,17 @@ class LatexGenerator implements LatexGeneratorInterface
     return $pdfLocation;
   }
 
-  /**
-   * Returns the cache path
-   */
-  protected function getCacheBasePath() {
+  protected function getCacheBasePath(): string {
     return $this->cacheDir . '/BobvLatex/';
   }
 
   /**
    * Write the file to the cache directory
    *
-   * @param string $texData
-   * @param        $fileName
-   *
    * @return string The location of the saved .tex file
    * @throws IOException
    */
-  protected function writeTexFile($texData, $fileName) {
+  protected function writeTexFile(string $texData, string $fileName): string {
     $this->checkFilesystem();
     $this->outputDir = $this->getCacheBasePath() . hash('ripemd160', $texData) . '/';
     $texLocation     = $this->outputDir . $fileName . '.tex';
@@ -443,28 +374,13 @@ class LatexGenerator implements LatexGeneratorInterface
 
   /**
    * Check if the line contains a reference error
-   *
-   * @param $value
-   *
-   * @return bool
    */
-  private function findReferenceError($value) {
+  private function findReferenceError(string $value): bool {
     return preg_match_all('/reference|change/ui', $value) > 0;
   }
 
-  /**
-   * Run a latex process
-   *
-   * @param string $commandLine
-   *
-   * @return Process
-   */
-  private function runProcess(string $commandLine) {
-    if (method_exists(Process::class, 'fromShellCommandline')) {
-      $process = Process::fromShellCommandline($commandLine);
-    } else {
-      $process = new Process($commandLine);
-    }
+  private function runProcess(string $commandLine): Process {
+    $process = Process::fromShellCommandline($commandLine);
 
     $process->setTimeout($this->timeout);
     $process->run();
