@@ -3,52 +3,33 @@
 namespace Bobv\LatexBundle\Latex;
 
 /**
- * Interface LatexInterface
  * All Latex objects should implement this class
- *
- * @package Bobv\LatexBundle\Latex
  */
 interface LatexInterface
 {
-
   /**
    * Needs to return the parameters for the twig render
-   *
-   * @return array
    */
-  public function getContext();
+  public function getContext(): array;
 
   /**
    * Return all set params
-   *
-   * @return array
    */
-  public function getParams();
+  public function getParams(): array;
 
   /**
    * Set a specific param in the context for Twig
-   *
-   * @param string $param
-   * @param mixed $value
-   *
-   * @return LatexInterface
    */
-  public function setParam($param, $value);
+  public function setParam(string $param, mixed $value): self;
 
   /**
    * Should return the twig template
-   *
-   * @return string
    */
-  public function getTemplate();
+  public function getTemplate(): string;
 
   /**
    * In case you want to change the twig template, use this method
-   *
-   * @param string $template
-   *
-   * @return LatexInterface
    */
-  public function setTemplate($template);
+  public function setTemplate(string $template): self;
 
 }

@@ -4,71 +4,41 @@ namespace Bobv\LatexBundle\Latex;
 
 interface LatexBaseInterface extends LatexInterface
 {
-  /**
-   * Constructor
-   *
-   * @param string $fileName
-   */
-  public function __construct($fileName);
+  public function __construct(string $fileName);
 
   /**
    * Should return the filename for the pdf file
-   *
-   * @return string
    */
-  public function getFileName();
+  public function getFileName(): string;
 
   /**
    * In case you want to change the filename, use this method
-   *
-   * @param string $fileName
-   *
-   * @return LatexBaseInterface
    */
-  public function setFileName($fileName);
+  public function setFileName(string $fileName): self;
 
   /**
    * Should return an array with dependency locations
-   *
-   * @return array
    */
-  public function getDependencies();
+  public function getDependencies(): array;
 
   /**
-   * To add an dependency location
-   *
-   * @param $dependency
-   *
-   * @return LatexBaseInterface
+   * To add a dependency location
    */
-  public function addDependency($dependency);
+  public function addDependency(mixed $dependency): self;
 
   /**
    * To add multiple dependencies locations
-   *
-   * @param $dependencies
-   *
-   * @return LatexBaseInterface
    */
-  public function addDependencies($dependencies);
+  public function addDependencies(iterable $dependencies): self;
 
   /**
-   * Add an package to include
-   *
-   * @param $package
-   * @param $options
-   *
-   * @return LatexBaseInterface $this
+   * Add a package to include
    */
-  public function addPackage($package, $options = '');
+  public function addPackage(mixed $package, string $options = ''): self;
 
   /**
    * Add multiple packages to include (without options)
-   *
-   * @param $packages
-   *
-   * @return mixed
    */
-  public function addPackages($packages);
+  public function addPackages(iterable $packages): self;
 
 }

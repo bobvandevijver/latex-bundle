@@ -5,40 +5,39 @@ use Bobv\LatexBundle\Latex\LatexElement;
 
 class Table extends LatexElement
 {
-
   /**
    * @param array $rows Alignment rows, for example array(l,r,c)
    */
-  public function __construct($rows = array())
+  public function __construct(array $rows = [])
   {
 
     // Define defaults
     $this->template = '@BobvLatex/Element/table.tex.twig';
-    $this->params   = array(
+    $this->params   = [
         'tabularx'       => true,
         'caption'        => null,
         'rows'           => $rows,
-        'data'           => array(),
+        'data'           => [],
         'width'          => '\textwidth',
-        'extra_commands' => array(),
-    );
+        'extra_commands' => [],
+    ];
   }
 
-  public function addBottomRule()
+  public function addBottomRule(): self
   {
     $this->addRule('\bottomrule');
 
     return $this;
   }
 
-  public function addMidRule()
+  public function addMidRule(): self
   {
     $this->addRule('\midrule');
 
     return $this;
   }
 
-  public function addRow($row)
+  public function addRow($row): self
   {
     $data = $this->getParams()['data'];
     $data[] = array(
@@ -50,14 +49,14 @@ class Table extends LatexElement
     return $this;
   }
 
-  public function addTopRule()
+  public function addTopRule(): self
   {
     $this->addRule('\toprule');
 
     return $this;
   }
 
-  private function addRule($rule)
+  private function addRule($rule): void
   {
     $data = $this->getParams()['data'];
     $data[] = array(
@@ -66,5 +65,4 @@ class Table extends LatexElement
     );
     $this->setParam('data', $data);
   }
-
 }

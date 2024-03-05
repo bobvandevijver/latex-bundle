@@ -6,14 +6,8 @@ use Throwable;
 
 class BibliographyGenerationException extends LatexException
 {
-
-  /**
-   * @param string      $texLocation
-   * @param int         $exitCode
-   * @param string|null $exitCodeText
-   */
-  public function __construct($texLocation, $exitCode, $exitCodeText = NULL) {
-    if ($exitCodeText !== NULL) {
+  public function __construct(string $texLocation, int $exitCode, ?string $exitCodeText = null) {
+    if ($exitCodeText !== null) {
       $exitCodeText = sprintf(' (%s)', $exitCodeText);
     } else {
       $exitCodeText = '';

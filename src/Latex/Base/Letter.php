@@ -5,7 +5,6 @@ namespace Bobv\LatexBundle\Latex\Base;
 use Bobv\LatexBundle\Latex\LatexBase;
 
 /**
- * Class LatexLetter
  * Base letter
  *
  * @author BobV
@@ -15,15 +14,13 @@ class Letter extends LatexBase
 
   /**
    * Letter constructor, sets defaults
-   *
-   * @param string $filename
    */
-  public function __construct($filename)
+  public function __construct(string $filename)
   {
     // Define standard values
     $this->template = '@BobvLatex/Base/letter.tex.twig';
     $datetime = new \DateTime();
-    $this->params   = array(
+    $this->params   = [
         'pagenumber'     => 'false',     // Whether to print pagenumbers from page 2 and forward
         'parskip'        => 'full',      // Spacing between paragraphs (full, half, ..)
         'fromalign'      => 'right',     // Alignment of the from address
@@ -44,9 +41,9 @@ class Letter extends LatexBase
 
         'date'           => $datetime->format('d-m-Y'),
 
-        'extra_commands' => array(), // Define extra commands if needed
-        'packages'       => array(), // Define extra packages to use
-    );
+        'extra_commands' => [], // Define extra commands if needed
+        'packages'       => [], // Define extra packages to use
+    ];
 
     // Use the ulem package
     $this->addPackage('ulem');

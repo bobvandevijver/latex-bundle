@@ -4,41 +4,27 @@ namespace Bobv\LatexBundle\Generator;
 
 use Bobv\LatexBundle\Exception\LatexNotLockedException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
+use DateTimeInterface;
 use LogicException;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\LockFactory;
 use Symfony\Component\Lock\Store\FlockStore;
 
 /**
- * Class LockedLatexGenerator
- *
  * Lock LaTeX pdf generation to prevent the same files being rendered at the same time.
  */
 class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGeneratorInterface
 {
-  /**
-   * @var LatexGeneratorInterface
-   */
-  private $generator;
-  /**
-   * @var LockFactory
-   */
-  private $lockFactory;
-  /**
-   * @var Lock|null
-   */
-  private $lock;
-  /**
-   * @var int
-   */
-  private $timeout;
+  private LockFactory $lockFactory; // Set in constructor
+  private ?Lock $lock = null;
+  private float|int|null $timeout; // Set in constructor
 
-  public function __construct(LatexGeneratorInterface $generator) {
+  public function __construct(private readonly LatexGeneratorInterface $generator) {
     if (!class_exists(LockFactory::class)) {
       throw new LogicException('In order to use the LockedLatexGenerator, try running "composer require symfony/lock".');
     }
 
-    $this->generator = $generator;
     $this->setTimeout(60);
     $this->lockFactory = new LockFactory(new FlockStore());
   }
@@ -65,82 +51,55 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true) {
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse {
     $this->ensureLock();
 
     return $this->generator->createPdfResponse($latex, $download);
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true) {
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse {
     $this->ensureLock();
 
     return $this->generator->createTexResponse($latex, $download);
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function generate(LatexBaseInterface $latex) {
+  public function generate(LatexBaseInterface $latex): string {
     $this->ensureLock();
 
     return $this->generator->generate($latex);
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function generateLatex(LatexBaseInterface $latex = NULL) {
+  public function generateLatex(LatexBaseInterface $latex = null): string {
     $this->ensureLock();
 
     return $this->generator->generateLatex($latex);
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function generatePdf($texLocation, array $compileOptions = array()) {
+  public function generatePdf($texLocation, array $compileOptions = []): string {
     $this->ensureLock();
 
     return $this->generator->generatePdf($texLocation, $compileOptions);
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function setCacheDir($cacheDir) {
+  public function setCacheDir(string $cacheDir): self {
     $this->generator->setCacheDir($cacheDir);
 
     return $this;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function setForceRegenerate($forceRegenerate) {
+  public function setForceRegenerate(bool $forceRegenerate): self {
     $this->generator->setForceRegenerate($forceRegenerate);
 
     return $this;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function setMaxAge($maxAge) {
+  public function setMaxAge(DateTimeInterface $maxAge): self {
     $this->generator->setMaxAge($maxAge);
 
     return $this;
   }
 
-  /**
-   * @inheritDoc
-   */
-  public function setTimeout($timeout) {
+  public function setTimeout(float|int|null $timeout): self {
     $this->generator->setTimeout($timeout);
 
     // Save timeout for lock, include some trivial overhead margin, and refresh when required
@@ -155,7 +114,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
   /**
    * Verify the callee has already exclusive access
    */
-  private function ensureLock() {
+  private function ensureLock(): void {
     if (!$this->lock->isAcquired()) {
       throw new LatexNotLockedException();
     }

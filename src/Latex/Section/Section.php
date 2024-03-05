@@ -7,18 +7,16 @@ class Section extends LatexSection {
 
   /**
    * Constructor of the section section, also defines the default
-   *
-   * @param string $sectionTitle
    */
-  public function __construct($sectionTitle = ''){
+  public function __construct(string $sectionTitle = ''){
     $this->template = '@BobvLatex/Section/section.tex.twig';
-    $this->params = array(
+    $this->params = [
       'sectionTitle' => $sectionTitle,
       'includeTOC' => true,
 
       'newpage' => true, // Standard a section starts on a new page
 
-      'extra_commands' => array(), // Define extra commands at the begin of the section
-    );
+      'extra_commands' => [], // Define extra commands at the beginning of the section
+    ];
   }
 }

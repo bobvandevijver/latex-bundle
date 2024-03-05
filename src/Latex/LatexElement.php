@@ -3,28 +3,19 @@ namespace Bobv\LatexBundle\Latex;
 
 class LatexElement extends LatexParams implements LatexInterface
 {
-  /** @var string */
-  protected $template;
+  protected string $template;
 
-  public function getContext()
+  public function getContext(): array
   {
     return $this->getParams();
   }
 
-  /**
-   * @return string
-   */
-  public function getTemplate()
+  public function getTemplate(): string
   {
     return $this->template;
   }
 
-  /**
-   * @param string $template
-   *
-   * @return LatexInterface $this
-   */
-  public function setTemplate($template)
+  public function setTemplate(string $template): self
   {
     $this->template = $template;
 

@@ -4,23 +4,16 @@ namespace Bobv\LatexBundle\Latex\Element;
 use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
- * Class BlackTitle
- *
  * @author BobV
  */
 class BlackTitle extends LatexElement
 {
-
-  /**
-   * @param $title
-   */
-  public function __construct($title)
+  public function __construct(string $title)
   {
     $this->template = '@BobvLatex/Element/blacktitle.tex.twig';
-    $this->params   = array(
+    $this->params   = [
         'title'          => $title,
-        'extra_commands' => array(),
-    );
+        'extra_commands' => [],
+    ];
   }
-
 }

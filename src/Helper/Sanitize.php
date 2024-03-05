@@ -2,7 +2,6 @@
 namespace Bobv\LatexBundle\Helper;
 
 /**
- * Class Sanitizer
  * @author BobV
  */
 class Sanitize
@@ -15,10 +14,10 @@ class Sanitize
    *
    * @return string
    */
-  public static function sanitizeText($text) {
-    $strip = array("~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
+  public static function sanitizeText(string $text): string {
+    $strip = ["~", "`", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "_", "=", "+", "[", "{", "]",
         "}", "\\", "|", ";", ":", "\"", "'", "&#8216;", "&#8217;", "&#8220;", "&#8221;", "&#8211;", "&#8212;",
-        "â€”", "â€“", ",", "<", ".", ">", "/", "?");
+        "â€”", "â€“", ",", "<", ".", ">", "/", "?"];
 
     $text = trim(str_replace($strip, "", strip_tags($text)));
 

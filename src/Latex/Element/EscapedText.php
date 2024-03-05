@@ -5,7 +5,6 @@ namespace Bobv\LatexBundle\Latex\Element;
 use Bobv\LatexBundle\Latex\LatexElement;
 
 /**
- * Class EscapedText
  * Base text element (fully escaped)
  *
  * @author BobV
@@ -15,17 +14,15 @@ class EscapedText extends LatexElement
 
   /**
    * Constructor of the title element, also defines the defaults
-   *
-   * @param string $text
    */
-  public function __construct($text)
+  public function __construct(string $text)
   {
     // Define defaults
     $this->template = '@BobvLatex/Element/escaped_text.tex.twig';
-    $this->params   = array(
+    $this->params   = [
         'text'           => $text,
-        'extra_commands' => array(),
-    );
+        'extra_commands' => [],
+    ];
   }
 
 }

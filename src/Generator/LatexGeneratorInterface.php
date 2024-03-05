@@ -3,6 +3,7 @@
 namespace Bobv\LatexBundle\Generator;
 
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
+use DateTimeInterface;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 interface LatexGeneratorInterface
@@ -11,42 +12,32 @@ interface LatexGeneratorInterface
   /**
    * Generate a response containing a PDF document
    *
-   * @param LatexBaseInterface $latex
    * @param bool               $download If set to false, the attachment value will be omitted from the
    *                                     Content-Disposition field. Defaults to true.
-   *
-   * @return BinaryFileResponse
    */
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true);
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse;
 
   /**
    * Generate a response containing a generated .tex file
    *
-   * @param LatexBaseInterface $latex
    * @param bool               $download If set to false, the attachment value will be omitted from the
    *                                     Content-Disposition field. Defaults to true.
-   *
-   * @return BinaryFileResponse
    */
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true);
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse;
 
   /**
    * Compile a LaTeX object into the wanted PDF file
    *
-   * @param \Bobv\LatexBundle\Latex\LatexBaseInterface $latex
-   *
    * @return string Location of the PDF document
    */
-  public function generate(LatexBaseInterface $latex);
+  public function generate(LatexBaseInterface $latex): string;
 
   /**
    * Generates a latex file for the given LaTeX object
    *
-   * @param \Bobv\LatexBundle\Latex\LatexBaseInterface $latex
-   *
    * @return string Location of the generated LaTeX file
    */
-  public function generateLatex(LatexBaseInterface $latex = NULL);
+  public function generateLatex(LatexBaseInterface $latex = null): string;
 
   /**
    * Generates a PDF from a given LaTeX location
@@ -56,36 +47,19 @@ interface LatexGeneratorInterface
    *
    * @return string Location of the generated PDF file
    */
-  public function generatePdf($texLocation, array $compileOptions = array());
+  public function generatePdf(string $texLocation, array $compileOptions = []): string;
 
-  /**
-   * @param $cacheDir
-   *
-   * @return LatexGeneratorInterface
-   */
-  public function setCacheDir($cacheDir);
+  public function setCacheDir(string $cacheDir): self;
 
-  /**
-   * @param boolean $forceRegenerate
-   *
-   * @return LatexGeneratorInterface
-   */
-  public function setForceRegenerate($forceRegenerate);
+  public function setForceRegenerate(bool $forceRegenerate): self;
 
-  /**
-   * @param \DateTime $maxAge
-   *
-   * @return LatexGeneratorInterface
-   */
-  public function setMaxAge($maxAge);
+  public function setMaxAge(DateTimeInterface $maxAge): self;
 
   /**
    * Sets the process timeout (max. runtime).
    * To disable the timeout, set this value to null.
    *
    * @param int|float|null $timeout The timeout in seconds
-   *
-   * @return LatexGeneratorInterface
    */
-  public function setTimeout($timeout);
+  public function setTimeout(int|float|null $timeout): self;
 }

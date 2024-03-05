@@ -3,8 +3,6 @@
 namespace Bobv\LatexBundle\Generator;
 
 /**
- * Class LockedLatexGenerator
- *
  * Lock LaTeX pdf generation to prevent the same files being rendered at the same time.
  */
 interface LockedLatexGeneratorInterface extends LatexGeneratorInterface

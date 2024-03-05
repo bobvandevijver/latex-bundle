@@ -5,8 +5,6 @@ namespace Bobv\LatexBundle\Latex\Base;
 use Bobv\LatexBundle\Latex\LatexBase;
 
 /**
- * Class Base
- *
  * @internal Note that this class does not define a template!
  *           It currently is only used by Article and Book as base to avoid code duplication
  *
@@ -14,17 +12,11 @@ use Bobv\LatexBundle\Latex\LatexBase;
  */
 abstract class Base extends LatexBase
 {
-
-  /**
-   * Book constructor, sets defaults
-   *
-   * @param string $filename
-   */
-  public function __construct($filename)
+  public function __construct(string $filename)
   {
     // Define standard values
     $dateTime       = new \DateTime();
-    $this->params   = array(
+    $this->params   = [
         'options'        => null,
 
         'lhead'          => '', // Top left header
@@ -55,9 +47,9 @@ abstract class Base extends LatexBase
 
         'tocdepth'       => '2', // TOC depth
 
-        'extra_commands' => array(), // Define extra commands if needed
-        'packages'       => array(), // Define extra packages to use
-    );
+        'extra_commands' => [], // Define extra commands if needed
+        'packages'       => [], // Define extra packages to use
+    ];
 
     // Use the ulem package
     $this->addPackage('ulem');
@@ -65,5 +57,4 @@ abstract class Base extends LatexBase
     // Call parent constructor
     parent::__construct($filename);
   }
-
 }
