@@ -74,6 +74,9 @@ class Parser
    * @param bool        $removeGreek   If set, any greek character will be replaced by their LaTeX math equivalent (default false)
    */
   public function parseText(?string $text, bool $checkTable = true, bool $removeLatex = false, bool $parseNewLines = false, bool $removeGreek = false): string {
+    if ($text === NULL || $text === '') {
+      return '';
+    }
 
     // Try to replace HTML entities
     preg_match_all('/&[a-zA-Z]+;/iu', $text, $matches);
@@ -228,6 +231,10 @@ class Parser
    * Parse the html input and create latex code of it
    */
   public static function parseHtml(?string $text): ?string {
+    if ($text === NULL || $text === '') {
+      // BC compatible return value
+      return "\n\n";
+    }
 
     // Replace NO-BREAK-SPACE with normal space
     $text = str_replace("\xc2\xa0", ' ', $text);
