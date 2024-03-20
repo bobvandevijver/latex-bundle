@@ -67,4 +67,16 @@ class ParserTest extends TestCase
         Parser::parseHtml($text),
     );
   }
+
+  public function testEmptyText(): void {
+    $parser = new Parser();
+
+    $this->assertEquals('', $parser->parseText(null));
+    $this->assertEquals('', $parser->parseText(''));
+  }
+
+  public function testEmptyHtml(): void {
+    $this->assertEquals("\n\n", Parser::parseHtml(null));
+    $this->assertEquals("\n\n", Parser::parseHtml(''));
+  }
 }
