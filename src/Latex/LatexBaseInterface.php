@@ -4,8 +4,6 @@ namespace Bobv\LatexBundle\Latex;
 
 interface LatexBaseInterface extends LatexInterface
 {
-  public function __construct(string $fileName);
-
   /**
    * Should return the filename for the pdf file
    */
