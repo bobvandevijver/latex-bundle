@@ -13,11 +13,11 @@ class LongTable extends LatexElement
     // Define defaults
     $this->template = '@BobvLatex/Element/longtable.tex.twig';
     $this->params   = [
-        'caption'        => NULL,
-        'firsthead'      => NULL,
-        'head'           => NULL,
-        'foot'           => NULL,
-        'lastfoot'       => NULL,
+        'caption'        => null,
+        'firsthead'      => null,
+        'head'           => null,
+        'foot'           => null,
+        'lastfoot'       => null,
         'rows'           => $rows,
         'data'           => [],
         'extra_commands' => [],

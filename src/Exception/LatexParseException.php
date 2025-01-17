@@ -50,7 +50,7 @@ class LatexParseException extends LatexException
    * Try to find useful information on the error that has occurred
    * This is stored in the object properties $filteredLogSource and $filteredTexSource
    */
-  protected function findErrors(array $errorOutput, ?string $texLocation = NULL): void
+  protected function findErrors(array $errorOutput, ?string $texLocation = null): void
   {
     $refWarning       = strtolower('LaTeX Warning: Reference');
     $filteredErrors   = [];
@@ -103,7 +103,7 @@ class LatexParseException extends LatexException
     // Try to find matching tex lines
     // Check if a line number can be found in the errors
     $this->filteredTexSource[] = '---';
-    if ($texLocation !== NULL) {
+    if ($texLocation !== null) {
       $lineNumber = [];
       $texFile    = new \SplFileObject($texLocation);
       foreach ($this->filteredLogSource as $logLine) {

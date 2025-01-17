@@ -112,13 +112,13 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws RuntimeError
    * @throws SyntaxError
    */
-  public function generateLatex(LatexBaseInterface $latex = NULL): string {
+  public function generateLatex(?LatexBaseInterface $latex = null): string {
 
-    if ($this->latex === NULL && $latex === NULL) {
+    if ($this->latex === null && $latex === null) {
       throw new LatexException("No latex file given");
     }
 
-    if ($latex === NULL) {
+    if ($latex === null) {
       $latex = $this->latex;
     }
 

@@ -14,11 +14,11 @@ new LongTable($rows)
 ### Params
 
 ```
-    'caption'        => NULL,
-    'firsthead'      => NULL,
-    'head'           => NULL,
-    'foot'           => NULL,
-    'lastfoot'       => NULL,
+    'caption'        => null,
+    'firsthead'      => null,
+    'head'           => null,
+    'foot'           => null,
+    'lastfoot'       => null,
     'rows'           => $rows,
     'data'           => array(),
     'extra_commands' => array(),
