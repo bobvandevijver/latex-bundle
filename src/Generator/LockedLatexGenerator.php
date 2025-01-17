@@ -33,7 +33,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
    * Acquires a generation lock for PDF generation. This is required before using any method.
    */
   public function acquireLock(): LatexGeneratorInterface {
-    if ($this->lock === NULL) {
+    if ($this->lock === null) {
       $this->lock = $this->lockFactory->createLock(self::class, $this->timeout);
     }
     $this->lock->acquire(true);
@@ -69,7 +69,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this->generator->generate($latex);
   }
 
-  public function generateLatex(LatexBaseInterface $latex = null): string {
+  public function generateLatex(?LatexBaseInterface $latex = null): string {
     $this->ensureLock();
 
     return $this->generator->generateLatex($latex);

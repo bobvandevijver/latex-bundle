@@ -37,7 +37,7 @@ interface LatexGeneratorInterface
    *
    * @return string Location of the generated LaTeX file
    */
-  public function generateLatex(LatexBaseInterface $latex = null): string;
+  public function generateLatex(?LatexBaseInterface $latex = null): string;
 
   /**
    * Generates a PDF from a given LaTeX location
