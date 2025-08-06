@@ -52,48 +52,70 @@ class LatexParseException extends LatexException
    */
   protected function findErrors(array $errorOutput, ?string $texLocation = null): void
   {
-    $refWarning       = strtolower('LaTeX Warning: Reference');
+    $excludeStartsWith  = [
+        'latex warning: reference', // Reference warning
+        'latex warning: there were undefined references', // Reference warning
+        'latex warning: label(s) may have changed. rerun to get cross-references right', // Reference warning
+        '<error-correction level increased from', // qrcode generation
+    ];
+    $excludeOccurrences = [
+        'providing info/warning/error messages', // infwarerr package init logging
+        '<making error block ', // qrcode generation
+        '<interleaving errorblocks of length', // qrcode generation
+    ];
+
     $filteredErrors   = [];
     $filteredErrors[] = '---';
 
-    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$texLocation, &$filteredErrors, $refWarning) {
-
+    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$texLocation, &$filteredErrors, $excludeStartsWith, $excludeOccurrences) {
       // Find lines with an error
-      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid/ui', $value) > 0) {
-        if (!str_starts_with(strtolower($errorOutput[$key]), $refWarning)) {
-          // Get the lines surrounding the error, but do not include empty lines
+      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid/ui', $value) <= 0) {
+        return;
+      }
 
-          // Get lines before the error
-          $temp = [];
-          for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-            if (isset($errorOutput[$key - $i])) {
-              $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key - $i]));
-              if ($value != '') {
-                $temp[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-          $filteredErrors = array_merge($filteredErrors, array_reverse($temp));
-
-          // Get lines after the error
-          for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-            if (isset($errorOutput[$key + $i])) {
-              $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key + $i]));
-              if ($value != '') {
-                $filteredErrors[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-
-          $filteredErrors[] = '---';
+      // Test matches for exclusions
+      $lowerCaseLogLine = strtolower($errorOutput[$key]);
+      foreach ($excludeStartsWith as $excludeLine) {
+        if (str_starts_with($lowerCaseLogLine, $excludeLine)) {
+          return;
         }
       }
+      foreach ($excludeOccurrences as $excludeLine) {
+        if (str_contains($lowerCaseLogLine, $excludeLine)) {
+          return;
+        }
+      }
+
+      // Get the lines surrounding the error, but do not include empty lines
+      // Get lines before the error
+      $temp = [];
+      for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+        if (isset($errorOutput[$key - $i])) {
+          $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key - $i]));
+          if ($value != '') {
+            $temp[] = $value;
+            $count++;
+          }
+        } else {
+          break;
+        }
+      }
+      $filteredErrors = array_merge($filteredErrors, array_reverse($temp));
+
+      // Get lines after the error
+      for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+        if (isset($errorOutput[$key + $i])) {
+          $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key + $i]));
+          if ($value != '') {
+            $filteredErrors[] = $value;
+            $count++;
+          }
+        } else {
+          break;
+        }
+      }
+
+      $filteredErrors[] = '---';
 
     });
 
