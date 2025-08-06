@@ -69,7 +69,7 @@ class LatexParseException extends LatexException
 
     array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$texLocation, &$filteredErrors, $excludeStartsWith, $excludeOccurrences) {
       // Find lines with an error
-      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid/ui', $value) <= 0) {
+      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid|^! /ui', $value) <= 0) {
         return;
       }
 
