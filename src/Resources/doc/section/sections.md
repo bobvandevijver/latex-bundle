@@ -28,6 +28,6 @@ For the sub and subsub section the `newpage` param is standard false
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/section.tex.twig).
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/subsection.tex.twig).
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/subsubsection.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/section.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/subsection.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/subsubsection.tex.twig).

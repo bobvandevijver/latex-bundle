@@ -20,4 +20,4 @@ new EscapedText($text)
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/escaped_text.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/escaped_text.tex.twig).

@@ -19,4 +19,4 @@ new CustomCommand($custom)
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/custom_command.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/custom_command.tex.twig).

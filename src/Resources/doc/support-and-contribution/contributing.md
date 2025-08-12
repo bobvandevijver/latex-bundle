@@ -1,22 +1,22 @@
 # Contributing
 ----------------------------------------------------
-(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/src/Resources/doc/support-and-contribution/contributing.md) (copied for ease)
+(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/main/src/Resources/doc/support-and-contribution/contributing.md) (copied for ease)
 
 [go back to Table of contents][back-to-index]
 
-[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/doc/documentation.md
+[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/doc/documentation.md
 
 ## 1. Createing and managing git branches
 
-In your github fork, you need to keep your master branch clean, without any changes,
-like that you can create at any time a branch from your master. Each time, that you
+In your github fork, you need to keep your main branch clean, without any changes,
+like that you can create at any time a branch from your main. Each time, that you
 want commit a bug fix or a feature, you need to create a branch for it, which will
-be the copy of your master branch.
+be the copy of your main branch.
 
 When you do a pull request on a branch, you can continue to work on an another
 branch and make another pull request on the other branch.
 
-Before createing a new branch pull the changes from Symfony2Admingenerator, your master
+Before creating a new branch pull the changes from LatexBundle, your main
 needs to be up to date.
 
 ### Create the branch on your local machine:
@@ -50,7 +50,7 @@ Which will show:
 ```console
 * documentation_update
   feature_sortable
-  master
+  main
 ```
 
 Current branch is marked by `*`.

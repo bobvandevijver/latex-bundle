@@ -4,7 +4,7 @@ This page contains a full index of all pages contained in this documentation, ba
 If you're working with older versions we encourage you to update to latest build.
 If you're getting errors or have trouble with updating see [submitting issues][1] and open a ticket on github.
 
-[1]: https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/doc/support-and-contribution/submitting-issues.md
+[1]: https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/doc/support-and-contribution/submitting-issues.md
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -26,7 +26,7 @@ Add the LaTeX-bundle to your `composer.json`:
 
 ```json
 "require": {
-    "bobv/latex-bundle": "dev-master"
+    "bobv/latex-bundle": "dev-main"
 },
 ```
 
@@ -72,7 +72,7 @@ The default latex installation does not contain the `ulem` package, which is nee
 
 ```
 sudo mkdir /usr/share/texmf/tex/latex/ulem
-sudo wget https://raw.githubusercontent.com/bobvandevijver/latex-bundle/master/src/Resources/packages/ulem.sty -P /usr/share/texmf/tex/latex/ulem
+sudo wget https://raw.githubusercontent.com/bobvandevijver/latex-bundle/main/src/Resources/packages/ulem.sty -P /usr/share/texmf/tex/latex/ulem
 sudo texhash
 ```
 
@@ -106,7 +106,7 @@ use Bobv\LatexBundle\Latex\Base\Article;
 $latex = new Article('Bobv Latex Bundle');
 ```
 
-For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/base).
+For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/base).
 
 ### 2. Adding sections
 
@@ -118,7 +118,7 @@ use Bobv\LatexBundle\Latex\Section\TOC;
 $latex->addElement(new TOC());
 ```
 
-For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/section).
+For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/section).
 
 ### 3. Adding elements
 
@@ -130,7 +130,7 @@ use Bobv\LatexBundle\Latex\Element\TitlePage;
 $latex->addElement(new TitlePage('Test title'));
 ```
 
-For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/element).
+For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/element).
 
 ### 4. Generate the latex/pdf files/response
 
@@ -209,7 +209,7 @@ $latexGenerator->setMaxAge($dateTime);
 ## Cookbook
 
 You can easily extend the existing templates with you custom defined one, although most you will need is already available.
-Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
+Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
 
 ## Exceptions
 
@@ -228,7 +228,7 @@ This bundle includes a simple text parser which can escape most UTF-8 characters
 
 > **Note**: By default, the filter is not meant to remove latex commands! It is meant to convert characters that might be used by your users into a character that LaTeX understands. However, when the parameters are set correctly, you can achieve the remove all behavior.
 
-This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. Note that the filter takes arguments which can change the behavior of the text parser. For the most up-to-date arguments check the [`Parser` class](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Helper/Parser.php#L34). 
+This method is also available in Twig as a simple filter: `latex_escape`. This filter is applied automatically when using the standard objects/templates. Note that the filter takes arguments which can change the behavior of the text parser. For the most up-to-date arguments check the [`Parser` class](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Helper/Parser.php#L34). 
 
 Next to the `latex_escape` filter, there is also a `latex_escape_all` filter. This should remove all LaTeX commands. 
 
@@ -306,7 +306,7 @@ By default, the `pdflatex` command is called with `-no-shell-escape`, in order t
 
 ## Adding extra fonts
 
-See [here](https://github.com/bobvandevijver/latex-bundle/tree/master/Resources/doc/font/font.md).
+See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/font/font.md).
 
 ## Test the bundle
 

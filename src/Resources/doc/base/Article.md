@@ -60,4 +60,4 @@ As convenience, multiple dependencies can be added with a single invocation of `
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Base/article.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Base/article.tex.twig).

@@ -33,4 +33,4 @@ new IncludePdf($fileLocation, $skipFirstWallpaper = true)
 
 ### Template
 
-See [here](https://github.com/bobvandevijver/latex-bundle/blob/master/src/Resources/views/Element/includepdf.tex.twig).
+See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Element/includepdf.tex.twig).
