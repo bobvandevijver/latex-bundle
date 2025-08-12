@@ -12,12 +12,20 @@ class LatexParseException extends LatexException
   const TEX_GET_LINES = 8;
   const TEX_MAX_LINES = 20;
 
+  protected bool $errorsResolved = false;
+
+  /** @var string[] */
   protected array $filteredTexSource = [];
 
+  /** @var string[] */
   protected array $filteredLogSource = [];
 
-  public function __construct(string $texLocation, int $exitCode, ?array $pdfLatexOutput = null, ?string $exitCodeText = null)
-  {
+  public function __construct(
+      private readonly string $texLocation,
+      int $exitCode,
+      private ?array $pdfLatexOutput = null,
+      ?string $exitCodeText = null
+  ) {
     if ($exitCodeText !== null) {
       $exitCodeText = sprintf(' (%s)', $exitCodeText);
     } else {
@@ -25,8 +33,6 @@ class LatexParseException extends LatexException
     }
 
     $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText. '. See the log file (' . explode('.tex', $texLocation)[0] . '.log ) for all details.';
-
-    $this->findErrors($pdfLatexOutput, $texLocation);
 
     parent::__construct($message, $exitCode);
   }
@@ -36,6 +42,8 @@ class LatexParseException extends LatexException
    */
   public function getExtendedMessage(): string
   {
+    $this->resolveErrors();
+
     $message = $this->getMessage();
 
     if (count($this->filteredLogSource) > 0) {
@@ -46,12 +54,30 @@ class LatexParseException extends LatexException
     return $message;
   }
 
+  public function getFilteredTexSource(): string
+  {
+    $this->resolveErrors();
+
+    return implode("\n", $this->filteredTexSource);
+  }
+
+  public function getFilteredLogSource(): string
+  {
+    $this->resolveErrors();
+
+    return implode("\n", $this->filteredLogSource);
+  }
+
   /**
    * Try to find useful information on the error that has occurred
    * This is stored in the object properties $filteredLogSource and $filteredTexSource
    */
-  protected function findErrors(array $errorOutput, ?string $texLocation = null): void
+  protected function resolveErrors(): void
   {
+    if ($this->errorsResolved) {
+      return;
+    }
+
     $excludeStartsWith  = [
         'latex warning: reference', // Reference warning
         'latex warning: there were undefined references', // Reference warning
@@ -67,14 +93,14 @@ class LatexParseException extends LatexException
     $filteredErrors   = [];
     $filteredErrors[] = '---';
 
-    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$texLocation, &$filteredErrors, $excludeStartsWith, $excludeOccurrences) {
+    array_walk($this->pdfLatexOutput, function ($value, $key) use (&$filteredErrors, &$excludeStartsWith, &$excludeOccurrences) {
       // Find lines with an error
       if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid|^! /ui', $value) <= 0) {
         return;
       }
 
       // Test matches for exclusions
-      $lowerCaseLogLine = strtolower($errorOutput[$key]);
+      $lowerCaseLogLine = strtolower($this->pdfLatexOutput[$key]);
       foreach ($excludeStartsWith as $excludeLine) {
         if (str_starts_with($lowerCaseLogLine, $excludeLine)) {
           return;
@@ -90,8 +116,8 @@ class LatexParseException extends LatexException
       // Get lines before the error
       $temp = [];
       for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-        if (isset($errorOutput[$key - $i])) {
-          $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key - $i]));
+        if (isset($this->pdfLatexOutput[$key - $i])) {
+          $value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key - $i]));
           if ($value != '') {
             $temp[] = $value;
             $count++;
@@ -104,8 +130,8 @@ class LatexParseException extends LatexException
 
       // Get lines after the error
       for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-        if (isset($errorOutput[$key + $i])) {
-          $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key + $i]));
+        if (isset($this->pdfLatexOutput[$key + $i])) {
+          $value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key + $i]));
           if ($value != '') {
             $filteredErrors[] = $value;
             $count++;
@@ -125,9 +151,9 @@ class LatexParseException extends LatexException
     // Try to find matching tex lines
     // Check if a line number can be found in the errors
     $this->filteredTexSource[] = '---';
-    if ($texLocation !== null) {
+    if ($this->texLocation !== null) {
       $lineNumber = [];
-      $texFile    = new \SplFileObject($texLocation);
+      $texFile    = new \SplFileObject($this->texLocation);
       foreach ($this->filteredLogSource as $logLine) {
         preg_match('/l\.(\d+)/ui', $logLine, $lineNumber);
         if (count($lineNumber) == 2) {
@@ -165,15 +191,7 @@ class LatexParseException extends LatexException
         }
       }
     }
-  }
 
-  public function getFilteredTexSource(): string
-  {
-    return implode("\n", $this->filteredTexSource);
-  }
-
-  public function getFilteredLogSource(): string
-  {
-    return implode("\n", $this->filteredLogSource);
+    $this->errorsResolved = true;
   }
 } 
