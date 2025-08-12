@@ -1,0 +1,53 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Debian) (preloaded format=pdflatex 2025.1.11)  6 AUG 2025 08:55
+entering extended mode
+ %&-line parsing enabled.
+
+LaTeX Warning: Reference `LastPage' on page 21 undefined on input line 4110.
+
+[21 </var/www/somefile.jpg>]
+! Dimension too large.
+<argument> \ht \@tempboxa 
+                          
+l.9 ...somefile.jpg}
+                                                  
+I can't work with sizes bigger than about 19 feet.
+Continue and I'll use the largest value I can.
+
+LaTeX Warning: Reference `LastPage' on page 22 undefined on input line 4123.
+
+LaTeX Warning: There were undefined references.
+
+LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
+
+Package rerunfilecheck Warning: File `somefile.out' has changed.
+(rerunfilecheck)                Rerun to get outlines right
+(rerunfilecheck)                or use package `bookmark'.
+
+Package rerunfilecheck Info: Checksums for `somefile.out':
+(rerunfilecheck)             Before: <no file>
+(rerunfilecheck)             After:  59B0845557EB735C2D032841A5B55C6A;107.
+ ) 
+Here is how much of TeX's memory you used:
+ 15883 strings out of 478051
+ 258602 string characters out of 5840943
+ 1968330 words of memory out of 5000000
+ 35765 multiletter control sequences out of 15000+600000
+ 516756 words of font info for 48 fonts, out of 8000000 for 9000
+ 14 hyphenation exceptions out of 8191
+ 75i,15n,223p,1343b,1254s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ </tmp/.texlive2022/texmf-var/fonts/pk/ljfour/jknappen/ec/tcss1000.600pk></us
+r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss10.pfb></usr/shar
+e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss17.pfb></usr/share/texl
+ive/texmf-dist/fonts/type1/public/amsfonts/cm/cmss8.pfb></usr/share/texlive/tex
+mf-dist/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></usr/share/texlive/texmf-d
+ist/fonts/type1/public/amsfonts/cm/cmtt10.pfb></usr/share/texlive/texmf-dist/fo
+nts/type1/public/eurosym/feymr10.pfb></usr/share/texlive/texmf-dist/fonts/type1
+/urw/zapfding/uzdr.pfb>
+Output written on "/var/www/somefile.pdf" (29 page
+s, 7980604 bytes).
+PDF statistics:
+ 352 PDF objects out of 1000 (max. 8388607)
+ 153 compressed objects within 2 object streams
+ 48 named destinations out of 1000 (max. 500000)
+ 61 words of extra memory for PDF output out of 10000 (max. 10000000)
+

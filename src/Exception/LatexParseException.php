@@ -2,9 +2,12 @@
 
 namespace Bobv\LatexBundle\Exception;
 
-/**
- * Simple \Exception extend for better error origin check
- */
+use Bobv\LatexBundle\Model\ParseError;
+use Bobv\LatexBundle\Model\TexLine;
+use Bobv\LatexBundle\Model\TexSnippet;
+use SplFileObject;
+
+/** Simple \Exception extend for better error origin check */
 class LatexParseException extends LatexException
 {
   const LOG_GET_LINES = 4;
@@ -12,146 +15,217 @@ class LatexParseException extends LatexException
   const TEX_GET_LINES = 8;
   const TEX_MAX_LINES = 20;
 
-  protected array $filteredTexSource = [];
+  const EXCLUDE_STARTS_WITH = [
+      'latex warning: reference', // Reference warning
+      'latex warning: there were undefined references', // Reference warning
+      'latex warning: label(s) may have changed. rerun to get cross-references right', // Reference warning
+      '<error-correction level increased from', // qrcode generation
+  ];
 
-  protected array $filteredLogSource = [];
+  const EXCLUDE_OCCURRENCES = [
+      'providing info/warning/error messages', // infwarerr package init logging
+      '<making error block ', // qrcode generation
+      '<interleaving errorblocks of length', // qrcode generation
+  ];
 
-  public function __construct(string $texLocation, int $exitCode, ?array $pdfLatexOutput = null, ?string $exitCodeText = null)
-  {
+  protected bool $errorsResolved = false;
+
+  /** @var ParseError[] */
+  protected array $parseErrors = [];
+
+  public function __construct(
+      private readonly string $texLocation,
+      int $exitCode,
+      private ?array $pdfLatexOutput = null,
+      ?string $exitCodeText = null
+  ) {
     if ($exitCodeText !== null) {
       $exitCodeText = sprintf(' (%s)', $exitCodeText);
     } else {
       $exitCodeText = '';
     }
 
-    $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText. '. See the log file (' . explode('.tex', $texLocation)[0] . '.log ) for all details.';
-
-    $this->findErrors($pdfLatexOutput, $texLocation);
+    $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText. '. See the log file (' . explode('.tex', $texLocation)[0] . '.log) for all details.';
 
     parent::__construct($message, $exitCode);
   }
 
   /**
    * Return an extended error message together with the extracted errors
+   *
+   * @deprecated Use the new object-oriented `getParseErrors` instead
    */
   public function getExtendedMessage(): string
   {
+    $this->resolveErrors();
+
     $message = $this->getMessage();
 
-    if (count($this->filteredLogSource) > 0) {
-      $message .= "\n\n\nBelow some more info is tried to extract from the error:\n";
-      $message .= implode("\n", $this->filteredLogSource);
+    if (!empty($this->parseErrors)) {
+      $message .= "\n\n\nBelow some more info is tried to extract from the error:\n{$this->combineParseErrorLogSource()}";
     }
 
     return $message;
+  }
+
+  /** @return ParseError[] */
+  public function getParseErrors(): array
+  {
+    $this->resolveErrors();
+
+    return $this->parseErrors;
+  }
+
+  /** @deprecated Use the new object-oriented `getParseErrors` instead */
+  public function getFilteredTexSource(): string
+  {
+    $this->resolveErrors();
+
+    $result = ["---"];
+    foreach ($this->parseErrors as $parseError) {
+      foreach ($parseError->texSnippets as $texSnippet) {
+        $result[] = "l.$texSnippet->lineNumber\n" . $texSnippet->getTexSnippet();
+      }
+    }
+    $result[] = "---";
+
+    return implode("\n", $result);
+  }
+
+  /** @deprecated Use the new object-oriented `getParseErrors` instead */
+  public function getFilteredLogSource(): string
+  {
+    $this->resolveErrors();
+
+    return $this->combineParseErrorLogSource();
   }
 
   /**
    * Try to find useful information on the error that has occurred
    * This is stored in the object properties $filteredLogSource and $filteredTexSource
    */
-  protected function findErrors(array $errorOutput, ?string $texLocation = null): void
+  protected function resolveErrors(): void
   {
-    $refWarning       = strtolower('LaTeX Warning: Reference');
-    $filteredErrors   = [];
-    $filteredErrors[] = '---';
+    // Check whether already resolved
+    if ($this->errorsResolved) {
+      return;
+    }
 
-    array_walk($errorOutput, function ($value, $key) use (&$errorOutput, &$texLocation, &$filteredErrors, $refWarning) {
+    // Otherwise mark as resolved and start process.
+    $this->errorsResolved = true;
 
+    array_walk($this->pdfLatexOutput, function ($value, $key) {
       // Find lines with an error
-      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid/ui', $value) > 0) {
-        if (!str_starts_with(strtolower($errorOutput[$key]), $refWarning)) {
-          // Get the lines surrounding the error, but do not include empty lines
+      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid|^! /ui', $value) <= 0) {
+        return;
+      }
 
-          // Get lines before the error
-          $temp = [];
-          for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-            if (isset($errorOutput[$key - $i])) {
-              $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key - $i]));
-              if ($value != '') {
-                $temp[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-          $filteredErrors = array_merge($filteredErrors, array_reverse($temp));
-
-          // Get lines after the error
-          for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-            if (isset($errorOutput[$key + $i])) {
-              $value = trim(preg_replace('/\s+/', ' ', $errorOutput[$key + $i]));
-              if ($value != '') {
-                $filteredErrors[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-
-          $filteredErrors[] = '---';
+      // Test matches for exclusions
+      $lowerCaseLogLine = strtolower($this->pdfLatexOutput[$key]);
+      foreach (self::EXCLUDE_STARTS_WITH as $excludeLine) {
+        if (str_starts_with($lowerCaseLogLine, $excludeLine)) {
+          return;
+        }
+      }
+      foreach (self::EXCLUDE_OCCURRENCES as $excludeLine) {
+        if (str_contains($lowerCaseLogLine, $excludeLine)) {
+          return;
         }
       }
 
+      // Get the lines surrounding the error, but do not include empty lines
+      // Get lines before the error
+      $logLines = [];
+      for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+        if (!isset($this->pdfLatexOutput[$key - $i])) {
+          break;
+        }
+
+        if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key - $i]))) {
+          array_unshift($logLines, $value);
+          $count++;
+        }
+      }
+
+      // Get lines after the error
+      for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+        if (!isset($this->pdfLatexOutput[$key + $i])) {
+          break;
+        }
+
+        if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key + $i]))) {
+          $logLines[] = $value;
+          $count++;
+        }
+      }
+
+      $this->parseErrors[] = new ParseError($logLines);
     });
 
-    // Save in object
-    $this->filteredLogSource = $filteredErrors;
+    if (!$this->texLocation) {
+      // No tex file to search for matching sources
+      return;
+    }
 
-    // Try to find matching tex lines
-    // Check if a line number can be found in the errors
-    $this->filteredTexSource[] = '---';
-    if ($texLocation !== null) {
-      $lineNumber = [];
-      $texFile    = new \SplFileObject($texLocation);
-      foreach ($this->filteredLogSource as $logLine) {
-        preg_match('/l\.(\d+)/ui', $logLine, $lineNumber);
-        if (count($lineNumber) == 2) {
+    $texFile = new SplFileObject($this->texLocation);
+    foreach ($this->parseErrors as $idx => $parseError) {
+      /** @var TexSnippet[] $texSnippets */
+      $texSnippets = [];
 
-          // Get lines before the linenumber
-          $temp = [];
-          for ($count = 0, $i = 0; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
-            $texFile->seek($lineNumber[1] - $i);
-            if ($texFile->valid()) {
-              $value = trim(preg_replace('/\s+/', ' ', $texFile->current()));
-              if ($value != '') {
-                $temp[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-          $this->filteredTexSource = array_merge($this->filteredTexSource, [$lineNumber[0]], array_reverse($temp));
-
-          // Get lines after the line number
-          for ($count = 0, $i = 1; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
-            $texFile->seek($lineNumber[1] + $i);
-            if ($texFile->valid()) {
-              $value = trim(preg_replace('/\s+/', ' ', $texFile->current()));
-              if ($value != '') {
-                $this->filteredTexSource[] = $value;
-                $count++;
-              }
-            } else {
-              break;
-            }
-          }
-          $this->filteredTexSource[] = '---';
+      // Find line numbers in the parsed error
+      foreach ($parseError->logLines as $logLine) {
+        preg_match('/l\.(\d+)/ui', $logLine, $lineNumberMatch);
+        if (count($lineNumberMatch) != 2) {
+          continue;
         }
+
+        $lineNumber = (int)$lineNumberMatch[1];
+
+        /** @var TexLine[] $texLines */
+        $texLines = [];
+
+        // Get lines before the line number
+        for ($count = 0, $i = 0; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
+          $currentLineNumber = $lineNumber - $i;
+          $texFile->seek($currentLineNumber);
+          if (!$texFile->valid()) {
+            break;
+          }
+
+          if ($value = trim(preg_replace('/\s+/', ' ', $texFile->current()))) {
+            array_unshift($texLines, new TexLine($currentLineNumber, $value));
+            $count++;
+          }
+        }
+
+        // Get lines after the line number
+        for ($count = 0, $i = 1; $count < self::TEX_GET_LINES && $i < self::TEX_MAX_LINES; $i++) {
+          $currentLineNumber = $lineNumber + $i;
+          $texFile->seek($currentLineNumber);
+          if (!$texFile->valid()) {
+            break;
+          }
+
+          if ($value = trim(preg_replace('/\s+/', ' ', $texFile->current()))) {
+            $texLines[] = new TexLine($currentLineNumber, $value);
+            $count++;
+          }
+        }
+
+        $texSnippets[] = new TexSnippet($lineNumber, $texLines);
       }
+
+      $this->parseErrors[$idx] = new ParseError($parseError->logLines, $texSnippets);
     }
   }
 
-  public function getFilteredTexSource(): string
+  private function combineParseErrorLogSource(): string
   {
-    return implode("\n", $this->filteredTexSource);
-  }
+    $logSource = implode(
+        "\n---\n",
+        array_map(static fn(ParseError $pe): string => $pe->getLogSource(), $this->parseErrors)
+    );
 
-  public function getFilteredLogSource(): string
-  {
-    return implode("\n", $this->filteredLogSource);
+    return implode("\n", ['---', $logSource, '---']);
   }
 } 
