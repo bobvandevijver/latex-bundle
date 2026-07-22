@@ -106,7 +106,7 @@ use Bobv\LatexBundle\Latex\Base\Article;
 $latex = new Article('Bobv Latex Bundle');
 ```
 
-For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/base).
+For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/base).
 
 ### 2. Adding sections
 
@@ -118,7 +118,7 @@ use Bobv\LatexBundle\Latex\Section\TOC;
 $latex->addElement(new TOC());
 ```
 
-For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/section).
+For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/section).
 
 ### 3. Adding elements
 
@@ -130,7 +130,7 @@ use Bobv\LatexBundle\Latex\Element\TitlePage;
 $latex->addElement(new TitlePage('Test title'));
 ```
 
-For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/element).
+For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/element).
 
 ### 4. Generate the latex/pdf files/response
 
@@ -209,7 +209,7 @@ $latexGenerator->setMaxAge($dateTime);
 ## Cookbook
 
 You can easily extend the existing templates with you custom defined one, although most you will need is already available.
-Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
+Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
 
 ## Exceptions
 
@@ -306,7 +306,7 @@ By default, the `pdflatex` command is called with `-no-shell-escape`, in order t
 
 ## Adding extra fonts
 
-See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/Resources/doc/font/font.md).
+See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/font/font.md).
 
 ## Test the bundle
 
