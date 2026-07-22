@@ -1,6 +1,13 @@
 # Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
+### Upgrade from 4.x to 5.x
+
+This release focused on adding typings to methods. Most should be straight forward to adjust, and will only affect you if you were extending the internals.
+
+### Upgrade from 3.x to 4.x
+
+This major only dropped support for older Symfony versions.
 
 ### Upgrade from 2.x to 3.x
 
