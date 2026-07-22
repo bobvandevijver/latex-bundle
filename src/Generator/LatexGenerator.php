@@ -278,6 +278,14 @@ class LatexGenerator implements LatexGeneratorInterface
       $optionsString .= ' -no-shell-escape';
     }
 
+    // Add -openin_any=p and -openout_any=p
+    if (!array_key_exists('openin_any', $compileOptions)) {
+      $optionsString .= ' -cnf-line="openin_any=p"';
+    }
+    if (!array_key_exists('openout_any', $compileOptions)) {
+      $optionsString .= ' -cnf-line="openout_any=p"';
+    }
+
     $compile = true;
     $count   = 0;
     /** @var bool|array $output */

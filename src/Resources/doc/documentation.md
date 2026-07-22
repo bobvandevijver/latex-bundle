@@ -304,6 +304,13 @@ By default, the `pdflatex` command is called with `-no-shell-escape`, in order t
 
 > **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
 
+## File access
+
+By default, the `pdflatex` command is called with both `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` to disallow opening arbitrary files. If you do require this, simply pass `openin_any` or `openout_any` as option.
+If you want to pass another option, pass your custom option as `-cnf-line="openin_any=r"` and `openin_any` to disable the addition of the paranoid one.
+
+> **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
+
 ## Adding extra fonts
 
 See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/font/font.md).

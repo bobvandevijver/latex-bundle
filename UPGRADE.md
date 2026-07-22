@@ -1,6 +1,10 @@
 # Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
+### Upgrade from 5.x to 6.x
+
+This release marks the addition of a possibly breaking safety feature, namely passing `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` by default to the `pdflatex` command.
+
 ### Upgrade from 4.x to 5.x
 
 This release focused on adding typings to methods. Most should be straight forward to adjust, and will only affect you if you were extending the internals.
