@@ -5,7 +5,7 @@ The graphic block defines a standard include graphics block directly to include 
 
 ### Constructor
 
-The constructor takes a mandatory image location. This needs to be te full path, or just the filename when set as dependency.
+The constructor takes a mandatory image location. This needs to be the full path, or just the filename when set as dependency.
 
 ```php
 new Graphic($location)

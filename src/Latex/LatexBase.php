@@ -3,6 +3,8 @@
 namespace Bobv\LatexBundle\Latex;
 
 use Bobv\LatexBundle\Exception\LatexException;
+use InvalidArgumentException;
+use Symfony\Component\Uid\UuidV4;
 
 class LatexBase extends LatexParams implements LatexBaseInterface
 {
@@ -10,6 +12,8 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   protected string $fileName; // Set in constructor
   protected ?string $template = null;
   protected array $dependencies = [];
+  /** @var array<non-empty-string, non-empty-string> */
+  protected array $linkedDependencies = [];
 
   public function __construct(string $filename)
   {
@@ -96,6 +100,29 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     }
 
     return $this;
+  }
+
+  /** @return array<non-empty-string, non-empty-string> */
+  public function getLinkedDependencies(): array
+  {
+    return $this->linkedDependencies;
+  }
+
+  /** @return non-empty-string */
+  public function addLinkedDependency(mixed $dependency): string
+  {
+    if (!is_readable($dependency)) {
+      throw new InvalidArgumentException('The dependency must be a readable file.');
+    }
+
+    $key = (new UuidV4())->toString();
+    if ($ext = pathinfo($dependency, PATHINFO_EXTENSION)) {
+      $key .= '.' . $ext;
+    }
+
+    $this->linkedDependencies[$key] = $dependency;
+
+    return $key;
   }
 
   /**

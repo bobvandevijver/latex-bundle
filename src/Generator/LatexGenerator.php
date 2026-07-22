@@ -128,10 +128,16 @@ class LatexGenerator implements LatexGeneratorInterface
         $latex->getContext()
     );
 
+    $linkedDependencies = $latex->getLinkedDependencies();
+
     // Check if there are undefined images
     $matches = array();
     preg_match_all('/\\\\includegraphics(\[.+])?\{([^}]+)}/u', $texData, $matches);
     foreach ($matches[2] as $imageLocation) {
+      if (array_key_exists($imageLocation, $linkedDependencies)) {
+        continue;
+      }
+
       if (!$this->filesystem->exists($imageLocation)) {
         throw new ImageNotFoundException($imageLocation);
       }
@@ -158,8 +164,12 @@ class LatexGenerator implements LatexGeneratorInterface
       }
     }
 
-    return $texLocation;
+    // Link dependencies
+    foreach ($linkedDependencies as $key => $dependency) {
+      $this->filesystem->symlink($dependency, $this->outputDir . $key, true);
+    }
 
+    return $texLocation;
   }
 
   /**

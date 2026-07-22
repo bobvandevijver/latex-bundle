@@ -60,6 +60,8 @@ This class also has an `addDependency($dependency)` method. Use this if you need
 
 As convenience, multiple dependencies can be added with a single invocation of `addDependencies($dependencies)`.
 
+To save disk space, it is also possible to add it as a linked dependency with `addLinkedDependency($dependency)`: this way only a symlink is created in the compilation dir (or copied on Windows).
+
 ### Template
 
 See [here](https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/views/Base/book.tex.twig).

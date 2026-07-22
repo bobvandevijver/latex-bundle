@@ -24,6 +24,7 @@
         "symfony/http-kernel": "^5.4 || ^6.2 || ^7.1",
         "symfony/options-resolver": "^5.4 || ^6.2 || ^7.1",
         "symfony/process": "^5.4 || ^6.2 || ^7.1",
+        "symfony/uid": "^5.4 || ^6.2 || ^7.1",
         "twig/twig": "^2.15 || ^3.0"
     },
     "require-dev": {

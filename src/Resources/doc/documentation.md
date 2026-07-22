@@ -284,7 +284,7 @@ If you have any use-case that generates an error, feel create an issue or create
 
 ## Custom output directory
 
-By default, this bundle uses the `%bobv.latex.cache_dir%` parameter for the caching directory, which is by default set to `"%kernel.cache_dir%"`. If you want to override this directory, simply override the parameter. However, do note that the kernel cache dir is used for a reason: to generate a correct PDF file, all dependencies (if any, like fonts, letterhead, ...) are also placed there. By placing it in the cache, we know it can easily and automatically will be removed so that the disk does not constantly fill up.
+By default, this bundle uses the `%bobv.latex.cache_dir%` parameter for the caching directory, which is by default set to `"%kernel.cache_dir%"`. If you want to override this directory, simply override the parameter. However, do note that the kernel cache dir is used for a reason: to generate a correct PDF file, all dependencies (if any, like fonts, letterhead, ...) are also placed there. By placing it in the cache, we know it can easily and automatically will be removed so that the disk does not constantly fill up. Any linked dependencies are also placed in the cache directory with a symlink, or copied on Windows.
 
 It is also possible to override the cache directory per request, by using the `setCacheDir()` method on the `LatexGenerator`.
 

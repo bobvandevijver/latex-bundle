@@ -5,7 +5,7 @@ The include PDF block defines a standard includepdf command to include a PDF pag
 
 ### Constructor
 
-The constructor takes a mandatory pdf location. This needs to be te full path, or just the filename when set as dependency.
+The constructor takes a mandatory pdf location. This needs to be the full path, or just the filename when set as dependency.
 
 ```php
 new IncludePdf($fileLocation, $skipFirstWallpaper = true)
