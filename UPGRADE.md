@@ -1,7 +1,6 @@
 # Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
-[![Join the chat at https://gitter.im/bobvandevijver/latex-bundle](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/bobvandevijver/latex-bundle?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 ### Upgrade from 2.x to 3.x
 
