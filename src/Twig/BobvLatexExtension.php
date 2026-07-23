@@ -3,6 +3,7 @@
 namespace Bobv\LatexBundle\Twig;
 
 use Bobv\LatexBundle\Helper\Parser;
+use Twig\TwigFilter;
 
 use function Symfony\Component\String\u;
 
@@ -17,12 +18,10 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
 
   public function getFilters(): array
   {
-    $filterClass = class_exists('\\Twig\\TwigFilter') ? '\\Twig\\TwigFilter' : '\\Twig_SimpleFilter';
-
     return [
-      new $filterClass('latex_escape', $this->latexEscape(...), ['is_safe' => ['all']]),
-      new $filterClass('latex_escape_all', $this->latexEscapeAll(...), ['is_safe' => ['all']]),
-      new $filterClass('latex_parse_html', $this->latexParseHtml(...), ['is_safe' => ['all']]),
+      new TwigFilter('latex_escape', $this->latexEscape(...), ['is_safe' => ['all']]),
+      new TwigFilter('latex_escape_all', $this->latexEscapeAll(...), ['is_safe' => ['all']]),
+      new TwigFilter('latex_parse_html', $this->latexParseHtml(...), ['is_safe' => ['all']]),
     ];
   }
 
