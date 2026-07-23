@@ -2,6 +2,7 @@
 
 namespace Bobv\LatexBundle\Generator;
 
+use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
 use Bobv\LatexBundle\Exception\BibliographyGenerationException;
 use Bobv\LatexBundle\Exception\ImageNotFoundException;
 use Bobv\LatexBundle\Exception\LatexException;
@@ -28,16 +29,15 @@ class LatexGenerator implements LatexGeneratorInterface
   protected bool $forceRegenerate = false;
   protected ?LatexBaseInterface $latex = null;
   protected ?string $outputDir = null;
-  protected int|float|null $timeout = 60; // Default timeout from the Symfony Process component
   protected DateTimeInterface $maxAge;
 
   public function __construct(
       protected string $cacheDir,
       protected readonly string $env,
       protected readonly Environment $twig,
+      protected LatexCompilerInterface $latexCompiler,
       string $maxAge,
-      protected readonly string $pdfLatexBinaryLocation,
-      protected readonly string $bibliographyBinaryLocation) {
+  ) {
     $this->filesystem = new Filesystem();
     $this->maxAge     = new DateTime();
     $this->maxAge->modify($maxAge);
@@ -232,7 +232,7 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param int|float|null $timeout The timeout in seconds
    */
   public function setTimeout(int|float|null $timeout): self {
-    $this->timeout = $timeout;
+    $this->latexCompiler->setTimeout($timeout);
 
     return $this;
   }
@@ -263,7 +263,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * @throws Exception
    */
   protected function compilePdf(string $texLocation, array $compileOptions = []): string {
-    $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
+    $baseName    = explode('.tex', $texLocation)[0];
+    $pdfLocation = $baseName . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
     if ($this->filesystem->exists($pdfLocation)
@@ -278,23 +279,32 @@ class LatexGenerator implements LatexGeneratorInterface
     $this->outputDir = dirname($texLocation);
 
     // Process extra options for security
-    $optionsString = '';
+    $pdflatexArgs = '';
     foreach ($compileOptions as $option => $value) {
-      $optionsString .= sprintf(' -%s %s', $option, $value ? $value : '');
+      $pdflatexArgs .= sprintf(' -%s %s', $option, $value ?: '');
     }
 
     // Add -no-shell-escape
     if (!array_key_exists('shell-escape', $compileOptions)) {
-      $optionsString .= ' -no-shell-escape';
+      $pdflatexArgs .= ' -no-shell-escape';
     }
 
     // Add -openin_any=p and -openout_any=p
     if (!array_key_exists('openin_any', $compileOptions)) {
-      $optionsString .= ' -cnf-line="openin_any=p"';
+      $pdflatexArgs .= ' -cnf-line="openin_any=p"';
     }
     if (!array_key_exists('openout_any', $compileOptions)) {
-      $optionsString .= ' -cnf-line="openout_any=p"';
+      $pdflatexArgs .= ' -cnf-line="openout_any=p"';
     }
+
+    // Always add interaction mode
+    $pdflatexArgs .= ' -interaction=nonstopmode';
+
+    // Always add output directory
+    $pdflatexArgs .= sprintf(' -output-directory="%s"', $this->outputDir);
+
+    // Finally, add the tex location
+    $pdflatexArgs .= sprintf(' "%s"', $texLocation);
 
     $compile = true;
     $count   = 0;
@@ -310,41 +320,30 @@ class LatexGenerator implements LatexGeneratorInterface
       }
       unset($output);
 
-      $commandLine = sprintf(
-          'cd %s && HOME="/tmp" %s %s -interaction=nonstopmode -output-directory="%s" "%s"',
-          $this->outputDir,
-          $this->pdfLatexBinaryLocation,
-          $optionsString,
-          $this->outputDir,
-          $texLocation);
-      $process     = $this->runProcess($commandLine);
-      $output      = explode("\n", $process->getOutput());
+      $result = $this->latexCompiler->pdflatex($this->outputDir, $pdflatexArgs);
+      $output = $result->output;
 
       // Check if the pdflatex command completed successfully
-      if (!$process->isSuccessful()) {
+      if (!$result->isSuccessful) {
         throw new LatexParseException(
             $texLocation,
-            $process->getExitCode(),
+            $result->exitCode,
             $output,
-            $process->getExitCodeText());
+            $result->exitCodeText,
+        );
       }
 
       // Run bibliography tooling when enabled
-      if ($count === 0 && !empty($this->bibliographyBinaryLocation)) {
-        $bibLocation = explode('.tex', $texLocation)[0];
-        $commandLine = sprintf(
-            'cd %s && HOME="/tmp" %s "%s"',
-            $this->outputDir,
-            $this->bibliographyBinaryLocation,
-            $bibLocation);
-        $process     = $this->runProcess($commandLine);
+      if ($count === 0 && $this->latexCompiler->supportsBibliography()) {
+        $result = $this->latexCompiler->bibtex($this->outputDir, $baseName);
 
         // Check whether the pdflatex command completed successfully
-        if (!$process->isSuccessful()) {
+        if (!$result->isSuccessful) {
           throw new BibliographyGenerationException(
               $texLocation,
-              $process->getExitCode(),
-              $process->getExitCodeText());
+              $result->exitCode,
+              $result->exitCodeText,
+          );
         }
       }
 
@@ -395,14 +394,5 @@ class LatexGenerator implements LatexGeneratorInterface
    */
   private function findReferenceError(string $value): bool {
     return preg_match_all('/reference|change/ui', $value) > 0;
-  }
-
-  private function runProcess(string $commandLine): Process {
-    $process = Process::fromShellCommandline($commandLine);
-
-    $process->setTimeout($this->timeout);
-    $process->run();
-
-    return $process;
   }
 }
