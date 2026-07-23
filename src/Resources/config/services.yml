@@ -1,4 +1,5 @@
 parameters:
+  bobv.latex.compiler.class: Bobv\LatexBundle\Compiler\LocalLatexCompiler
   bobv.latex.generator.class: Bobv\LatexBundle\Generator\LatexGenerator
   bobv.latex.generator.locked.class: Bobv\LatexBundle\Generator\LockedLatexGenerator
   bobv.latex.twig.extension.class: Bobv\LatexBundle\Twig\BobvLatexExtension
@@ -16,6 +17,15 @@ services:
     tags:
       - { name: console.command }
 
+  Bobv\LatexBundle\Compiler\LatexCompilerInterface:
+    alias: bobv.latex.compiler
+
+  bobv.latex.compiler:
+    class: "%bobv.latex.compiler.class%"
+    arguments:
+      - "%bobv.latex.pdflatex.location%"
+      - "%bobv.latex.bibliography_binary.location%"
+
   Bobv\LatexBundle\Generator\LatexGeneratorInterface:
     alias: bobv.latex.generator
 
@@ -28,9 +38,8 @@ services:
       - "%bobv.latex.cache_dir%"
       - "%kernel.environment%"
       - "@twig"
+      - "@bobv.latex.compiler"
       - "%bobv.latex.max_age%"
-      - "%bobv.latex.pdflatex.location%"
-      - "%bobv.latex.bibliography_binary.location%"
 
   bobv.latex.generator.locked:
     class: "%bobv.latex.generator.locked.class%"
