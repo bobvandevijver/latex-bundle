@@ -8,7 +8,7 @@ use function Symfony\Component\String\u;
 
 class BobvLatexExtension extends AbstractBobvLatexExtension
 {
-  private Parser $parser; // Set in constructor
+  private readonly Parser $parser; // Set in constructor
 
   public function __construct(private readonly bool $useSymfonyString)
   {
@@ -20,9 +20,9 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
     $filterClass = class_exists('\\Twig\\TwigFilter') ? '\\Twig\\TwigFilter' : '\\Twig_SimpleFilter';
 
     return [
-      new $filterClass('latex_escape', [$this, 'latexEscape'], ['is_safe' => ['all']]),
-      new $filterClass('latex_escape_all', [$this, 'latexEscapeAll'], ['is_safe' => ['all']]),
-      new $filterClass('latex_parse_html', [$this, 'latexParseHtml'], ['is_safe' => ['all']]),
+      new $filterClass('latex_escape', $this->latexEscape(...), ['is_safe' => ['all']]),
+      new $filterClass('latex_escape_all', $this->latexEscapeAll(...), ['is_safe' => ['all']]),
+      new $filterClass('latex_parse_html', $this->latexParseHtml(...), ['is_safe' => ['all']]),
     ];
   }
 

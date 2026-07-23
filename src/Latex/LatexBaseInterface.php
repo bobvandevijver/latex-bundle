@@ -20,7 +20,7 @@ interface LatexBaseInterface extends LatexInterface
   public function addDependencies(iterable $dependencies): self;
 
   /** Add a package to include */
-  public function addPackage(mixed $package, string $options = ''): self;
+  public function addPackage(string $package, string $options = ''): self;
 
   /** Add multiple packages to include (without options) */
   public function addPackages(iterable $packages): self;

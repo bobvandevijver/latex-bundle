@@ -5,7 +5,7 @@ namespace Bobv\LatexBundle\DependencyInjection;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Exception\LogicException;
-use Symfony\Component\DependencyInjection\Loader;
+use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 use Symfony\Component\String\UnicodeString;
 
@@ -13,7 +13,7 @@ class BobvLatexExtension extends ConfigurableExtension
 {
   protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
   {
-    $loader = new Loader\YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+    $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
     $loader->load('services.yml');
 
     if ($mergedConfig['escaping']['use_symfony_string'] === true) {

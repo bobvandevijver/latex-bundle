@@ -14,7 +14,7 @@ use Symfony\Component\Lock\Store\FlockStore;
 /** Lock LaTeX pdf generation to prevent the same files being rendered at the same time. */
 class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGeneratorInterface
 {
-  private LockFactory $lockFactory; // Set in constructor
+  private readonly LockFactory $lockFactory; // Set in constructor
   private ?Lock $lock = null;
   private float|int|null $timeout; // Set in constructor
 

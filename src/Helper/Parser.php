@@ -4,13 +4,14 @@ namespace Bobv\LatexBundle\Helper;
 
 use DOMDocument;
 use DOMElement;
+use RuntimeException;
 
 class Parser
 {
   private array $htmlCodes; // Set in constructor
 
   /** @var string[] */
-  private array $greekMap;
+  private readonly array $greekMap;
 
   public function __construct()
   {
@@ -264,7 +265,9 @@ class Parser
     $text = $DOM->saveHTML();
 
     // Replace junk from URL to get it readable
-    $text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text);
+    if (!$text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text)) {
+      throw new RuntimeException('Failed to replace URLs');
+    }
 
     return strip_tags($text);
   }
