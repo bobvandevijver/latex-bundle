@@ -2,10 +2,10 @@
 
 namespace Bobv\LatexBundle\Exception;
 
-/**
- * Simple \Exception extend for better error origin check
- */
-class ImageNotFoundException extends \Exception
+use Exception;
+
+/** Simple \Exception extend for better error origin check */
+class ImageNotFoundException extends Exception
 {
   public function __construct(private readonly string $imageLocation)
   {

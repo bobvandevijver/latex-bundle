@@ -5,23 +5,23 @@ namespace Bobv\LatexBundle\Compiler;
 interface LatexCompilerInterface
 {
   /**
-   * Run a pdflatex process
+   * Run a pdflatex process.
    *
    * @return LatexCompilerResult The process output
    */
   public function pdflatex(
-      string $workingDirectory,
-      string $commandArguments,
+    string $workingDirectory,
+    string $commandArguments,
   ): LatexCompilerResult;
 
   /**
-   * Run a bibtex process
+   * Run a bibtex process.
    *
    * @return LatexCompilerResult The process output
    */
   public function bibtex(
-      string $workingDirectory,
-      string $commandArguments,
+    string $workingDirectory,
+    string $commandArguments,
   ): LatexCompilerResult;
 
   /** bibtex support is optional and needs to be configured. */

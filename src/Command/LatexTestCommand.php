@@ -18,18 +18,21 @@ use Symfony\Component\Console\Output\OutputInterface;
 
 class LatexTestCommand extends Command
 {
-  public function __construct(private readonly LatexGeneratorInterface $latexGenerator) {
+  public function __construct(private readonly LatexGeneratorInterface $latexGenerator)
+  {
     parent::__construct();
   }
 
-  protected function configure(): void {
+  protected function configure(): void
+  {
     $this
-        ->setName('bobv:latex:test')
-        ->setDescription('Generate a test LaTeX file (+ pdf)')
-        ->addArgument('no-pdf', InputArgument::OPTIONAL, 'Do not generate a PDF test file');
+      ->setName('bobv:latex:test')
+      ->setDescription('Generate a test LaTeX file (+ pdf)')
+      ->addArgument('no-pdf', InputArgument::OPTIONAL, 'Do not generate a PDF test file');
   }
 
-  protected function execute(InputInterface $input, OutputInterface $output): int {
+  protected function execute(InputInterface $input, OutputInterface $output): int
+  {
     $latex          = new Article('BobvLatexTest');
     $latex->addPackage('lipsum');
     $latex->addElement(new TitlePage('Bobv Latex Test', 'a subtitle', 'an author'));

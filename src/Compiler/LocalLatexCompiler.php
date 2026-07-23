@@ -7,13 +7,13 @@ use Symfony\Component\Process\Process;
 final class LocalLatexCompiler implements LatexCompilerInterface
 {
   public function __construct(
-      protected string $pdfLatexBinaryLocation,
-      protected ?string $bibliographyBinaryLocation,
+    private string $pdfLatexBinaryLocation,
+    private ?string $bibliographyBinaryLocation,
   ) {
   }
 
   /** Default timeout from the Symfony Process component. */
-  protected int|float|null $timeout = 60;
+  private int|float|null $timeout = 60;
 
   public function pdflatex(string $workingDirectory, string $commandArguments): LatexCompilerResult
   {
@@ -44,9 +44,9 @@ final class LocalLatexCompiler implements LatexCompilerInterface
   private function runLocalProcess(string $workingDirectory, string $command): Process
   {
     $commandLine = sprintf(
-        'cd %s && HOME="/tmp" %s',
-        $workingDirectory,
-        $command,
+      'cd %s && HOME="/tmp" %s',
+      $workingDirectory,
+      $command,
     );
 
     $process = Process::fromShellCommandline($commandLine);

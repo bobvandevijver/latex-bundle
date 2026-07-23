@@ -2,17 +2,10 @@
 
 namespace Bobv\LatexBundle\Latex\Base;
 
-/**
- * Base article
- *
- * @author BobV
- */
+/** Base article. */
 class Article extends Base
 {
-
-  /**
-   * Article constructor, sets defaults
-   */
+  /** Article constructor, sets defaults */
   public function __construct(string $filename)
   {
     // Define standard values
@@ -21,5 +14,4 @@ class Article extends Base
     // Call parent constructor
     parent::__construct($filename);
   }
-
 }

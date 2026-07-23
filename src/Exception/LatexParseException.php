@@ -10,22 +10,20 @@ use SplFileObject;
 /** Simple \Exception extend for better error origin check */
 class LatexParseException extends LatexException
 {
-  const LOG_GET_LINES = 4;
-  const LOG_MAX_LINES = 10;
-  const TEX_GET_LINES = 8;
-  const TEX_MAX_LINES = 20;
-
-  const EXCLUDE_STARTS_WITH = [
-      'latex warning: reference', // Reference warning
-      'latex warning: there were undefined references', // Reference warning
-      'latex warning: label(s) may have changed. rerun to get cross-references right', // Reference warning
-      '<error-correction level increased from', // qrcode generation
+  public const LOG_GET_LINES       = 4;
+  public const LOG_MAX_LINES       = 10;
+  public const TEX_GET_LINES       = 8;
+  public const TEX_MAX_LINES       = 20;
+  public const EXCLUDE_STARTS_WITH = [
+    'latex warning: reference', // Reference warning
+    'latex warning: there were undefined references', // Reference warning
+    'latex warning: label(s) may have changed. rerun to get cross-references right', // Reference warning
+    '<error-correction level increased from', // qrcode generation
   ];
-
-  const EXCLUDE_OCCURRENCES = [
-      'providing info/warning/error messages', // infwarerr package init logging
-      '<making error block ', // qrcode generation
-      '<interleaving errorblocks of length', // qrcode generation
+  public const EXCLUDE_OCCURRENCES = [
+    'providing info/warning/error messages', // infwarerr package init logging
+    '<making error block ', // qrcode generation
+    '<interleaving errorblocks of length', // qrcode generation
   ];
 
   protected bool $errorsResolved = false;
@@ -34,10 +32,10 @@ class LatexParseException extends LatexException
   protected array $parseErrors = [];
 
   public function __construct(
-      private readonly string $texLocation,
-      int $exitCode,
-      private ?array $pdfLatexOutput = null,
-      ?string $exitCodeText = null
+    private readonly string $texLocation,
+    int $exitCode,
+    private ?array $pdfLatexOutput = null,
+    ?string $exitCodeText = null,
   ) {
     if ($exitCodeText !== null) {
       $exitCodeText = sprintf(' (%s)', $exitCodeText);
@@ -45,13 +43,13 @@ class LatexParseException extends LatexException
       $exitCodeText = '';
     }
 
-    $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText. '. See the log file (' . explode('.tex', $texLocation)[0] . '.log) for all details.';
+    $message = 'Something went wrong during the execution of the pdflatex command, as it returned ' . $exitCode . $exitCodeText . '. See the log file (' . explode('.tex', $texLocation)[0] . '.log) for all details.';
 
     parent::__construct($message, $exitCode);
   }
 
   /**
-   * Return an extended error message together with the extracted errors
+   * Return an extended error message together with the extracted errors.
    *
    * @deprecated Use the new object-oriented `getParseErrors` instead
    */
@@ -81,13 +79,13 @@ class LatexParseException extends LatexException
   {
     $this->resolveErrors();
 
-    $result = ["---"];
+    $result = ['---'];
     foreach ($this->parseErrors as $parseError) {
       foreach ($parseError->texSnippets as $texSnippet) {
         $result[] = "l.$texSnippet->lineNumber\n" . $texSnippet->getTexSnippet();
       }
     }
-    $result[] = "---";
+    $result[] = '---';
 
     return implode("\n", $result);
   }
@@ -102,7 +100,7 @@ class LatexParseException extends LatexException
 
   /**
    * Try to find useful information on the error that has occurred
-   * This is stored in the object properties $filteredLogSource and $filteredTexSource
+   * This is stored in the object properties $filteredLogSource and $filteredTexSource.
    */
   protected function resolveErrors(): void
   {
@@ -222,10 +220,10 @@ class LatexParseException extends LatexException
   private function combineParseErrorLogSource(): string
   {
     $logSource = implode(
-        "\n---\n",
-        array_map(static fn(ParseError $pe): string => $pe->getLogSource(), $this->parseErrors)
+      "\n---\n",
+      array_map(static fn (ParseError $pe): string => $pe->getLogSource(), $this->parseErrors)
     );
 
     return implode("\n", ['---', $logSource, '---']);
   }
-} 
+}

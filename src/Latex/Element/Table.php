@@ -1,25 +1,23 @@
 <?php
+
 namespace Bobv\LatexBundle\Latex\Element;
 
 use Bobv\LatexBundle\Latex\LatexElement;
 
 class Table extends LatexElement
 {
-  /**
-   * @param array $rows Alignment rows, for example array(l,r,c)
-   */
+  /** @param array $rows Alignment rows, for example array(l,r,c) */
   public function __construct(array $rows = [])
   {
-
     // Define defaults
     $this->template = '@BobvLatex/Element/table.tex.twig';
     $this->params   = [
-        'tabularx'       => true,
-        'caption'        => null,
-        'rows'           => $rows,
-        'data'           => [],
-        'width'          => '\textwidth',
-        'extra_commands' => [],
+      'tabularx'       => true,
+      'caption'        => null,
+      'rows'           => $rows,
+      'data'           => [],
+      'width'          => '\textwidth',
+      'extra_commands' => [],
     ];
   }
 
@@ -39,11 +37,11 @@ class Table extends LatexElement
 
   public function addRow($row): self
   {
-    $data = $this->getParams()['data'];
-    $data[] = array(
-        'newRule' => true,
-        'data'    => $row,
-    );
+    $data   = $this->getParams()['data'];
+    $data[] = [
+      'newRule' => true,
+      'data'    => $row,
+    ];
     $this->setParam('data', $data);
 
     return $this;
@@ -58,11 +56,11 @@ class Table extends LatexElement
 
   private function addRule($rule): void
   {
-    $data = $this->getParams()['data'];
-    $data[] = array(
-        'newRule' => false,
-        'data'    => $rule,
-    );
+    $data   = $this->getParams()['data'];
+    $data[] = [
+      'newRule' => false,
+      'data'    => $rule,
+    ];
     $this->setParam('data', $data);
   }
 }
