@@ -9,12 +9,11 @@ final readonly class LatexCompilerResult
 {
   /** @param string[] $output */
   public function __construct(
-      public bool $isSuccessful,
-      public array $output,
-      public int $exitCode,
-      public ?string $exitCodeText,
-  )
-  {
+    public bool $isSuccessful,
+    public array $output,
+    public int $exitCode,
+    public ?string $exitCodeText,
+  ) {
   }
 
   public static function fromProcess(Process $process): self
@@ -24,10 +23,10 @@ final readonly class LatexCompilerResult
     }
 
     return new self(
-        $process->isSuccessful(),
-        explode("\n", $process->getOutput()),
-        $process->getExitCode(),
-        $process->getExitCodeText(),
+      $process->isSuccessful(),
+      explode("\n", $process->getOutput()),
+      $process->getExitCode(),
+      $process->getExitCodeText(),
     );
   }
 }

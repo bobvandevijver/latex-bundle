@@ -1,16 +1,12 @@
 <?php
+
 namespace Bobv\LatexBundle\Latex\Element;
 
 use Bobv\LatexBundle\Latex\LatexElement;
 
-/**
- * @author BobV
- */
 class TOC extends LatexElement
 {
-  /**
-   * Constructor of the TOC element, also defines the default
-   */
+  /** Constructor of the TOC element, also defines the default */
   public function __construct()
   {
     // Set defaults

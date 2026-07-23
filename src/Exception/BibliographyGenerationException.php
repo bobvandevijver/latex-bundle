@@ -2,11 +2,10 @@
 
 namespace Bobv\LatexBundle\Exception;
 
-use Throwable;
-
 class BibliographyGenerationException extends LatexException
 {
-  public function __construct(string $texLocation, int $exitCode, ?string $exitCodeText = null) {
+  public function __construct(string $texLocation, int $exitCode, ?string $exitCodeText = null)
+  {
     if ($exitCodeText !== null) {
       $exitCodeText = sprintf(' (%s)', $exitCodeText);
     } else {

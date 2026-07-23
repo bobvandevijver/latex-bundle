@@ -10,7 +10,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 {
   protected array $elements = [];
   protected string $fileName; // Set in constructor
-  protected ?string $template = null;
+  protected ?string $template   = null;
   protected array $dependencies = [];
   /** @var array<non-empty-string, non-empty-string> */
   protected array $linkedDependencies = [];
@@ -20,13 +20,11 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     $this->setFileName($filename);
   }
 
-  /**
-   * @throws LatexException
-   */
+  /** @throws LatexException */
   public function addElement(LatexInterface $latexInterface): self
   {
     if ($latexInterface instanceof LatexBaseInterface) {
-      throw new LatexException("A base LaTeX object can not have another base LaTeX object as element!");
+      throw new LatexException('A base LaTeX object can not have another base LaTeX object as element!');
     }
 
     $this->elements[] = $latexInterface;
@@ -37,10 +35,10 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   public function getContext(): array
   {
     return array_merge(
-        $this->getParams(),
-        [
-            'elements' => $this->getElements(),
-        ]
+      $this->getParams(),
+      [
+        'elements' => $this->getElements(),
+      ]
     );
   }
 
@@ -90,9 +88,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this;
   }
 
-  /**
-   * To add multiple dependencies locations
-   */
+  /** To add multiple dependencies locations */
   public function addDependencies(iterable $dependencies): self
   {
     foreach ($dependencies as $dependency) {
@@ -125,28 +121,24 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $key;
   }
 
-  /**
-   * Add a package to include
-   */
+  /** Add a package to include */
   public function addPackage(mixed $package, string $options = ''): self
   {
-    $matches = array();
+    $matches = [];
     preg_match_all('/\\\usepackage\{([^}]+)}/u', $package, $matches);
     if (count($matches[1]) > 0) {
       $package = $matches[1][0];
     }
 
-    $this->params['packages'][] = array(
-        'p' => $package,
-        'o' => $options,
-    );
+    $this->params['packages'][] = [
+      'p' => $package,
+      'o' => $options,
+    ];
 
     return $this;
   }
 
-  /**
-   * Add multiple packages to include (without options)
-   */
+  /** Add multiple packages to include (without options) */
   public function addPackages(iterable $packages): self
   {
     foreach ($packages as $package) {

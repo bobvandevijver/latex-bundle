@@ -21,3 +21,6 @@ composer.lock
 
 # phpunit
 .phpunit.result.cache
+
+# PHP-CS-Fixer cache
+.php-cs-fixer.cache

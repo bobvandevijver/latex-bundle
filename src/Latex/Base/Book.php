@@ -2,17 +2,10 @@
 
 namespace Bobv\LatexBundle\Latex\Base;
 
-/**
- * Base Book
- *
- * @author BobV
- */
+/** Base Book. */
 class Book extends Base
 {
-
-  /**
-   * Book constructor, sets defaults
-   */
+  /** Book constructor, sets defaults */
   public function __construct(string $filename)
   {
     // Define standard values
@@ -21,5 +14,4 @@ class Book extends Base
     // Call parent constructor
     parent::__construct($filename);
   }
-
 }

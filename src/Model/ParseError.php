@@ -9,12 +9,13 @@ class ParseError
    * @param TexSnippet[] $texSnippets
    */
   public function __construct(
-      public readonly array $logLines,
-      public readonly array $texSnippets = [],
+    public readonly array $logLines,
+    public readonly array $texSnippets = [],
   ) {
   }
 
-  public function getLogSource(): string {
+  public function getLogSource(): string
+  {
     return implode("\n", $this->logLines);
   }
 }

@@ -1,27 +1,26 @@
 <?php
 
 namespace Bobv\LatexBundle\Latex;
+
 use Bobv\LatexBundle\Exception\LatexException;
 
-/**
- * Use this to predefine the context methods and vars
- *
- * @author BobV
- */
+/** Use this to predefine the context methods and vars. */
 class LatexParams
 {
   protected array $params = [];
 
-  public function getParams(): array {
+  public function getParams(): array
+  {
     return $this->params;
   }
 
   /**
-   * Set a specific parameter for the class
+   * Set a specific parameter for the class.
    *
-   * @throws \Bobv\LatexBundle\Exception\LatexException
+   * @throws LatexException
    */
-  public function setParam(string $param, mixed $value): LatexInterface {
+  public function setParam(string $param, mixed $value): LatexInterface
+  {
     if (array_key_exists($param, $this->params)) {
       // Check if the param is defined as array
       if (is_array($this->params[$param])) {
@@ -37,6 +36,7 @@ class LatexParams
     } else {
       throw new LatexException("The param $param is not defined for " . get_class($this));
     }
+
     return $this;
   }
 }

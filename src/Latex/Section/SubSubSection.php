@@ -1,18 +1,18 @@
 <?php
+
 namespace Bobv\LatexBundle\Latex\Section;
 
 use Bobv\LatexBundle\Latex\LatexSection;
 
 class SubSubSection extends LatexSection
 {
-  /**
-   * Constructor of the subsubsection section, also defines the default
-   */
-  public function __construct(string $subsubsectionTitle = '') {
+  /** Constructor of the subsubsection section, also defines the default */
+  public function __construct(string $subsubsectionTitle = '')
+  {
     $this->template = '@BobvLatex/Section/sub_sub_section.tex.twig';
-    $this->params = [
+    $this->params   = [
       'subsubsectionTitle' => $subsubsectionTitle,
-      'includeTOC' => true,
+      'includeTOC'         => true,
 
       'newpage' => false, // Standard a subsubsection does not start on a new page
 

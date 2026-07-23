@@ -7,70 +7,63 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\Form\FormView;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-/**
- * You will want to use this type when using the html->latex conversion
- *
- * @author BobV
- */
+/** You will want to use this type when using the html->latex conversion. */
 class LatexType extends AbstractType
 {
-
-  /**
-   * Returns the default config used so you can use it as base for your own config
-   */
+  /** Returns the default config used so you can use it as base for your own config */
   public static function getDefaultConfig(): array
   {
     return [
-        'config' => [
-            'entities'         => false,
-            'basicEntities'    => false,
-            'entities_greek'   => false,
-            'entities_latin'   => false,
-            'toolbar'          => [
-                [
-                    'name'   => 'basicstyles',
-                    'groups' => ['basicstyles', 'cleanup'],
-                    'items'  => ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
-                ],
-                [
-                    'name'   => 'paragraph',
-                    'groups' => ['list', 'indent', 'blocks', 'align'],
-                    'items'  => ['NumberedList', 'BulletedList'
-                      /**
-                       * @todo Add support for the floats
-                       * , '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
-                       */
-                    ],
-                ],
-                [
-                    'name'  => 'links',
-                    'items' => ['Link', 'Unlink'],
-                ],
-                [
-                    'name'   => 'clipboard',
-                    'groups' => ['clipboard', 'undo'],
-                    'items'  => ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'],
-                ],
-                /**
-                 * @todo: add support for tables/special chars
-                 * array(
-                 * 'name'  => 'insert',
-                 * 'items' => array('Table', 'SpecialChar'),
-                 * ),
-                 */
-                [
-                    'name'   => 'document',
-                    'groups' => ['mode', 'document', 'doctools'],
-                    'items'  => ['Source'],
-                ],
-                [
-                    'name'  => 'tools',
-                    'items' => ['Maximize'],
-                ],
+      'config' => [
+        'entities'       => false,
+        'basicEntities'  => false,
+        'entities_greek' => false,
+        'entities_latin' => false,
+        'toolbar'        => [
+          [
+            'name'   => 'basicstyles',
+            'groups' => ['basicstyles', 'cleanup'],
+            'items'  => ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'RemoveFormat'],
+          ],
+          [
+            'name'   => 'paragraph',
+            'groups' => ['list', 'indent', 'blocks', 'align'],
+            'items'  => ['NumberedList', 'BulletedList',
+              /*
+               * @todo Add support for the floats
+               * , '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'
+               */
             ],
-            'extraPlugins'     => '',
-            'removeDialogTabs' => 'link:upload;image:Upload;image:advanced;link:advanced',
-        ]
+          ],
+          [
+            'name'  => 'links',
+            'items' => ['Link', 'Unlink'],
+          ],
+          [
+            'name'   => 'clipboard',
+            'groups' => ['clipboard', 'undo'],
+            'items'  => ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'],
+          ],
+          /*
+           * @todo: add support for tables/special chars
+           * array(
+           * 'name'  => 'insert',
+           * 'items' => array('Table', 'SpecialChar'),
+           * ),
+           */
+          [
+            'name'   => 'document',
+            'groups' => ['mode', 'document', 'doctools'],
+            'items'  => ['Source'],
+          ],
+          [
+            'name'  => 'tools',
+            'items' => ['Maximize'],
+          ],
+        ],
+        'extraPlugins'     => '',
+        'removeDialogTabs' => 'link:upload;image:Upload;image:advanced;link:advanced',
+      ],
     ];
   }
 
@@ -87,7 +80,7 @@ class LatexType extends AbstractType
     return $this->getBlockPrefix();
   }
 
-  public function getBlockPrefix() : string
+  public function getBlockPrefix(): string
   {
     return 'bobv_latex';
   }

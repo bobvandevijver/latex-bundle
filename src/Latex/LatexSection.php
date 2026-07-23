@@ -1,4 +1,5 @@
 <?php
+
 namespace Bobv\LatexBundle\Latex;
 
 use Bobv\LatexBundle\Exception\LatexException;
@@ -8,13 +9,11 @@ class LatexSection extends LatexParams implements LatexInterface
   protected array $elements = [];
   protected string $template;
 
-  /**
-   * @throws \Bobv\LatexBundle\Exception\LatexException
-   */
+  /** @throws LatexException */
   public function addElement(LatexInterface $latexInterface): self
   {
     if ($latexInterface instanceof LatexBaseInterface) {
-      throw new LatexException("A base LaTeX object can not have another base LaTeX object as element!");
+      throw new LatexException('A base LaTeX object can not have another base LaTeX object as element!');
     }
 
     $this->elements[] = $latexInterface;
@@ -25,10 +24,10 @@ class LatexSection extends LatexParams implements LatexInterface
   public function getContext(): array
   {
     return array_merge(
-        $this->getParams(),
-        [
-            'elements' => $this->getElements(),
-        ]
+      $this->getParams(),
+      [
+        'elements' => $this->getElements(),
+      ]
     );
   }
 

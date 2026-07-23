@@ -28,9 +28,10 @@
         "twig/twig": "^2.15 || ^3.0"
     },
     "require-dev": {
+        "friendsofphp/php-cs-fixer": "3.95.15",
+        "phpunit/phpunit": "^9.5",
         "symfony/string": "^5.4 || ^6.2 || ^7.1",
-        "symfony/lock": "^5.4 || ^6.2 || ^7.1",
-        "phpunit/phpunit": "^9.5"
+        "symfony/lock": "^5.4 || ^6.2 || ^7.1"
     },
     "suggest": {
         "friendsofsymfony/ckeditor-bundle": "Allows the usage of the bobv_latex form type, and easily integrates ckeditor into your Symfony application",
