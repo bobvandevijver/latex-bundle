@@ -15,7 +15,7 @@ use Symfony\Component\Lock\Store\FlockStore;
 class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGeneratorInterface
 {
   private readonly LockFactory $lockFactory; // Set in constructor
-  private ?LockInterface $lock = null;
+  private ?LockInterface $lock    = null;
   private float|int|null $timeout = null; // Set in constructor
 
   public function __construct(private readonly LatexGeneratorInterface $generator)
