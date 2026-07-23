@@ -34,7 +34,7 @@ class LatexParams
         $this->params[$param] = $value;
       }
     } else {
-      throw new LatexException("The param $param is not defined for " . get_class($this));
+      throw new LatexException("The param $param is not defined for " . static::class);
     }
 
     return $this;

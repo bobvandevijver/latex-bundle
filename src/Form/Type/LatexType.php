@@ -91,7 +91,7 @@ class LatexType extends AbstractType
     $fos_form_class   = 'FOS\CKEditorBundle\Form\Type\CKEditorType';
     $form_class       = class_exists($ivory_form_class) ? $ivory_form_class : $fos_form_class;
 
-    return method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ? $form_class : 'ckeditor';
+    return method_exists(AbstractType::class, 'getBlockPrefix') ? $form_class : 'ckeditor';
   }
 
   public function configureOptions(OptionsResolver $resolver): void

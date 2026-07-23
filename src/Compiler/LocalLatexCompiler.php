@@ -7,8 +7,8 @@ use Symfony\Component\Process\Process;
 final class LocalLatexCompiler implements LatexCompilerInterface
 {
   public function __construct(
-    private string $pdfLatexBinaryLocation,
-    private ?string $bibliographyBinaryLocation,
+    private readonly string $pdfLatexBinaryLocation,
+    private readonly ?string $bibliographyBinaryLocation,
   ) {
   }
 

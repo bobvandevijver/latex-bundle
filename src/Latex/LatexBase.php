@@ -122,7 +122,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
   }
 
   /** Add a package to include */
-  public function addPackage(mixed $package, string $options = ''): self
+  public function addPackage(string $package, string $options = ''): self
   {
     $matches = [];
     preg_match_all('/\\\usepackage\{([^}]+)}/u', $package, $matches);
