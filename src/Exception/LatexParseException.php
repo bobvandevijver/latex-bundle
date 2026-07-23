@@ -31,6 +31,7 @@ class LatexParseException extends LatexException
   /** @var ParseError[] */
   protected array $parseErrors = [];
 
+  /** @param list<string> $pdfLatexOutput */
   public function __construct(
     private readonly string $texLocation,
     int $exitCode,
@@ -112,53 +113,55 @@ class LatexParseException extends LatexException
     // Otherwise mark as resolved and start process.
     $this->errorsResolved = true;
 
-    array_walk($this->pdfLatexOutput, function ($value, $key) {
-      // Find lines with an error
-      if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid|^! /ui', $value) <= 0) {
-        return;
-      }
-
-      // Test matches for exclusions
-      $lowerCaseLogLine = strtolower($this->pdfLatexOutput[$key]);
-      foreach (self::EXCLUDE_STARTS_WITH as $excludeLine) {
-        if (str_starts_with($lowerCaseLogLine, $excludeLine)) {
+    if ($this->pdfLatexOutput !== null) {
+      array_walk($this->pdfLatexOutput, function ($value, $key) {
+        // Find lines with an error
+        if (preg_match_all('/error|missing|not found|undefined|too many|runaway|\$|you can\'t use|invalid|^! /ui', $value) <= 0) {
           return;
         }
-      }
-      foreach (self::EXCLUDE_OCCURRENCES as $excludeLine) {
-        if (str_contains($lowerCaseLogLine, $excludeLine)) {
-          return;
-        }
-      }
 
-      // Get the lines surrounding the error, but do not include empty lines
-      // Get lines before the error
-      $logLines = [];
-      for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-        if (!isset($this->pdfLatexOutput[$key - $i])) {
-          break;
+        // Test matches for exclusions
+        $lowerCaseLogLine = strtolower($this->pdfLatexOutput[$key] ?? '');
+        foreach (self::EXCLUDE_STARTS_WITH as $excludeLine) {
+          if (str_starts_with($lowerCaseLogLine, $excludeLine)) {
+            return;
+          }
         }
-
-        if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key - $i]))) {
-          array_unshift($logLines, $value);
-          $count++;
-        }
-      }
-
-      // Get lines after the error
-      for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
-        if (!isset($this->pdfLatexOutput[$key + $i])) {
-          break;
+        foreach (self::EXCLUDE_OCCURRENCES as $excludeLine) {
+          if (str_contains($lowerCaseLogLine, $excludeLine)) {
+            return;
+          }
         }
 
-        if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key + $i]))) {
-          $logLines[] = $value;
-          $count++;
-        }
-      }
+        // Get the lines surrounding the error, but do not include empty lines
+        // Get lines before the error
+        $logLines = [];
+        for ($count = 0, $i = 0; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+          if (!isset($this->pdfLatexOutput[$key - $i])) {
+            break;
+          }
 
-      $this->parseErrors[] = new ParseError($logLines);
-    });
+          if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key - $i]) ?: '')) {
+            array_unshift($logLines, $value);
+            $count++;
+          }
+        }
+
+        // Get lines after the error
+        for ($count = 0, $i = 1; $count < self::LOG_GET_LINES && $i < self::LOG_MAX_LINES; $i++) {
+          if (!isset($this->pdfLatexOutput[$key + $i])) {
+            break;
+          }
+
+          if ($value = trim(preg_replace('/\s+/', ' ', $this->pdfLatexOutput[$key + $i]) ?: '')) {
+            $logLines[] = $value;
+            $count++;
+          }
+        }
+
+        $this->parseErrors[] = new ParseError($logLines);
+      });
+    }
 
     if (!$this->texLocation) {
       // No tex file to search for matching sources
@@ -190,7 +193,12 @@ class LatexParseException extends LatexException
             break;
           }
 
-          if ($value = trim(preg_replace('/\s+/', ' ', $texFile->current()))) {
+          $currentLine = $texFile->current();
+          if (!is_string($currentLine)) {
+            continue;
+          }
+
+          if ($value = trim(preg_replace('/\s+/', ' ', $currentLine) ?: '')) {
             array_unshift($texLines, new TexLine($currentLineNumber, $value));
             $count++;
           }
@@ -204,7 +212,12 @@ class LatexParseException extends LatexException
             break;
           }
 
-          if ($value = trim(preg_replace('/\s+/', ' ', $texFile->current()))) {
+          $currentLine = $texFile->current();
+          if (!is_string($currentLine)) {
+            continue;
+          }
+
+          if ($value = trim(preg_replace('/\s+/', ' ', $currentLine) ?: '')) {
             $texLines[] = new TexLine($currentLineNumber, $value);
             $count++;
           }
@@ -221,7 +234,7 @@ class LatexParseException extends LatexException
   {
     $logSource = implode(
       "\n---\n",
-      array_map(static fn (ParseError $pe): string => $pe->getLogSource(), $this->parseErrors)
+      array_map(static fn (ParseError $pe): string => $pe->getLogSource(), $this->parseErrors),
     );
 
     return implode("\n", ['---', $logSource, '---']);

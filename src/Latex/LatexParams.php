@@ -7,8 +7,10 @@ use Bobv\LatexBundle\Exception\LatexException;
 /** Use this to predefine the context methods and vars. */
 class LatexParams
 {
+  /** @var array<string, mixed> */
   protected array $params = [];
 
+  /** @return array<string, mixed> */
   public function getParams(): array
   {
     return $this->params;
@@ -19,7 +21,7 @@ class LatexParams
    *
    * @throws LatexException
    */
-  public function setParam(string $param, mixed $value): LatexInterface
+  public function setParam(string $param, mixed $value): void
   {
     if (array_key_exists($param, $this->params)) {
       // Check if the param is defined as array
@@ -36,7 +38,5 @@ class LatexParams
     } else {
       throw new LatexException("The param $param is not defined for " . static::class);
     }
-
-    return $this;
   }
 }

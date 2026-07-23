@@ -13,6 +13,7 @@
     ],
     "require": {
         "php": ">=8.2",
+        "ext-dom": "*",
         "symfony/config": "^5.4 || ^6.2 || ^7.1",
         "symfony/console": "^5.4 || ^6.2 || ^7.1",
         "symfony/dependency-injection": "^5.4 || ^6.2 || ^7.1",
@@ -29,6 +30,7 @@
     },
     "require-dev": {
         "friendsofphp/php-cs-fixer": "3.95.15",
+        "phpstan/phpstan": "2.2.5",
         "phpunit/phpunit": "^9.5",
         "rector/rector": "2.5.7",
         "symfony/string": "^5.4 || ^6.2 || ^7.1",

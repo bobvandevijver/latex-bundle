@@ -2,12 +2,14 @@
 
 namespace Bobv\LatexBundle\Helper;
 
+use Bobv\LatexBundle\Exception\HtmlParserException;
+use Bobv\LatexBundle\Exception\TextParserException;
 use DOMDocument;
 use DOMElement;
-use RuntimeException;
 
 class Parser
 {
+  /** @var string[] */
   private array $htmlCodes; // Set in constructor
 
   /** @var string[] */
@@ -103,7 +105,9 @@ class Parser
     $text = str_replace('€', '\\euro{}', $text);
 
     // Remove remaining HTML entities
-    $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text);
+    if (!$text = preg_replace('/&[a-zA-Z]+;/iu', '', $text)) {
+      throw new TextParserException('Could not remove HTML entities');
+    }
 
     // Remaining special characters (cannot be placed with the others,
     // as then the html entity replace would fail).
@@ -262,11 +266,13 @@ class Parser
     self::updateNode($DOM, 'a', '\url{', ' }');
 
     // Export the new list
-    $text = $DOM->saveHTML();
+    if (!$text = $DOM->saveHTML()) {
+      throw new HtmlParserException('Failed to replace tags');
+    }
 
     // Replace junk from URL to get it readable
     if (!$text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text)) {
-      throw new RuntimeException('Failed to replace URLs');
+      throw new HtmlParserException('Failed to replace URLs');
     }
 
     return strip_tags($text);
@@ -285,7 +291,7 @@ class Parser
       $replacementEndNode = $document->createTextNode($replacementEnd);
 
       // Insert the nodes
-      $element->parentNode->insertBefore($replacementStartNode, $element);
+      ($element->parentNode ?? throw new HtmlParserException('Parent node is missing'))->insertBefore($replacementStartNode, $element);
       $element->appendChild($replacementEndNode);
     }
   }

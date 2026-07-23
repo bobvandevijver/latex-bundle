@@ -10,7 +10,11 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 /** You will want to use this type when using the html->latex conversion. */
 class LatexType extends AbstractType
 {
-  /** Returns the default config used so you can use it as base for your own config */
+  /**
+   * Returns the default config used so you can use it as base for your own config.
+   *
+   * @return array{config: array<string, mixed>}
+   */
   public static function getDefaultConfig(): array
   {
     return [
@@ -89,9 +93,8 @@ class LatexType extends AbstractType
   {
     $ivory_form_class = 'Ivory\CKEditorBundle\Form\Type\CKEditorType';
     $fos_form_class   = 'FOS\CKEditorBundle\Form\Type\CKEditorType';
-    $form_class       = class_exists($ivory_form_class) ? $ivory_form_class : $fos_form_class;
 
-    return method_exists(AbstractType::class, 'getBlockPrefix') ? $form_class : 'ckeditor';
+    return class_exists($ivory_form_class) ? $ivory_form_class : $fos_form_class;
   }
 
   public function configureOptions(OptionsResolver $resolver): void

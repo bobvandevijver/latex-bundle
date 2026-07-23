@@ -41,8 +41,8 @@ interface LatexGeneratorInterface
   /**
    * Generates a PDF from a given LaTeX location.
    *
-   * @param string $texLocation    Location of the .tex file
-   * @param array  $compileOptions Optional compile options for pdflatex
+   * @param string               $texLocation    Location of the .tex file
+   * @param array<string, mixed> $compileOptions Optional compile options for pdflatex
    *
    * @return string Location of the generated PDF file
    */

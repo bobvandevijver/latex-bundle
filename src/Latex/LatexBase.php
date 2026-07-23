@@ -3,18 +3,23 @@
 namespace Bobv\LatexBundle\Latex;
 
 use Bobv\LatexBundle\Exception\LatexException;
+use Bobv\LatexBundle\Exception\TemplateNotSetException;
 use InvalidArgumentException;
 use Symfony\Component\Uid\UuidV4;
 
 class LatexBase extends LatexParams implements LatexBaseInterface
 {
+  /** @var array<covariant LatexInterface> */
   protected array $elements = [];
+  /** @var non-empty-string */
   protected string $fileName; // Set in constructor
-  protected ?string $template   = null;
+  protected ?string $template = null;
+  /** @var array<non-empty-string> */
   protected array $dependencies = [];
   /** @var array<non-empty-string, non-empty-string> */
   protected array $linkedDependencies = [];
 
+  /** @param non-empty-string $filename */
   public function __construct(string $filename)
   {
     $this->setFileName($filename);
@@ -38,15 +43,17 @@ class LatexBase extends LatexParams implements LatexBaseInterface
       $this->getParams(),
       [
         'elements' => $this->getElements(),
-      ]
+      ],
     );
   }
 
+  /** @return array<covariant LatexInterface> */
   public function getElements(): array
   {
     return $this->elements;
   }
 
+  /** @param array<covariant LatexInterface> $elements */
   public function setElements(array $elements): void
   {
     $this->elements = $elements;
@@ -66,7 +73,7 @@ class LatexBase extends LatexParams implements LatexBaseInterface
 
   public function getTemplate(): string
   {
-    return $this->template;
+    return $this->template ?? throw new TemplateNotSetException();
   }
 
   public function setTemplate(string $template): self
@@ -81,14 +88,13 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this->dependencies;
   }
 
-  public function addDependency(mixed $dependency): self
+  public function addDependency(string $dependency): self
   {
     $this->dependencies[] = $dependency;
 
     return $this;
   }
 
-  /** To add multiple dependencies locations */
   public function addDependencies(iterable $dependencies): self
   {
     foreach ($dependencies as $dependency) {
@@ -98,14 +104,12 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this;
   }
 
-  /** @return array<non-empty-string, non-empty-string> */
   public function getLinkedDependencies(): array
   {
     return $this->linkedDependencies;
   }
 
-  /** @return non-empty-string */
-  public function addLinkedDependency(mixed $dependency): string
+  public function addLinkedDependency(string $dependency): string
   {
     if (!is_readable($dependency)) {
       throw new InvalidArgumentException('The dependency must be a readable file.');
@@ -121,7 +125,6 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $key;
   }
 
-  /** Add a package to include */
   public function addPackage(string $package, string $options = ''): self
   {
     $matches = [];
@@ -138,7 +141,6 @@ class LatexBase extends LatexParams implements LatexBaseInterface
     return $this;
   }
 
-  /** Add multiple packages to include (without options) */
   public function addPackages(iterable $packages): self
   {
     foreach ($packages as $package) {
