@@ -27,3 +27,6 @@ composer.lock
 
 # Rector cache
 /var/cache/rector
+
+# PHPStan cache
+/var/cache/phpstan

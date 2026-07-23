@@ -7,7 +7,7 @@ use Symfony\Component\Process\Process;
 
 final readonly class LatexCompilerResult
 {
-  /** @param string[] $output */
+  /** @param list<string> $output */
   public function __construct(
     public bool $isSuccessful,
     public array $output,
@@ -18,14 +18,14 @@ final readonly class LatexCompilerResult
 
   public static function fromProcess(Process $process): self
   {
-    if (!$process->isTerminated()) {
+    if (!$process->isTerminated() || null === $exitCode = $process->getExitCode()) {
       throw new InvalidArgumentException('Process must have finished');
     }
 
     return new self(
       $process->isSuccessful(),
       explode("\n", $process->getOutput()),
-      $process->getExitCode(),
+      $exitCode,
       $process->getExitCodeText(),
     );
   }

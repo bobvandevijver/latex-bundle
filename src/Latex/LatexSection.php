@@ -6,6 +6,7 @@ use Bobv\LatexBundle\Exception\LatexException;
 
 class LatexSection extends LatexParams implements LatexInterface
 {
+  /** @var array<covariant LatexInterface> */
   protected array $elements = [];
   protected string $template;
 
@@ -21,6 +22,7 @@ class LatexSection extends LatexParams implements LatexInterface
     return $this;
   }
 
+  /** @return array<string, mixed> */
   public function getContext(): array
   {
     return array_merge(
@@ -31,11 +33,13 @@ class LatexSection extends LatexParams implements LatexInterface
     );
   }
 
+  /** @return array<covariant LatexInterface> */
   public function getElements(): array
   {
     return $this->elements;
   }
 
+  /** @param array<covariant LatexInterface> $elements */
   public function setElements(array $elements): void
   {
     $this->elements = $elements;

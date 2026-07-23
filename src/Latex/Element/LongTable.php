@@ -6,7 +6,7 @@ use Bobv\LatexBundle\Latex\LatexElement;
 
 class LongTable extends LatexElement
 {
-  /** @param array $rows Alignment rows, for example array(l,r,c) */
+  /** @param string[] $rows Alignment rows, for example array(l,r,c) */
   public function __construct(array $rows = [])
   {
     // Define defaults
@@ -23,7 +23,7 @@ class LongTable extends LatexElement
     ];
   }
 
-  public function addRow($row): self
+  public function addRow(mixed $row): self
   {
     $data   = $this->getParams()['data'];
     $data[] = [

@@ -6,7 +6,7 @@ use Bobv\LatexBundle\Latex\LatexElement;
 
 class Table extends LatexElement
 {
-  /** @param array $rows Alignment rows, for example array(l,r,c) */
+  /** @param string[] $rows Alignment rows, for example array(l,r,c) */
   public function __construct(array $rows = [])
   {
     // Define defaults
@@ -35,7 +35,7 @@ class Table extends LatexElement
     return $this;
   }
 
-  public function addRow($row): self
+  public function addRow(mixed $row): self
   {
     $data   = $this->getParams()['data'];
     $data[] = [
@@ -54,7 +54,7 @@ class Table extends LatexElement
     return $this;
   }
 
-  private function addRule($rule): void
+  private function addRule(mixed $rule): void
   {
     $data   = $this->getParams()['data'];
     $data[] = [

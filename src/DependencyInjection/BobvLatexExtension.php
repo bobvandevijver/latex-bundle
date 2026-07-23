@@ -11,6 +11,7 @@ use Symfony\Component\String\UnicodeString;
 
 class BobvLatexExtension extends ConfigurableExtension
 {
+  /** @param array<string, mixed> $mergedConfig */
   protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
   {
     $loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));

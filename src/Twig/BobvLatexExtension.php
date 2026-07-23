@@ -39,7 +39,7 @@ class BobvLatexExtension extends AbstractBobvLatexExtension
     return u($text)->ascii()->toString();
   }
 
-  public function latexEscape(?string $text, bool $checkTable = true, bool $removeLatex = false, bool $parseNewLines = false, bool $removeGreek = false): string
+  public function latexEscape(?string $text, bool $checkTable = true, bool $removeLatex = false, bool $parseNewLines = false, bool $removeGreek = false): ?string
   {
     return $this->passThroughSfString(
       $this->parser->parseText($text, $checkTable, $removeLatex, $parseNewLines, $removeGreek)

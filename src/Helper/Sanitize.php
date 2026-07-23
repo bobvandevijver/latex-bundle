@@ -13,6 +13,6 @@ class Sanitize
 
     $text = trim(str_replace($strip, '', strip_tags($text)));
 
-    return preg_replace('!\s+!', ' ', $text);
+    return preg_replace('!\s+!', ' ', $text) ?? '';
   }
 }

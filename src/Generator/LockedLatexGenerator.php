@@ -7,16 +7,16 @@ use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use DateTimeInterface;
 use LogicException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\Lock\Lock;
 use Symfony\Component\Lock\LockFactory;
+use Symfony\Component\Lock\LockInterface;
 use Symfony\Component\Lock\Store\FlockStore;
 
-/** Lock LaTeX pdf generation to prevent the same files being rendered at the same time. */
+/** Lock LaTeX PDF generation to prevent the same files being rendered at the same time. */
 class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGeneratorInterface
 {
   private readonly LockFactory $lockFactory; // Set in constructor
-  private ?Lock $lock = null;
-  private float|int|null $timeout; // Set in constructor
+  private ?LockInterface $lock = null;
+  private float|int|null $timeout = null; // Set in constructor
 
   public function __construct(private readonly LatexGeneratorInterface $generator)
   {
@@ -45,7 +45,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
    */
   public function releaseLock(): LatexGeneratorInterface
   {
-    $this->lock->release();
+    $this->lock?->release();
 
     return $this;
   }
@@ -78,7 +78,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this->generator->generateLatex($latex);
   }
 
-  public function generatePdf($texLocation, array $compileOptions = []): string
+  public function generatePdf(string $texLocation, array $compileOptions = []): string
   {
     $this->ensureLock();
 
@@ -110,8 +110,15 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
   {
     $this->generator->setTimeout($timeout);
 
-    // Save timeout for lock, include some trivial overhead margin, and refresh when required
-    $this->timeout = $timeout + 5;
+    if ($timeout === null) {
+      // No timeout requested
+      $this->timeout = null;
+    } else {
+      // Save timeout for lock, include some trivial overhead margin
+      $this->timeout = $timeout + 5;
+    }
+
+    // Refresh lock when required
     if ($this->lock && $this->lock->isAcquired()) {
       $this->lock->refresh($this->timeout);
     }
@@ -122,7 +129,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
   /** Verify the callee has already exclusive access */
   private function ensureLock(): void
   {
-    if (!$this->lock->isAcquired()) {
+    if (!$this->lock || !$this->lock->isAcquired()) {
       throw new LatexNotLockedException();
     }
 

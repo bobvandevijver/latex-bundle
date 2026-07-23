@@ -176,8 +176,8 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Generates a PDF from a given LaTeX location.
    *
-   * @param string $texLocation    Location of the .tex file
-   * @param array  $compileOptions Optional compile options for pdflatex
+   * @param string               $texLocation    Location of the .tex file
+   * @param array<string, mixed> $compileOptions Optional compile options for pdflatex
    *
    * @throws IOException
    * @throws LatexException
@@ -263,8 +263,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * Compile a PDF from a tex file on a given location
    * If necessary, compilation will be done up to three times for correct references.
    *
-   * @param string $texLocation    Location of the .tex file
-   * @param array  $compileOptions Optional compile options for pdflatex
+   * @param string               $texLocation    Location of the .tex file
+   * @param array<string, mixed> $compileOptions Optional compile options for pdflatex
    *
    * @throws Exception
    */
@@ -315,7 +315,7 @@ class LatexGenerator implements LatexGeneratorInterface
 
     $compile = true;
     $count   = 0;
-    /** @var bool|array $output */
+    /** @var false|string[] $output */
     $output = false;
 
     // Compile until all references are solved or three times is reached
