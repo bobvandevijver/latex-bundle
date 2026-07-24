@@ -4,7 +4,8 @@ namespace Bobv\LatexBundle\Compiler;
 
 use Symfony\Component\Process\Process;
 
-final class LocalLatexCompiler implements LatexCompilerInterface
+/** Simple local LaTeX compiler, which uses a locally installed LaTeX binary. */
+final class LocalLatexCompiler extends AbstractTimeoutCompiler
 {
   public function __construct(
     private readonly string $pdfLatexBinaryLocation,
@@ -12,21 +13,18 @@ final class LocalLatexCompiler implements LatexCompilerInterface
   ) {
   }
 
-  /** Default timeout from the Symfony Process component. */
-  private int|float|null $timeout = 60;
-
-  public function pdflatex(string $workingDirectory, string $commandArguments): LatexCompilerResult
+  public function pdflatex(CompilerContext $context): LatexCompilerResult
   {
-    $command = $this->pdfLatexBinaryLocation . ' ' . $commandArguments;
+    $command = $this->pdfLatexBinaryLocation . ' ' . $context->pdflatexArgs;
 
-    return LatexCompilerResult::fromProcess($this->runLocalProcess($workingDirectory, $command));
+    return $this->runLocalProcess($context, $command);
   }
 
-  public function bibtex(string $workingDirectory, string $commandArguments): LatexCompilerResult
+  public function bibtex(CompilerContext $context): LatexCompilerResult
   {
-    $command = $this->bibliographyBinaryLocation . ' ' . $commandArguments;
+    $command = $this->bibliographyBinaryLocation . ' ' . $context->baseName;
 
-    return LatexCompilerResult::fromProcess($this->runLocalProcess($workingDirectory, $command));
+    return $this->runLocalProcess($context, $command);
   }
 
   public function supportsBibliography(): bool
@@ -34,18 +32,11 @@ final class LocalLatexCompiler implements LatexCompilerInterface
     return !empty($this->bibliographyBinaryLocation);
   }
 
-  public function setTimeout(float|int|null $timeout): LatexCompilerInterface
-  {
-    $this->timeout = $timeout;
-
-    return $this;
-  }
-
-  private function runLocalProcess(string $workingDirectory, string $command): Process
+  private function runLocalProcess(CompilerContext $context, string $command): LatexCompilerResult
   {
     $commandLine = sprintf(
       'cd %s && HOME="/tmp" %s',
-      $workingDirectory,
+      $context->workingDirectory,
       $command,
     );
 
@@ -54,6 +45,6 @@ final class LocalLatexCompiler implements LatexCompilerInterface
     $process->setTimeout($this->timeout);
     $process->run();
 
-    return $process;
+    return LatexCompilerResult::fromProcess($process);
   }
 }

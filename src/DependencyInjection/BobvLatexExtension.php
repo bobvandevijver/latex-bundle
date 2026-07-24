@@ -4,6 +4,7 @@ namespace Bobv\LatexBundle\DependencyInjection;
 
 use Bobv\LatexBundle\Command\LatexTestCommand;
 use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
+use Bobv\LatexBundle\Compiler\LocalLatexCompiler;
 use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
 use Bobv\LatexBundle\Generator\LockedLatexGeneratorInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
@@ -13,25 +14,26 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class BobvLatexExtension extends ConfigurableExtension
 {
-  private const BASE_ID                      = 'bobv.latex.';
-  private const SERVICE_COMPILER             = self::BASE_ID . 'compiler';
-  private const SERVICE_GENERATOR            = self::BASE_ID . 'generator';
-  private const SERVICE_LOCKED_GENERATOR     = self::BASE_ID . 'generator.locked';
-  private const SERVICE_TWIG_EXTENSION       = self::BASE_ID . 'twig.extension';
-  private const PARAM_CACHE_DIR              = self::BASE_ID . 'cache_dir';
-  private const PARAM_MAX_AGE                = self::BASE_ID . 'max_age';
-  private const PARAM_PDFLATEX_LOCATION      = self::BASE_ID . 'pdflatex.location';
-  private const PARAM_BIBTEX_LOCATION        = self::BASE_ID . 'bibtex.location';
-  private const PARAM_USE_SYMFONY_STRING     = self::BASE_ID . 'use_symfony_string';
+  private const BASE_ID                    = 'bobv.latex.';
+  private const SERVICE_COMPILER           = self::BASE_ID . 'compiler';
+  private const SERVICE_GENERATOR          = self::BASE_ID . 'generator';
+  private const SERVICE_LOCKED_GENERATOR   = self::BASE_ID . 'generator.locked';
+  private const SERVICE_TWIG_EXTENSION     = self::BASE_ID . 'twig.extension';
+  private const PARAM_CACHE_DIR            = self::BASE_ID . 'cache_dir';
+  private const PARAM_MAX_AGE              = self::BASE_ID . 'max_age';
+  private const PARAM_USE_SYMFONY_STRING   = self::BASE_ID . 'use_symfony_string';
+  private const PARAM_PDFLATEX_BINARY_PATH = self::BASE_ID . 'compiler.pdflatex.binary.path';
+  private const PARAM_BIBTEX_BINARY_PATH   = self::BASE_ID . 'compiler.bibtex.binary.path';
 
   /** @param array<string, mixed> $mergedConfig */
   protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
   {
     $container->setParameter(self::PARAM_CACHE_DIR, $mergedConfig['cache_dir']);
     $container->setParameter(self::PARAM_MAX_AGE, $mergedConfig['max_age']);
-    $container->setParameter(self::PARAM_PDFLATEX_LOCATION, $mergedConfig['pdflatex_location']);
-    $container->setParameter(self::PARAM_BIBTEX_LOCATION, $mergedConfig['bibtex_location']);
     $container->setParameter(self::PARAM_USE_SYMFONY_STRING, $mergedConfig['use_symfony_string']);
+
+    $container->setParameter(self::PARAM_PDFLATEX_BINARY_PATH, $mergedConfig['compiler']['pdflatex_binary_path']);
+    $container->setParameter(self::PARAM_BIBTEX_BINARY_PATH, $mergedConfig['compiler']['bibtex_binary_path']);
 
     $container
       ->register(LatexTestCommand::class)
@@ -40,13 +42,17 @@ class BobvLatexExtension extends ConfigurableExtension
       ])
       ->addTag('console.command');
 
-    $container
+    $compilerDefinition = $container
       ->register(self::SERVICE_COMPILER)
-      ->setClass($mergedConfig['compiler']['class'])
-      ->setArguments([
-        new Parameter(self::PARAM_PDFLATEX_LOCATION),
-        new Parameter(self::PARAM_BIBTEX_LOCATION),
-      ]);
+      ->setClass($mergedConfig['compiler']['class']);
+
+    match ($compilerDefinition->getClass()) {
+      LocalLatexCompiler::class  => $compilerDefinition
+        ->setArguments([
+          new Parameter(self::PARAM_PDFLATEX_BINARY_PATH),
+          new Parameter(self::PARAM_BIBTEX_BINARY_PATH),
+        ]),
+    };;
     $container->setAlias(LatexCompilerInterface::class, self::SERVICE_COMPILER);
 
     $container

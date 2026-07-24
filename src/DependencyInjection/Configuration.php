@@ -34,6 +34,12 @@ class Configuration implements ConfigurationInterface
       LatexCompilerInterface::class,
     );
 
+    $compilerNodeBuilder
+      ->scalarNode('pdflatex_binary_path')->defaultValue('pdflatex');
+
+    $compilerNodeBuilder
+      ->scalarNode('bibtex_binary_path')->defaultValue('');
+
     $generatorNodeBuilder = $nodeBuilder
       ->arrayNode('generator')
       ->addDefaultsIfNotSet()
@@ -69,12 +75,6 @@ class Configuration implements ConfigurationInterface
 
     $nodeBuilder
       ->scalarNode('max_age')->defaultValue('-1 day');
-
-    $nodeBuilder
-      ->scalarNode('pdflatex_location')->defaultValue('pdflatex');
-
-    $nodeBuilder
-      ->scalarNode('bibtex_location')->defaultValue('');
 
     $nodeBuilder
       ->booleanNode('use_symfony_string')

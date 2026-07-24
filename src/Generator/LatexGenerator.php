@@ -2,6 +2,7 @@
 
 namespace Bobv\LatexBundle\Generator;
 
+use Bobv\LatexBundle\Compiler\CompilerContext;
 use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
 use Bobv\LatexBundle\Exception\BibliographyGenerationException;
 use Bobv\LatexBundle\Exception\ImageNotFoundException;
@@ -318,6 +319,9 @@ class LatexGenerator implements LatexGeneratorInterface
     /** @var false|string[] $output */
     $output = false;
 
+    // Create context for the current run
+    $context = new CompilerContext($baseName, $this->outputDir, $pdflatexArgs);
+
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
       // Always add one pass for when a large TOC is present, but do not check before the first run
@@ -326,7 +330,7 @@ class LatexGenerator implements LatexGeneratorInterface
       }
       unset($output);
 
-      $result = $this->latexCompiler->pdflatex($this->outputDir, $pdflatexArgs);
+      $result = $this->latexCompiler->pdflatex($context);
       $output = $result->output;
 
       // Check if the pdflatex command completed successfully
@@ -341,7 +345,7 @@ class LatexGenerator implements LatexGeneratorInterface
 
       // Run bibliography tooling when enabled
       if ($count === 0 && $this->latexCompiler->supportsBibliography()) {
-        $result = $this->latexCompiler->bibtex($this->outputDir, $baseName);
+        $result = $this->latexCompiler->bibtex($context);
 
         // Check whether the pdflatex command completed successfully
         if (!$result->isSuccessful) {
