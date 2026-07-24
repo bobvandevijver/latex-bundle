@@ -9,20 +9,14 @@ interface LatexCompilerInterface
    *
    * @return LatexCompilerResult The process output
    */
-  public function pdflatex(
-    string $workingDirectory,
-    string $commandArguments,
-  ): LatexCompilerResult;
+  public function pdflatex(CompilerContext $context): LatexCompilerResult;
 
   /**
    * Run a bibtex process.
    *
    * @return LatexCompilerResult The process output
    */
-  public function bibtex(
-    string $workingDirectory,
-    string $commandArguments,
-  ): LatexCompilerResult;
+  public function bibtex(CompilerContext $context): LatexCompilerResult;
 
   /** bibtex support is optional and needs to be configured. */
   public function supportsBibliography(): bool;

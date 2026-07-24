@@ -7,12 +7,16 @@ use Symfony\Component\Process\Process;
 
 final readonly class LatexCompilerResult
 {
-  /** @param list<string> $output */
+  /**
+   * @param list<string> $output
+   * @param list<string> $errorOutput
+   */
   public function __construct(
     public bool $isSuccessful,
     public array $output,
     public int $exitCode,
     public ?string $exitCodeText,
+    public array $errorOutput,
   ) {
   }
 
@@ -27,6 +31,7 @@ final readonly class LatexCompilerResult
       explode("\n", $process->getOutput()),
       $exitCode,
       $process->getExitCodeText(),
+      explode("\n", $process->getErrorOutput()),
     );
   }
 }
