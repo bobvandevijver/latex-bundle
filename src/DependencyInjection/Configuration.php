@@ -35,6 +35,15 @@ class Configuration implements ConfigurationInterface
     );
 
     $compilerNodeBuilder
+      ->scalarNode('podman_homedir')->defaultValue('/home/bobv-latex-pdflatex');
+
+    $compilerNodeBuilder
+      ->scalarNode('podman_binary_path')->defaultValue('podman');
+
+    $compilerNodeBuilder
+      ->scalarNode('podman_image')->defaultValue('registry.drenso.dev/open/docker-images/pdflatex:latest');
+
+    $compilerNodeBuilder
       ->scalarNode('pdflatex_binary_path')->defaultValue('pdflatex');
 
     $compilerNodeBuilder
