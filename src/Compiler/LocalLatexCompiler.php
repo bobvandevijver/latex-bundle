@@ -15,16 +15,12 @@ final class LocalLatexCompiler extends AbstractTimeoutCompiler
 
   public function pdflatex(CompilerContext $context): LatexCompilerResult
   {
-    $command = $this->pdfLatexBinaryLocation . ' ' . $context->pdflatexArgs;
-
-    return $this->runLocalProcess($context, $command);
+    return $this->runLocalProcess($context, $this->pdfLatexBinaryLocation, $context->pdflatexArgs);
   }
 
   public function bibtex(CompilerContext $context): LatexCompilerResult
   {
-    $command = $this->bibliographyBinaryLocation . ' ' . $context->baseName;
-
-    return $this->runLocalProcess($context, $command);
+    return $this->runLocalProcess($context, $this->bibliographyBinaryLocation, [$context->baseName]);
   }
 
   public function supportsBibliography(): bool
@@ -32,12 +28,14 @@ final class LocalLatexCompiler extends AbstractTimeoutCompiler
     return !empty($this->bibliographyBinaryLocation);
   }
 
-  private function runLocalProcess(CompilerContext $context, string $command): LatexCompilerResult
+  /** @param string[] $args */
+  private function runLocalProcess(CompilerContext $context, string $binaryLocation, array $args): LatexCompilerResult
   {
     $commandLine = sprintf(
-      'cd %s && HOME="/tmp" %s',
+      'cd %s && HOME="/tmp" %s %s',
       $context->workingDirectory,
-      $command,
+      $binaryLocation,
+      join(' ', $args),
     );
 
     $process = Process::fromShellCommandline($commandLine);

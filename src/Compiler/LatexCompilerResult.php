@@ -13,8 +13,8 @@ final readonly class LatexCompilerResult
    */
   public function __construct(
     public bool $isSuccessful,
-    public array $output,
     public int $exitCode,
+    public array $output,
     public ?string $exitCodeText,
     public array $errorOutput,
   ) {
@@ -28,8 +28,8 @@ final readonly class LatexCompilerResult
 
     return new self(
       $process->isSuccessful(),
-      explode("\n", $process->getOutput()),
       $exitCode,
+      explode("\n", $process->getOutput()),
       $process->getExitCodeText(),
       explode("\n", $process->getErrorOutput()),
     );

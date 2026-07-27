@@ -35,6 +35,9 @@ class Configuration implements ConfigurationInterface
     );
 
     $compilerNodeBuilder
+      ->scalarNode('podman_proxy_sock')->defaultValue('unix:///home/bobv-latex-pdflatex/podman_proxy.sock');
+
+    $compilerNodeBuilder
       ->scalarNode('podman_homedir')->defaultValue('/home/bobv-latex-pdflatex');
 
     $compilerNodeBuilder

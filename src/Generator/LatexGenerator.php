@@ -8,6 +8,7 @@ use Bobv\LatexBundle\Exception\BibliographyGenerationException;
 use Bobv\LatexBundle\Exception\ImageNotFoundException;
 use Bobv\LatexBundle\Exception\LatexException;
 use Bobv\LatexBundle\Exception\LatexParseException;
+use Bobv\LatexBundle\Exception\LatexProxyException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use DateTime;
 use DateTimeInterface;
@@ -287,32 +288,32 @@ class LatexGenerator implements LatexGeneratorInterface
     $this->outputDir = dirname($texLocation);
 
     // Process extra options for security
-    $pdflatexArgs = '';
+    $pdflatexArgs = [];
     foreach ($compileOptions as $option => $value) {
-      $pdflatexArgs .= sprintf(' -%s %s', $option, $value ?: '');
+      $pdflatexArgs[] = sprintf('-%s %s', $option, $value ?: '');
     }
 
     // Add -no-shell-escape
     if (!array_key_exists('shell-escape', $compileOptions)) {
-      $pdflatexArgs .= ' -no-shell-escape';
+      $pdflatexArgs[] = '-no-shell-escape';
     }
 
     // Add -openin_any=p and -openout_any=p
     if (!array_key_exists('openin_any', $compileOptions)) {
-      $pdflatexArgs .= ' -cnf-line="openin_any=p"';
+      $pdflatexArgs[] = '-cnf-line="openin_any=p"';
     }
     if (!array_key_exists('openout_any', $compileOptions)) {
-      $pdflatexArgs .= ' -cnf-line="openout_any=p"';
+      $pdflatexArgs[] = '-cnf-line="openout_any=p"';
     }
 
     // Always add interaction mode
-    $pdflatexArgs .= ' -interaction=nonstopmode';
+    $pdflatexArgs[] = '-interaction=nonstopmode';
 
     // Always add output directory
-    $pdflatexArgs .= sprintf(' -output-directory="%s"', $this->outputDir);
+    $pdflatexArgs[] = sprintf('-output-directory="%s"', $this->outputDir);
 
     // Finally, add the tex location
-    $pdflatexArgs .= sprintf(' "%s"', $texLocation);
+    $pdflatexArgs[] = sprintf('"%s"', $texLocation);
 
     $compile = true;
     $count   = 0;
