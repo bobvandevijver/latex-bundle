@@ -44,6 +44,7 @@ import signal
 
 # Configuration
 SOCKET_PATH = os.path.splitext(os.path.basename(__file__))[0] + '.sock'
+CONTAINER_IMAGE = 'registry.drenso.dev/open/docker-images/pdflatex:latest'
 
 logging.basicConfig(
     level=logging.INFO,
@@ -117,7 +118,7 @@ def handle_client(conn, addr):
           podman_cmd.extend(['-v', volume])
 
         # Add image
-        podman_cmd.append('registry.drenso.dev/open/docker-images/pdflatex:latest')
+        podman_cmd.append(CONTAINER_IMAGE)
 
         # Add command
         podman_cmd.append(command)
