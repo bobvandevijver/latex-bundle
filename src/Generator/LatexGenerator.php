@@ -8,7 +8,6 @@ use Bobv\LatexBundle\Exception\BibliographyGenerationException;
 use Bobv\LatexBundle\Exception\ImageNotFoundException;
 use Bobv\LatexBundle\Exception\LatexException;
 use Bobv\LatexBundle\Exception\LatexParseException;
-use Bobv\LatexBundle\Exception\LatexProxyException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
 use DateTime;
 use DateTimeInterface;
@@ -88,11 +87,11 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Compile a LaTeX object into the wanted PDF file.
    *
-   * @throws ImageNotFoundException
    * @throws LatexException
    * @throws LoaderError
    * @throws RuntimeError
    * @throws SyntaxError
+   * @throws ImageNotFoundException
    *
    * @return string Location of the PDF document
    */
@@ -107,11 +106,11 @@ class LatexGenerator implements LatexGeneratorInterface
   /**
    * Generates a latex file for the given LaTeX object.
    *
-   * @throws ImageNotFoundException
    * @throws LatexException
    * @throws LoaderError
    * @throws RuntimeError
    * @throws SyntaxError
+   * @throws ImageNotFoundException
    *
    * @return string Location of the generated LaTeX file
    */
@@ -128,7 +127,7 @@ class LatexGenerator implements LatexGeneratorInterface
     // Create the compiled tex-file
     $texData = $this->twig->render(
       $latex->getTemplate(),
-      $latex->getContext()
+      $latex->getContext(),
     );
 
     $linkedDependencies = $latex->getLinkedDependencies();
@@ -181,8 +180,8 @@ class LatexGenerator implements LatexGeneratorInterface
    * @param string               $texLocation    Location of the .tex file
    * @param array<string, mixed> $compileOptions Optional compile options for pdflatex
    *
-   * @throws IOException
    * @throws LatexException
+   * @throws IOException
    *
    * @return string Location of the generated PDF file
    */
@@ -272,8 +271,8 @@ class LatexGenerator implements LatexGeneratorInterface
    */
   protected function compilePdf(string $texLocation, array $compileOptions = []): string
   {
-    $baseName    = explode('.tex', $texLocation)[0];
-    $pdfLocation = $baseName . '.pdf';
+    $baseName    = basename($texLocation, '.tex');
+    $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
     if ($this->filesystem->exists($pdfLocation)
@@ -300,20 +299,14 @@ class LatexGenerator implements LatexGeneratorInterface
 
     // Add -openin_any=p and -openout_any=p
     if (!array_key_exists('openin_any', $compileOptions)) {
-      $pdflatexArgs[] = '-cnf-line="openin_any=p"';
+      $pdflatexArgs[] = '-cnf-line=openin_any=p';
     }
     if (!array_key_exists('openout_any', $compileOptions)) {
-      $pdflatexArgs[] = '-cnf-line="openout_any=p"';
+      $pdflatexArgs[] = '-cnf-line=openout_any=p';
     }
 
     // Always add interaction mode
     $pdflatexArgs[] = '-interaction=nonstopmode';
-
-    // Always add output directory
-    $pdflatexArgs[] = sprintf('-output-directory="%s"', $this->outputDir);
-
-    // Finally, add the tex location
-    $pdflatexArgs[] = sprintf('"%s"', $texLocation);
 
     $compile = true;
     $count   = 0;
@@ -321,7 +314,7 @@ class LatexGenerator implements LatexGeneratorInterface
     $output = false;
 
     // Create context for the current run
-    $context = new CompilerContext($baseName, $this->outputDir, $pdflatexArgs);
+    $context = new CompilerContext($this->outputDir, $baseName, $pdflatexArgs);
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
@@ -391,10 +384,7 @@ class LatexGenerator implements LatexGeneratorInterface
         return $texLocation;
       }
 
-      $this->filesystem->dumpFile(
-        $texLocation,
-        $texData
-      );
+      $this->filesystem->dumpFile($texLocation, $texData);
     } catch (IOException $ioe) {
       throw new IOException('An error occurred while creating the tex file at ' . $ioe->getPath() . '. Is the cache writable?', 0, $ioe);
     }

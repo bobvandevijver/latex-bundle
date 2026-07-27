@@ -2,11 +2,8 @@
 
 namespace Bobv\LatexBundle\Compiler;
 
-use Bobv\LatexBundle\Exception\LatexException;
 use Bobv\LatexBundle\Exception\LatexProxyException;
 use JsonException;
-use Symfony\Component\Filesystem\Filesystem;
-use Symfony\Component\Finder\Finder;
 use Symfony\Component\Process\Process;
 use Throwable;
 
@@ -24,7 +21,10 @@ final class PodmanProxyLatexCompiler extends AbstractTimeoutCompiler
 
   public function pdflatex(CompilerContext $context): LatexCompilerResult
   {
-    return $this->runPodmanProcess($context, 'pdflatex', $context->pdflatexArgs);
+    return $this->runPodmanProcess($context, 'pdflatex', [
+      ...$context->pdflatexArgs,
+      "$context->baseName.tex",
+    ]);
   }
 
   public function bibtex(CompilerContext $context): LatexCompilerResult
@@ -34,7 +34,7 @@ final class PodmanProxyLatexCompiler extends AbstractTimeoutCompiler
 
   public function supportsBibliography(): bool
   {
-    return !empty($this->bibliographyBinaryLocation);
+    return true;
   }
 
   /**

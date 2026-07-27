@@ -9,18 +9,18 @@ interface LatexCompilerInterface
   /**
    * Run a pdflatex process.
    *
-   * @return LatexCompilerResult The process output
-   *
    * @throws LatexException
+   *
+   * @return LatexCompilerResult The process output
    */
   public function pdflatex(CompilerContext $context): LatexCompilerResult;
 
   /**
    * Run a bibtex process.
    *
-   * @return LatexCompilerResult The process output
-   *
    * @throws LatexException
+   *
+   * @return LatexCompilerResult The process output
    */
   public function bibtex(CompilerContext $context): LatexCompilerResult;
 
