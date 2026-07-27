@@ -14,6 +14,7 @@ The configuration has been rebuilt, and parameters have changed. If you were usi
 The following methods have been dropped from the `LatexGeneratorInterface` in favour of passing an options DTO to the generate methods. This makes the Generator instance stateless.
 
 - `setForceRegenerate`
+- `setCacheDir`
 
 The `$compileOptions` argument on method `generatePdf` has been replaced with the same options DTO. Do note that the following keys from `$compileOptions` have been replaced with dedicated DTO options:
 

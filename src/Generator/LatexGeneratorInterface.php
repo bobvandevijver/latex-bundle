@@ -83,8 +83,6 @@ interface LatexGeneratorInterface
    */
   public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string;
 
-  public function setCacheDir(string $cacheDir): self;
-
   public function setMaxAge(DateTimeInterface $maxAge): self;
 
   /**
