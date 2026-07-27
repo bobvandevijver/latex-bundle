@@ -4,7 +4,7 @@ This page contains a full index of all pages contained in this documentation, ba
 If you're working with older versions we encourage you to update to latest build.
 If you're getting errors or have trouble with updating see [submitting issues][1] and open a ticket on github.
 
-[1]: https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/doc/support-and-contribution/submitting-issues.md
+[1]: https://github.com/bobvandevijver/latex-bundle/blob/main/docs/support-and-contribution/submitting-issues.md
 
 * [Installation](#installation)
 * [Usage](#usage)
@@ -22,7 +22,7 @@ If you're getting errors or have trouble with updating see [submitting issues][1
 
 ### 1. Add to composer
 
-Add the LaTeX-bundle to your `composer.json`:
+Add the LaTeX-bundle to your `../composer.json`:
 
 ```json
 "require": {
@@ -106,7 +106,7 @@ use Bobv\LatexBundle\Latex\Base\Article;
 $latex = new Article('Bobv Latex Bundle');
 ```
 
-For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/base).
+For all possible Base classes check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/docs/base).
 
 ### 2. Adding sections
 
@@ -118,7 +118,7 @@ use Bobv\LatexBundle\Latex\Section\TOC;
 $latex->addElement(new TOC());
 ```
 
-For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/section).
+For all possible sections check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/docs/section).
 
 ### 3. Adding elements
 
@@ -130,7 +130,7 @@ use Bobv\LatexBundle\Latex\Element\TitlePage;
 $latex->addElement(new TitlePage('Test title'));
 ```
 
-For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/element).
+For all possible elements check [here](https://github.com/bobvandevijver/latex-bundle/tree/main/docs/element).
 
 ### 4. Generate the latex/pdf files/response
 
@@ -209,7 +209,7 @@ $latexGenerator->setMaxAge($dateTime);
 ## Cookbook
 
 You can easily extend the existing templates with you custom defined one, although most you will need is already available.
-Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/cookbook.md) to see a couple of examples gathered over time.
+Navigate to the [actual cookbook](https://github.com/bobvandevijver/latex-bundle/tree/main/docs/cookbook.md) to see a couple of examples gathered over time.
 
 ## Exceptions
 
@@ -278,7 +278,7 @@ This bundle also includes a HTML to LaTeX parser, which will parse basic HTML st
 
 NOTE: The parser assumes that the HTML input is generated using a CK-editor instance. When this is not the case, the behaviour might be unexpected!
 
-It is recommended to use the `bobv_latex` form type when you are in need for a stylable input to LaTeX. This form field type will be updated with new functions when available. Note that to use this form field, you will need to require the suggested `friendsofsymfony/ckeditor-bundle` in your `composer.json`.  
+It is recommended to use the `bobv_latex` form type when you are in need for a stylable input to LaTeX. This form field type will be updated with new functions when available. Note that to use this form field, you will need to require the suggested `friendsofsymfony/ckeditor-bundle` in your `../composer.json`.
 
 If you have any use-case that generates an error, feel create an issue or create a PR.
 
@@ -313,7 +313,7 @@ If you want to pass another option, pass your custom option as `-cnf-line="openi
 
 ## Adding extra fonts
 
-See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/src/Resources/doc/font/font.md).
+See [here](https://github.com/bobvandevijver/latex-bundle/tree/main/docs/font/font.md).
 
 ## Test the bundle
 
