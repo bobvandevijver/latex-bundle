@@ -48,7 +48,9 @@ public function registerBundles()
 
 ### 3. Install LaTeX on your machine
 
-For the latex to pdf compilation you will need to have `pdflatex` installed. I can recommend to install these packages (these include most common used packages). 
+> Note: we strongly recommend the usage of a rootless podman container instead! Check [our podman documentation](podman.md) for more information.
+
+For the latex to PDF compilation you will need to have `pdflatex` installed. I can recommend to install these packages (these include most common used packages).
 
 ```
 texlive-base 
@@ -173,7 +175,7 @@ class DefaultController Extends Controller{
 
 Note that the `generatePdf` also accepts an optional `$compileOptions` array. With this array you can specify extra compile options for the `pdflatex` command.
 
-> Note: If you have extremely large files, you might hit the default Process limit of 60 seconds during the execution of pdflatex (from the Symfony Process component). If so, you can customize the timeout with the `setTimout($timeout)` method on the `LatexGenerator`.
+> Note: If you have extremely large files, you might hit the default Process limit of 60 seconds during the execution of pdflatex (from the Symfony Process component). If so, you can customise the timeout with the `setTimout($timeout)` method on the `LatexGenerator`.
 
 If you're using a Symfony version which has autowiring enabled, you can also autowire the generator by using the `LatexGeneratorInterface` interface!
 
@@ -181,7 +183,7 @@ If you're using a Symfony version which has autowiring enabled, you can also aut
 use Bobv\LatexBundle\Latex\Base\Article;
 use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
 
-public function renderLatex(LatexGeneratorInterface $generator){
+public function renderLatex(LatexGeneratorInterface $generator) {
   $latex = new Article();
   return $generator->createPdfResponse($latex);
 }
@@ -292,19 +294,27 @@ By default, the cache directory is appended with `/BobvLatex`. This can be adjus
 
 ## pdflatex location
 
+> Note: we strongly recommend the usage of a rootless podman container instead!
+
 This bundles uses the `%bobv.latex.pdflatex.location%` parameter as pdflatex executable location, which is set to `pdflatex` by default. This means that the executable should be available in your path, which would be the case in the most default installation. If your executable is not available from the path, make sure to put the absolute executable path in your configuration.
 
 ## bibliography support
 
+> Note: we strongly recommend the usage of a rootless podman container instead!
+
 If you need to run a bibliography processor on your latex file, you can configure the bibliography binary location in the `%bobv.latex.bibliography_binary.location%` parameter. The same notes on the location as for the pdflatex location hold for this location.
 
 ## No shell escape
+
+> Note: we strongly recommend the usage of a rootless podman container!
 
 By default, the `pdflatex` command is called with `-no-shell-escape`, in order to disallow arbitrary program execution outside of the LaTeX file. If you do require this, simply pass `shell-escape` as option. 
 
 > **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
 
 ## File access
+
+> Note: we strongly recommend the usage of a rootless podman container!
 
 By default, the `pdflatex` command is called with both `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` to disallow opening arbitrary files. If you do require this, simply pass `openin_any` or `openout_any` as option.
 If you want to pass another option, pass your custom option as `-cnf-line="openin_any=r"` and `openin_any` to disable the addition of the paranoid one.
