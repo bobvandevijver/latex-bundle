@@ -50,7 +50,6 @@ final class PodmanLatexCompiler extends AbstractTimeoutCompiler
       '--security-opt no-new-privileges',
       '--memory 512m',
       '--pids-limit 20',
-      '--cgroup-manager cgroupfs',
       sprintf('--workdir %s', $context->workingDirectory),
     ];
 

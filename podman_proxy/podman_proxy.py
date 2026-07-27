@@ -109,7 +109,6 @@ def handle_client(conn, addr):
           '--security-opt', 'no-new-privileges',
           '--memory', '512m',
           '--pids-limit', '20',
-          '--cgroup-manager', 'cgroupfs',
           '--workdir', working_dir
         ]
 
