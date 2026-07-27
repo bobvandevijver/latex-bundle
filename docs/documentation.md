@@ -308,7 +308,7 @@ If you need to run a bibliography processor on your latex file, you can configur
 
 > Note: we strongly recommend the usage of a rootless podman container!
 
-By default, the `pdflatex` command is called with `-no-shell-escape`, in order to disallow arbitrary program execution outside of the LaTeX file. If you do require this, simply pass `shell-escape` as option. 
+By default, the `pdflatex` command is called with `-no-shell-escape`, in order to disallow arbitrary program execution outside of the LaTeX file. If you do require this, simply set `shell-escape` in the generator options.
 
 > **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
 
@@ -316,8 +316,7 @@ By default, the `pdflatex` command is called with `-no-shell-escape`, in order t
 
 > Note: we strongly recommend the usage of a rootless podman container!
 
-By default, the `pdflatex` command is called with both `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` to disallow opening arbitrary files. If you do require this, simply pass `openin_any` or `openout_any` as option.
-If you want to pass another option, pass your custom option as `-cnf-line="openin_any=r"` and `openin_any` to disable the addition of the paranoid one.
+By default, the `pdflatex` command is called with both `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` to disallow opening arbitrary files. You can change the passed value using the generator options, or fully disable the line by setting the property to `null`.
 
 > **Note**: This feature was added to enhance security and you should protect your execution environment when disabling this!
 
