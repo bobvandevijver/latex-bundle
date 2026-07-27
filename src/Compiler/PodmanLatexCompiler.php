@@ -59,7 +59,7 @@ final class PodmanLatexCompiler extends AbstractTimeoutCompiler
       $this->podmanHomeDir,
       $this->podmanBinaryPath,
       join(' ', $podmanArgs),
-      $context->compilerContext->getBindArgs(),
+      $context->compilerContext->getVolumeBindsAsArgList(),
       $this->podmanImage,
       $command,
       join(' ', $args),

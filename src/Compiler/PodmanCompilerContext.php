@@ -30,13 +30,7 @@ final readonly class PodmanCompilerContext
     $this->volumeBinds = $binds;
   }
 
-  /** @return array<string, string> */
-  public function getVolumeBinds(): array
-  {
-    return $this->volumeBinds;
-  }
-
-  public function getBindArgs(): string
+  public function getVolumeBindsAsArgList(): string
   {
     $args = [];
 
@@ -45,5 +39,16 @@ final readonly class PodmanCompilerContext
     }
 
     return join(' ', $args);
+  }
+
+  /** @return string[] Array of binds, in the format "src:target" */
+  public function getVolumeBinds(): array {
+    $volumeBinds = [];
+
+    foreach ($this->volumeBinds as $hostPath => $containerPath) {
+      $volumeBinds[] = sprintf('%s:%s', $hostPath, $containerPath);
+    }
+
+    return $volumeBinds;
   }
 }
