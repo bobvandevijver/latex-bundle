@@ -10,12 +10,12 @@ use Symfony\Component\Process\Process;
  * Note that this will not work by default using Debian (Sury) and PHP-FPM,
  * as the PHP-FPM service is not allowed to create namespaces.
  */
-final class PodmanLatexCompiler extends AbstractTimeoutCompiler
+final readonly class PodmanLatexCompiler implements LatexCompilerInterface
 {
   public function __construct(
-    private readonly string $podmanHomeDir,
-    private readonly string $podmanBinaryPath,
-    private readonly string $podmanImage,
+    private string $podmanHomeDir,
+    private string $podmanBinaryPath,
+    private string $podmanImage,
   ) {
   }
 
@@ -69,7 +69,7 @@ final class PodmanLatexCompiler extends AbstractTimeoutCompiler
 
     $process = Process::fromShellCommandline($commandLine);
 
-    $process->setTimeout($this->timeout);
+    $process->setTimeout($context->timeout);
     $process->run();
 
     return LatexCompilerResult::fromProcess($process);
