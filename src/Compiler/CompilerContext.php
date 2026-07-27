@@ -10,8 +10,8 @@ final class CompilerContext
 
   /** @param string[] $pdflatexArgs */
   public function __construct(
-    public readonly string $baseName,
     public readonly string $workingDirectory,
+    public readonly string $baseName,
     public readonly array $pdflatexArgs,
   ) {
   }

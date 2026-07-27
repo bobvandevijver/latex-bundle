@@ -21,7 +21,10 @@ final class PodmanLatexCompiler extends AbstractTimeoutCompiler
 
   public function pdflatex(CompilerContext $context): LatexCompilerResult
   {
-    return $this->runPodmanProcess($context, 'pdflatex', $context->pdflatexArgs);
+    return $this->runPodmanProcess($context, 'pdflatex', [
+      ...$context->pdflatexArgs,
+      "\"$context->baseName.tex\"",
+    ]);
   }
 
   public function bibtex(CompilerContext $context): LatexCompilerResult
@@ -31,7 +34,7 @@ final class PodmanLatexCompiler extends AbstractTimeoutCompiler
 
   public function supportsBibliography(): bool
   {
-    return !empty($this->bibliographyBinaryLocation);
+    return true;
   }
 
   /** @param string[] $args */

@@ -9,13 +9,16 @@ final class LocalLatexCompiler extends AbstractTimeoutCompiler
 {
   public function __construct(
     private readonly string $pdfLatexBinaryLocation,
-    private readonly ?string $bibliographyBinaryLocation,
+    private readonly string $bibliographyBinaryLocation,
   ) {
   }
 
   public function pdflatex(CompilerContext $context): LatexCompilerResult
   {
-    return $this->runLocalProcess($context, $this->pdfLatexBinaryLocation, $context->pdflatexArgs);
+    return $this->runLocalProcess($context, $this->pdfLatexBinaryLocation, [
+      ...$context->pdflatexArgs,
+      "\"$context->baseName.tex\"",
+    ]);
   }
 
   public function bibtex(CompilerContext $context): LatexCompilerResult

@@ -6,7 +6,7 @@ use Symfony\Component\Finder\Finder;
 
 final readonly class PodmanCompilerContext
 {
-  /** @var array<string, string> $volumeBinds */
+  /** @var array<string, string> */
   private array $volumeBinds;
 
   public function __construct(CompilerContext $context)
@@ -42,7 +42,8 @@ final readonly class PodmanCompilerContext
   }
 
   /** @return string[] Array of binds, in the format "src:target" */
-  public function getVolumeBinds(): array {
+  public function getVolumeBinds(): array
+  {
     $volumeBinds = [];
 
     foreach ($this->volumeBinds as $hostPath => $containerPath) {
