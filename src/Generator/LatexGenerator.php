@@ -9,8 +9,7 @@ use Bobv\LatexBundle\Exception\ImageNotFoundException;
 use Bobv\LatexBundle\Exception\LatexException;
 use Bobv\LatexBundle\Exception\LatexParseException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
-use DateTime;
-use DateTimeInterface;
+use DateTimeImmutable;
 use Exception;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
@@ -23,18 +22,15 @@ class LatexGenerator implements LatexGeneratorInterface
 {
   protected Filesystem $filesystem;
   protected ?string $outputDir         = null;
-  protected DateTimeInterface $maxAge;
 
   public function __construct(
     protected readonly string $cacheDir,
     protected readonly string $env,
     protected readonly Environment $twig,
     protected LatexCompilerInterface $latexCompiler,
-    string $maxAge,
+    protected string $maxAgeModifier,
   ) {
     $this->filesystem = new Filesystem();
-    $this->maxAge     = new DateTime();
-    $this->maxAge->modify($maxAge);
   }
 
   public function createPdfResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
@@ -148,13 +144,6 @@ class LatexGenerator implements LatexGeneratorInterface
     return $pdfLocation;
   }
 
-  public function setMaxAge(DateTimeInterface $maxAge): self
-  {
-    $this->maxAge = $maxAge;
-
-    return $this;
-  }
-
   /**
    * Sets the process timeout (max. runtime).
    * To disable the timeout, set this value to null.
@@ -207,7 +196,7 @@ class LatexGenerator implements LatexGeneratorInterface
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
     if ($this->filesystem->exists($pdfLocation)
         && $this->env == 'prod'
-        && filemtime($pdfLocation) > $this->maxAge->getTimestamp()
+        && filemtime($pdfLocation) > $this->getMaxAgeTimestamp($options)
         && !$options->forceRegenerate
     ) {
       return $pdfLocation;
@@ -308,7 +297,7 @@ class LatexGenerator implements LatexGeneratorInterface
       // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
       if ($this->filesystem->exists($texLocation)
           && $this->env == 'prod'
-          && filemtime($texLocation) > $this->maxAge->getTimestamp()
+          && filemtime($texLocation) > $this->getMaxAgeTimestamp($options)
           && !$options->forceRegenerate
       ) {
         return $texLocation;
@@ -326,5 +315,14 @@ class LatexGenerator implements LatexGeneratorInterface
   private function findReferenceError(string $value): bool
   {
     return preg_match_all('/reference|change/ui', $value) > 0;
+  }
+
+  private function getMaxAgeTimestamp(GeneratorOptions $options): int
+  {
+    if ($options->maxAge) {
+      return $options->maxAge->getTimestamp();
+    }
+
+    return (new DateTimeImmutable())->modify($this->maxAgeModifier)->getTimestamp();
   }
 }

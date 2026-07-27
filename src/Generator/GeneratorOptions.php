@@ -2,15 +2,18 @@
 
 namespace Bobv\LatexBundle\Generator;
 
+use DateTimeImmutable;
+
 class GeneratorOptions
 {
   /**
-   * @param bool                 $forceRegenerate whether to force regeneration of the TeX/PDF file(s), even if it already exists
-   * @param array<string, mixed> $compileOptions  Optional compile options for pdflatex
-   * @param bool                 $shellEscape     whether to allow arbitrary program execution outside of the LaTeX file
-   * @param string|null          $openInAny       value for the openin_any option, or null to disable the option
-   * @param string|null          $openOutAny      value for the openout_any option, or null to disable the option
-   * @param string|null          $cacheDir        value for the cache directory, or null to use the default
+   * @param bool                   $forceRegenerate whether to force regeneration of the TeX/PDF file(s), even if it already exists
+   * @param array<string, mixed>   $compileOptions  Optional compile options for pdflatex
+   * @param bool                   $shellEscape     whether to allow arbitrary program execution outside of the LaTeX file
+   * @param string|null            $openInAny       value for the openin_any option, or null to disable the option
+   * @param string|null            $openOutAny      value for the openout_any option, or null to disable the option
+   * @param string|null            $cacheDir        value for the cache directory, or null to use the default
+   * @param DateTimeImmutable|null $maxAge          maximum age of the cache file, or null to use the default
    */
   public function __construct(
     public bool $forceRegenerate = false,
@@ -19,6 +22,7 @@ class GeneratorOptions
     public ?string $openInAny = 'p',
     public ?string $openOutAny = 'p',
     public ?string $cacheDir = null,
+    public ?DateTimeImmutable $maxAge = null,
   ) {
   }
 }

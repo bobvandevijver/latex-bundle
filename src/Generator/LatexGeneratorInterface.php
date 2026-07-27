@@ -83,8 +83,6 @@ interface LatexGeneratorInterface
    */
   public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string;
 
-  public function setMaxAge(DateTimeInterface $maxAge): self;
-
   /**
    * Sets the process timeout (max. runtime).
    * To disable the timeout, set this value to null.

@@ -15,6 +15,7 @@ The following methods have been dropped from the `LatexGeneratorInterface` in fa
 
 - `setForceRegenerate`
 - `setCacheDir`
+- `setMaxAge`
 
 The `$compileOptions` argument on method `generatePdf` has been replaced with the same options DTO. Do note that the following keys from `$compileOptions` have been replaced with dedicated DTO options:
 
