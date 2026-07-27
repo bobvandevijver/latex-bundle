@@ -1,10 +1,10 @@
 # Submitting issues
 ---------------------------------------
-(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/main/src/Resources/doc/support-and-contribution/submitting-issues.md) (copied for ease, adjusted)
+(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/master/Resources/doc/support-and-contribution/submitting-issues.md) (copied for ease, adjusted)
 
 [go back to Table of contents][back-to-index]
 
-[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/doc/documentation.md
+[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/docs/documentation.md
 
 ### Step 1: check existing issues
 
@@ -12,7 +12,7 @@ Go to [our issues page][docs-issues] and search existing issues, your problem ma
 
 [docs-issues]: https://github.com/bobvandevijver/latex-bundle/issues
 
-### Step 3: create new issue
+### Step 2: create new issue
 
 To create a new issue go to [Github issues][docs-issues] and click on **New issue** button (or use [this shortcut][docs-new-issue]).
 

@@ -1,10 +1,10 @@
 # Contributing
 ----------------------------------------------------
-(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/main/src/Resources/doc/support-and-contribution/contributing.md) (copied for ease)
+(c) [AdminGeneratorBundle](https://github.com/symfony2admingenerator/AdmingeneratorGeneratorBundle/blob/main/docs/support-and-contribution/contributing.md) (copied for ease)
 
 [go back to Table of contents][back-to-index]
 
-[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/src/Resources/doc/documentation.md
+[back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/docs/documentation.md
 
 ## 1. Createing and managing git branches
 

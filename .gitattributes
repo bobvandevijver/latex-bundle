@@ -21,6 +21,7 @@
 *.rtf	 diff=astextplain
 *.RTF	 diff=astextplain
 
+docs/ export-ignore
 tests/ export-ignore
 .gitattributes export-ignore
 .gitignore export-ignore
