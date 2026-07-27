@@ -26,7 +26,7 @@ class LatexGenerator implements LatexGeneratorInterface
   protected DateTimeInterface $maxAge;
 
   public function __construct(
-    protected string $cacheDir,
+    protected readonly string $cacheDir,
     protected readonly string $env,
     protected readonly Environment $twig,
     protected LatexCompilerInterface $latexCompiler,
@@ -148,13 +148,6 @@ class LatexGenerator implements LatexGeneratorInterface
     return $pdfLocation;
   }
 
-  public function setCacheDir(string $cacheDir): self
-  {
-    $this->cacheDir = $cacheDir;
-
-    return $this;
-  }
-
   public function setMaxAge(DateTimeInterface $maxAge): self
   {
     $this->maxAge = $maxAge;
@@ -180,12 +173,14 @@ class LatexGenerator implements LatexGeneratorInterface
    *
    * @throws IOException
    */
-  protected function checkFilesystem(): void
+  protected function checkFilesystem(GeneratorOptions $options): void
   {
+    $cacheBasePath = $this->getCacheBasePath($options);
+
     // Check if the cache dir exists
-    if (!$this->filesystem->exists($this->getCacheBasePath())) {
+    if (!$this->filesystem->exists($cacheBasePath)) {
       try {
-        $this->filesystem->mkdir($this->getCacheBasePath());
+        $this->filesystem->mkdir($cacheBasePath);
       } catch (IOException $ioe) {
         throw new IOException('An error occurred while creating the cache directory at ' . $ioe->getPath() . '. Is the cache writable?', 0, $ioe);
       }
@@ -292,9 +287,9 @@ class LatexGenerator implements LatexGeneratorInterface
     return $pdfLocation;
   }
 
-  protected function getCacheBasePath(): string
+  protected function getCacheBasePath(GeneratorOptions $options): string
   {
-    return $this->cacheDir . '/BobvLatex/';
+    return ($options->cacheDir ?? $this->cacheDir) . '/BobvLatex/';
   }
 
   /**
@@ -306,8 +301,8 @@ class LatexGenerator implements LatexGeneratorInterface
    */
   protected function writeTexFile(string $texData, string $fileName, GeneratorOptions $options): string
   {
-    $this->checkFilesystem();
-    $this->outputDir = $this->getCacheBasePath() . hash('ripemd160', $texData) . '/';
+    $this->checkFilesystem($options);
+    $this->outputDir = $this->getCacheBasePath($options) . hash('ripemd160', $texData) . '/';
     $texLocation     = $this->outputDir . $fileName . '.tex';
     try {
       // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)

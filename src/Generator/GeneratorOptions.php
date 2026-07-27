@@ -10,6 +10,7 @@ class GeneratorOptions
    * @param bool                 $shellEscape     whether to allow arbitrary program execution outside of the LaTeX file
    * @param string|null          $openInAny       value for the openin_any option, or null to disable the option
    * @param string|null          $openOutAny      value for the openout_any option, or null to disable the option
+   * @param string|null          $cacheDir        value for the cache directory, or null to use the default
    */
   public function __construct(
     public bool $forceRegenerate = false,
@@ -17,6 +18,7 @@ class GeneratorOptions
     public bool $shellEscape = false,
     public ?string $openInAny = 'p',
     public ?string $openOutAny = 'p',
+    public ?string $cacheDir = null,
   ) {
   }
 }

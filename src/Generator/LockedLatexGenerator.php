@@ -85,13 +85,6 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this->generator->generatePdf($texLocation, $options);
   }
 
-  public function setCacheDir(string $cacheDir): self
-  {
-    $this->generator->setCacheDir($cacheDir);
-
-    return $this;
-  }
-
   public function setMaxAge(DateTimeInterface $maxAge): self
   {
     $this->generator->setMaxAge($maxAge);
