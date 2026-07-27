@@ -13,9 +13,9 @@ use Throwable;
  * Note that this will not work by default using Debian (Sury) and PHP-FPM,
  * as the PHP-FPM service is not allowed to create namespaces.
  */
-final class PodmanProxyLatexCompiler extends AbstractTimeoutCompiler
+final readonly class PodmanProxyLatexCompiler implements LatexCompilerInterface
 {
-  public function __construct(private readonly string $podmanProxySock)
+  public function __construct(private string $podmanProxySock)
   {
   }
 
@@ -61,7 +61,7 @@ final class PodmanProxyLatexCompiler extends AbstractTimeoutCompiler
     }
 
     try {
-      $fp = fsockopen($this->podmanProxySock, -1, timeout: $this->timeout);
+      $fp = fsockopen($this->podmanProxySock, -1, $errorCode, $errorMessage, $context->timeout);
       if (!$fp) {
         throw new LatexProxyException('Failed to connect to podman proxy service');
       }

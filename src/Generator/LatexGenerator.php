@@ -145,19 +145,6 @@ class LatexGenerator implements LatexGeneratorInterface
   }
 
   /**
-   * Sets the process timeout (max. runtime).
-   * To disable the timeout, set this value to null.
-   *
-   * @param int|float|null $timeout The timeout in seconds
-   */
-  public function setTimeout(int|float|null $timeout): self
-  {
-    $this->latexCompiler->setTimeout($timeout);
-
-    return $this;
-  }
-
-  /**
    * Checks if the filesystem is ready to create the needed files.
    *
    * @throws IOException
@@ -233,7 +220,7 @@ class LatexGenerator implements LatexGeneratorInterface
     $output = false;
 
     // Create context for the current run
-    $context = new CompilerContext($this->outputDir, $baseName, $pdflatexArgs);
+    $context = new CompilerContext($this->outputDir, $baseName, $pdflatexArgs, $options->timeout);
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {

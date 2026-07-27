@@ -26,12 +26,4 @@ interface LatexCompilerInterface
 
   /** bibtex support is optional and needs to be configured. */
   public function supportsBibliography(): bool;
-
-  /**
-   * Sets the process timeout (max. runtime).
-   * To disable the timeout, set this value to null.
-   *
-   * @param int|float|null $timeout The timeout in seconds
-   */
-  public function setTimeout(int|float|null $timeout): self;
 }

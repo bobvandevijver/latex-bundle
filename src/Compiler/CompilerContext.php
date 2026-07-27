@@ -17,6 +17,7 @@ final class CompilerContext
     public readonly string $workingDirectory,
     public readonly string $baseName,
     public readonly array $pdflatexArgs,
+    public readonly int|float|null $timeout,
   ) {
   }
 }

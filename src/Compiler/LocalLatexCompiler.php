@@ -5,11 +5,11 @@ namespace Bobv\LatexBundle\Compiler;
 use Symfony\Component\Process\Process;
 
 /** Simple local LaTeX compiler, which uses a locally installed LaTeX binary. */
-final class LocalLatexCompiler extends AbstractTimeoutCompiler
+final readonly class LocalLatexCompiler implements LatexCompilerInterface
 {
   public function __construct(
-    private readonly string $pdfLatexBinaryLocation,
-    private readonly string $bibliographyBinaryLocation,
+    private string $pdfLatexBinaryLocation,
+    private string $bibliographyBinaryLocation,
   ) {
   }
 
@@ -43,7 +43,7 @@ final class LocalLatexCompiler extends AbstractTimeoutCompiler
 
     $process = Process::fromShellCommandline($commandLine);
 
-    $process->setTimeout($this->timeout);
+    $process->setTimeout($context->timeout);
     $process->run();
 
     return LatexCompilerResult::fromProcess($process);

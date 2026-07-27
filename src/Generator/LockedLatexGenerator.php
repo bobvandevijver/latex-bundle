@@ -4,7 +4,6 @@ namespace Bobv\LatexBundle\Generator;
 
 use Bobv\LatexBundle\Exception\LatexNotLockedException;
 use Bobv\LatexBundle\Latex\LatexBaseInterface;
-use DateTimeInterface;
 use LogicException;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\Lock\LockFactory;
@@ -14,9 +13,10 @@ use Symfony\Component\Lock\Store\FlockStore;
 /** Lock LaTeX PDF generation to prevent the same files being rendered at the same time. */
 class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGeneratorInterface
 {
+  /** Define a trivial overhead for the timeout margin to prevent releasing the lock before the process timeout has happened. */
+  private const TIMEOUT_OVERHEAD = 2;
   private readonly LockFactory $lockFactory; // Set in constructor
-  private ?LockInterface $lock    = null;
-  private float|int|null $timeout = null; // Set in constructor
+  private ?LockInterface       $lock = null;
 
   public function __construct(private readonly LatexGeneratorInterface $generator)
   {
@@ -24,15 +24,14 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
       throw new LogicException('In order to use the LockedLatexGenerator, try running "composer require symfony/lock".');
     }
 
-    $this->setTimeout(60);
     $this->lockFactory = new LockFactory(new FlockStore());
   }
 
   /** Acquires a generation lock for PDF generation. This is required before using any method. */
-  public function acquireLock(): LatexGeneratorInterface
+  public function acquireLock(?GeneratorOptions $options = null): LatexGeneratorInterface
   {
     if ($this->lock === null) {
-      $this->lock = $this->lockFactory->createLock(self::class, $this->timeout);
+      $this->lock = $this->lockFactory->createLock(self::class, $this->getTimeout($options));
     }
     $this->lock->acquire(true);
 
@@ -50,68 +49,61 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this;
   }
 
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
+  public function createPdfResponse(
+    LatexBaseInterface $latex,
+    bool $download = true,
+    ?GeneratorOptions $options = null,
+  ): BinaryFileResponse
   {
-    $this->ensureLock();
+    $this->ensureLock($options);
 
     return $this->generator->createPdfResponse($latex, $download, $options);
   }
 
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
+  public function createTexResponse(
+    LatexBaseInterface $latex,
+    bool $download = true,
+    ?GeneratorOptions $options = null,
+  ): BinaryFileResponse
   {
-    $this->ensureLock();
+    $this->ensureLock($options);
 
     return $this->generator->createTexResponse($latex, $download, $options);
   }
 
   public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
   {
-    $this->ensureLock();
+    $this->ensureLock($options);
 
     return $this->generator->generate($latex, $options);
   }
 
   public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
   {
-    $this->ensureLock();
+    $this->ensureLock($options);
 
     return $this->generator->generateLatex($latex, $options);
   }
 
   public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string
   {
-    $this->ensureLock();
+    $this->ensureLock($options);
 
     return $this->generator->generatePdf($texLocation, $options);
   }
 
-  public function setTimeout(float|int|null $timeout): self
-  {
-    $this->generator->setTimeout($timeout);
-
-    if ($timeout === null) {
-      // No timeout requested
-      $this->timeout = null;
-    } else {
-      // Save timeout for lock, include some trivial overhead margin
-      $this->timeout = $timeout + 5;
-    }
-
-    // Refresh lock when required
-    if ($this->lock && $this->lock->isAcquired()) {
-      $this->lock->refresh($this->timeout);
-    }
-
-    return $this;
-  }
-
-  /** Verify the callee has already exclusive access */
-  private function ensureLock(): void
+  /** Verify the callee already has exclusive access */
+  private function ensureLock(?GeneratorOptions $options): void
   {
     if (!$this->lock || !$this->lock->isAcquired()) {
       throw new LatexNotLockedException();
     }
 
-    $this->lock->refresh($this->timeout);
+    $this->lock->refresh($this->getTimeout($options));
+  }
+
+  private function getTimeout(?GeneratorOptions $options): float|int|null
+  {
+    return ($options?->timeout ?? GeneratorOptions::DEFAULT_TIMEOUT) + self::TIMEOUT_OVERHEAD;
   }
 }

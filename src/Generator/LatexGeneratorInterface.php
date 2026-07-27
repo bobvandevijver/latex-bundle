@@ -82,12 +82,4 @@ interface LatexGeneratorInterface
    * @return string Location of the generated PDF file
    */
   public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string;
-
-  /**
-   * Sets the process timeout (max. runtime).
-   * To disable the timeout, set this value to null.
-   *
-   * @param int|float|null $timeout The timeout in seconds
-   */
-  public function setTimeout(int|float|null $timeout): self;
 }
