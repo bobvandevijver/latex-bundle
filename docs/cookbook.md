@@ -1,10 +1,10 @@
 # Cookbook
 
-Below examples are given of how you can extend the bundle. Note that not all of them are recommended.
+The examples below are given of how you can extend the bundle. Note that not all of them are recommended.
 
 ## Direct Twig template rendering
 
-> **Note**: I do not recommend this usage as you bypass the object oriented approach this bundle uses.
+> **Note**: we do not recommend this usage as you bypass the object-oriented approach this bundle uses.
 
 You can use the `DirectTwig` class below:
 ```php
@@ -29,7 +29,7 @@ class DirectTwig extends LatexBase
 }
 ```
 
-Create the PDF from you twig template:
+Create the PDF from your twig template:
 ```php
 return $latexGenerator->createPdfResponse(
   (new DirectTwig('article/recent_list.tex.twig'))
