@@ -2,12 +2,16 @@
 
 namespace Bobv\LatexBundle\Compiler;
 
+use Bobv\LatexBundle\Exception\LatexException;
+
 interface LatexCompilerInterface
 {
   /**
    * Run a pdflatex process.
    *
    * @return LatexCompilerResult The process output
+   *
+   * @throws LatexException
    */
   public function pdflatex(CompilerContext $context): LatexCompilerResult;
 
@@ -15,6 +19,8 @@ interface LatexCompilerInterface
    * Run a bibtex process.
    *
    * @return LatexCompilerResult The process output
+   *
+   * @throws LatexException
    */
   public function bibtex(CompilerContext $context): LatexCompilerResult;
 
