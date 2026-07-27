@@ -9,6 +9,20 @@ This is a major release, and contains breaking changes. Please read carefully.
 
 The configuration has been rebuilt, and parameters have changed. If you were using parameters (starting with `bobv.latex.`) please migrate to modern bundle configuration. Every option that was available before can still be set.
 
+### Generator
+
+The following methods have been dropped from the `LatexGeneratorInterface` in favour of passing an options DTO to the generate methods. This makes the Generator instance stateless.
+
+- `setForceRegenerate`
+
+The `$compileOptions` argument on method `generatePdf` has been replaced with the same options DTO. Do note that the following keys from `$compileOptions` have been replaced with dedicated DTO options:
+
+- `shell-escape`
+- `openin_any`
+- `openout_any`
+
+The `generateLatex` method must now always be passed a `LatexBaseInterface` instance.
+
 ## Upgrade from 5.x to 6.x
 
 This release marks the addition of a possibly breaking safety feature, namely passing `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` by default to the `pdflatex` command.

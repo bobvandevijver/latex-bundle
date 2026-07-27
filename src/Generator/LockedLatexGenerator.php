@@ -50,51 +50,44 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this;
   }
 
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse
+  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
   {
     $this->ensureLock();
 
-    return $this->generator->createPdfResponse($latex, $download);
+    return $this->generator->createPdfResponse($latex, $download, $options);
   }
 
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true): BinaryFileResponse
+  public function createTexResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
   {
     $this->ensureLock();
 
-    return $this->generator->createTexResponse($latex, $download);
+    return $this->generator->createTexResponse($latex, $download, $options);
   }
 
-  public function generate(LatexBaseInterface $latex): string
+  public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
   {
     $this->ensureLock();
 
-    return $this->generator->generate($latex);
+    return $this->generator->generate($latex, $options);
   }
 
-  public function generateLatex(?LatexBaseInterface $latex = null): string
+  public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
   {
     $this->ensureLock();
 
-    return $this->generator->generateLatex($latex);
+    return $this->generator->generateLatex($latex, $options);
   }
 
-  public function generatePdf(string $texLocation, array $compileOptions = []): string
+  public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string
   {
     $this->ensureLock();
 
-    return $this->generator->generatePdf($texLocation, $compileOptions);
+    return $this->generator->generatePdf($texLocation, $options);
   }
 
   public function setCacheDir(string $cacheDir): self
   {
     $this->generator->setCacheDir($cacheDir);
-
-    return $this;
-  }
-
-  public function setForceRegenerate(bool $forceRegenerate): self
-  {
-    $this->generator->setForceRegenerate($forceRegenerate);
 
     return $this;
   }
