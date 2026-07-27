@@ -85,13 +85,6 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     return $this->generator->generatePdf($texLocation, $options);
   }
 
-  public function setMaxAge(DateTimeInterface $maxAge): self
-  {
-    $this->generator->setMaxAge($maxAge);
-
-    return $this;
-  }
-
   public function setTimeout(float|int|null $timeout): self
   {
     $this->generator->setTimeout($timeout);
