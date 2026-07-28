@@ -6,7 +6,7 @@ namespace Bobv\LatexBundle\Generator;
 interface LockedLatexGeneratorInterface extends LatexGeneratorInterface
 {
   /** Acquires a generation lock for PDF generation. This is required before using any method. */
-  public function acquireLock(): LatexGeneratorInterface;
+  public function acquireLock(?GeneratorOptions $options = null): LatexGeneratorInterface;
 
   /**
    * Release the lock when you're done with it
