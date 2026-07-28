@@ -24,7 +24,9 @@ final readonly class PodmanCompilerContext
         continue;
       }
 
-      $binds[$fileOrDir->getRealPath()] = $fileOrDir->getRealPath();
+      if ($realPath = $fileOrDir->getRealPath()) {
+        $binds[$realPath] = $realPath;
+      }
     }
 
     $this->volumeBinds = $binds;
