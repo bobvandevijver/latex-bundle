@@ -21,7 +21,6 @@ use Twig\Environment;
 class LatexGenerator implements LatexGeneratorInterface
 {
   protected Filesystem $filesystem;
-  protected ?string $outputDir         = null;
 
   public function __construct(
     protected readonly string $cacheDir,
@@ -33,11 +32,14 @@ class LatexGenerator implements LatexGeneratorInterface
     $this->filesystem = new Filesystem();
   }
 
-  public function createPdfResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
-  {
-    $pdfLocation = $this->generate($latex, $options);
+  public function createPdfResponse(
+    LatexBaseInterface $latex,
+    bool $download = true,
+    ?GeneratorOptions $options = null,
+  ): BinaryFileResponse {
+    $pdfFileInfo = $this->generate($latex, $options);
 
-    $response = new BinaryFileResponse($pdfLocation);
+    $response = new BinaryFileResponse($pdfFileInfo->getPdfLocation());
     $response->headers->set('Content-Type', 'application/pdf;charset=utf-8');
     $response->headers->set('Content-Disposition',
       sprintf('%sfilename="%s.pdf"', $download ? 'attachment;' : '', $latex->getFileName()));
@@ -45,11 +47,14 @@ class LatexGenerator implements LatexGeneratorInterface
     return $response;
   }
 
-  public function createTexResponse(LatexBaseInterface $latex, bool $download = true, ?GeneratorOptions $options = null): BinaryFileResponse
-  {
-    $texLocation = $this->generateLatex($latex, $options);
+  public function createTexResponse(
+    LatexBaseInterface $latex,
+    bool $download = true,
+    ?GeneratorOptions $options = null,
+  ): BinaryFileResponse {
+    $texFileInfo = $this->generateLatex($latex, $options);
 
-    $response = new BinaryFileResponse($texLocation);
+    $response = new BinaryFileResponse($texFileInfo->getTexLocation());
     $response->headers->set('Content-Type', 'application/x-tex;charset=utf-8');
     $response->headers->set('Content-Disposition',
       sprintf('%sfilename="%s.tex"', $download ? 'attachment;' : '', $latex->getFileName()));
@@ -57,14 +62,14 @@ class LatexGenerator implements LatexGeneratorInterface
     return $response;
   }
 
-  public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
+  public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): PdfFileInfo
   {
     $texLocation = $this->generateLatex($latex, $options);
 
     return $this->generatePdf($texLocation, $options);
   }
 
-  public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
+  public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): TexFileInfo
   {
     $options ??= new GeneratorOptions();
 
@@ -90,7 +95,7 @@ class LatexGenerator implements LatexGeneratorInterface
     }
 
     try {
-      $texLocation = $this->writeTexFile($texData, $latex->getFileName(), $options);
+      $texFileInfo = $this->writeTexFile($texData, $latex->getFileName(), $options);
     } catch (Exception $e) {
       if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
@@ -105,30 +110,30 @@ class LatexGenerator implements LatexGeneratorInterface
         $finder->files()->in($dependency)->depth('== 0');
         foreach ($finder as $file) {
           /* @var \SplFileInfo $file */
-          $this->filesystem->copy($file->getRealpath(), $this->outputDir . $file->getFilename(), true);
+          $this->filesystem->copy($file->getRealpath(), $texFileInfo->directory . $file->getFilename(), true);
         }
       }
     }
 
     // Link dependencies
     foreach ($linkedDependencies as $key => $dependency) {
-      $this->filesystem->symlink($dependency, $this->outputDir . $key, true);
+      $this->filesystem->symlink($dependency, $texFileInfo->directory . $key, true);
     }
 
-    return $texLocation;
+    return $texFileInfo;
   }
 
-  public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string
+  public function generatePdf(TexFileInfo $texFileInfo, ?GeneratorOptions $options = null): PdfFileInfo
   {
     $options ??= new GeneratorOptions();
 
     // Check if the compiled tex file exists
-    if (!$this->filesystem->exists($texLocation)) {
-      throw new IOException("The LaTeX file at $texLocation does not exist. Is the cache writable or did you forget to generate the .tex file?");
+    if (!$this->filesystem->exists($texFileInfo->getTexLocation())) {
+      throw new IOException("The LaTeX file at {$texFileInfo->getTexLocation()} does not exist. Is the cache writable or did you forget to generate the .tex file?");
     }
 
     try {
-      $pdfLocation = $this->compilePdf($texLocation, $options);
+      $pdfLocation = $this->compilePdf($texFileInfo, $options);
     } catch (Exception $e) {
       if ($e instanceof IOException || $e instanceof LatexException) {
         throw $e;
@@ -138,7 +143,7 @@ class LatexGenerator implements LatexGeneratorInterface
         throw new LatexException('The execution of the pdflatex command timed out. Is it a extremely large file?', 0, $e);
       }
 
-      throw new LatexException('Something failed during the compilation of the pdf file. Check the logs for more info. (filename: ' . explode('.tex', $texLocation)[0] . '.log )', 0, $e);
+      throw new LatexException('Something failed during the compilation of the pdf file. Check the logs for more info. (filename: ' . explode('.tex', $texFileInfo->getTexLocation())[0] . '.log )', 0, $e);
     }
 
     return $pdfLocation;
@@ -167,30 +172,32 @@ class LatexGenerator implements LatexGeneratorInterface
    * Compile a PDF from a tex file on a given location
    * If necessary, compilation will be done up to three times for correct references.
    *
-   * @param string           $texLocation Location of the .tex file
+   * @param TexFileInfo      $texFileInfo Information of the  LaTeX (.tex) file
    * @param GeneratorOptions $options     Generator options
    *
-   * @return string
    * @throws BibliographyGenerationException
    * @throws LatexException
    * @throws LatexParseException
+   *
+   * @return PdfFileInfo Information about the generated PDF file
    */
-  protected function compilePdf(string $texLocation, GeneratorOptions $options): string
+  protected function compilePdf(TexFileInfo $texFileInfo, GeneratorOptions $options): PdfFileInfo
   {
-    $baseName    = basename($texLocation, '.tex');
-    $pdfLocation = explode('.tex', $texLocation)[0] . '.pdf';
+    $baseName    = explode('.tex', $texFileInfo->filename)[0];
+    $pdfFileInfo = new PdfFileInfo(
+      $texFileInfo->directory,
+      $baseName . '.pdf',
+    );
+    $pdfLocation = $pdfFileInfo->getPdfLocation();
 
     // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
     if ($this->filesystem->exists($pdfLocation)
-        && $this->env == 'prod'
-        && filemtime($pdfLocation) > $this->getMaxAgeTimestamp($options)
-        && !$options->forceRegenerate
+      && $this->env == 'prod'
+      && filemtime($pdfLocation) > $this->getMaxAgeTimestamp($options)
+      && !$options->forceRegenerate
     ) {
-      return $pdfLocation;
+      return $pdfFileInfo;
     }
-
-    // Get the output directory from the tex file
-    $this->outputDir = dirname($texLocation);
 
     // Process extra options for security
     $pdflatexArgs = [];
@@ -220,7 +227,7 @@ class LatexGenerator implements LatexGeneratorInterface
     $output = false;
 
     // Create context for the current run
-    $context = new CompilerContext($this->outputDir, $baseName, $pdflatexArgs, $options->timeout);
+    $context = new CompilerContext($pdfFileInfo->directory, $baseName, $pdflatexArgs, $options->timeout);
 
     // Compile until all references are solved or three times is reached
     while ($compile && $count < 3) {
@@ -236,7 +243,7 @@ class LatexGenerator implements LatexGeneratorInterface
       // Check if the pdflatex command completed successfully
       if (!$result->isSuccessful) {
         throw new LatexParseException(
-          $texLocation,
+          $texFileInfo->getTexLocation(),
           $result->exitCode,
           $output,
           $result->exitCodeText,
@@ -250,7 +257,7 @@ class LatexGenerator implements LatexGeneratorInterface
         // Check whether the pdflatex command completed successfully
         if (!$result->isSuccessful) {
           throw new BibliographyGenerationException(
-            $texLocation,
+            $texFileInfo->getTexLocation(),
             $result->exitCode,
             $result->exitCodeText,
           );
@@ -260,7 +267,7 @@ class LatexGenerator implements LatexGeneratorInterface
       $count++;
     }
 
-    return $pdfLocation;
+    return $pdfFileInfo;
   }
 
   protected function getCacheBasePath(GeneratorOptions $options): string
@@ -273,21 +280,26 @@ class LatexGenerator implements LatexGeneratorInterface
    *
    * @throws IOException
    *
-   * @return string The location of the saved .tex file
+   * @return TexFileInfo Information about the .tex file
    */
-  protected function writeTexFile(string $texData, string $fileName, GeneratorOptions $options): string
+  protected function writeTexFile(string $texData, string $fileName, GeneratorOptions $options): TexFileInfo
   {
     $this->checkFilesystem($options);
-    $this->outputDir = $this->getCacheBasePath($options) . hash('ripemd160', $texData) . '/';
-    $texLocation     = $this->outputDir . $fileName . '.tex';
+
+    $outputInfo  = new TexFileInfo(
+      $this->getCacheBasePath($options) . hash('ripemd160', $texData) . '/',
+      $fileName . '.tex',
+    );
+    $texLocation = $outputInfo->getTexLocation();
+
     try {
       // Do not regenerate unless cache is off (dev mode or force regenerate or passed maxAge)
       if ($this->filesystem->exists($texLocation)
-          && $this->env == 'prod'
-          && filemtime($texLocation) > $this->getMaxAgeTimestamp($options)
-          && !$options->forceRegenerate
+        && $this->env == 'prod'
+        && filemtime($texLocation) > $this->getMaxAgeTimestamp($options)
+        && !$options->forceRegenerate
       ) {
-        return $texLocation;
+        return $outputInfo;
       }
 
       $this->filesystem->dumpFile($texLocation, $texData);
@@ -295,7 +307,7 @@ class LatexGenerator implements LatexGeneratorInterface
       throw new IOException('An error occurred while creating the tex file at ' . $ioe->getPath() . '. Is the cache writable?', 0, $ioe);
     }
 
-    return $texLocation;
+    return $outputInfo;
   }
 
   /** Check if the line contains a reference error */

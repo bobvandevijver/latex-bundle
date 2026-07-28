@@ -26,6 +26,10 @@ The `$compileOptions` argument on method `generatePdf` has been replaced with th
 
 The `generateLatex` method must now always be passed a `LatexBaseInterface` instance.
 
+The `generatePdf` method no longer accepts a `string` as file location, it must now be passed a `TexFileInfo` instance.
+
+The `generate*` functions now return an instance of `TexFileInfo` or `PdfFileInfo`, depending on the method. You can call `getTexLocation()` or `getPdfLocation()` on the returned instance to get the full file path.
+
 ## Upgrade from 5.x to 6.x
 
 This release marks the addition of a possibly breaking safety feature, namely passing `-cnf-line="openin_any=p"` and `-cnf-line="openout_any=p"` by default to the `pdflatex` command.
