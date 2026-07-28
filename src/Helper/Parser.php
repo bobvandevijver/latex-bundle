@@ -105,7 +105,7 @@ class Parser
     $text = str_replace('€', '\\euro{}', $text);
 
     // Remove remaining HTML entities
-    if (!$text = preg_replace('/&[a-zA-Z]+;/iu', '', $text)) {
+    if (null === $text = preg_replace('/&[a-zA-Z]+;/iu', '', $text)) {
       throw new TextParserException('Could not remove HTML entities');
     }
 
@@ -271,7 +271,7 @@ class Parser
     }
 
     // Replace junk from URL to get it readable
-    if (!$text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text)) {
+    if (null === $text = preg_replace("/(mailto:|https?:\/\/)?(([\da-z.-]+)([.@])([a-z.]{2,6})([\/\w.-]*[\/\w-])*\/?)/smui", '$2', $text)) {
       throw new HtmlParserException('Failed to replace URLs');
     }
 
