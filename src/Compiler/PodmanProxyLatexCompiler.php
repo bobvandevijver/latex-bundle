@@ -84,9 +84,9 @@ final readonly class PodmanProxyLatexCompiler implements LatexCompilerInterface
     return new LatexCompilerResult(
       $exitCode === 0,
       $exitCode,
-      $data['stdout'] ? explode("\n", $data['stdout']) : [],
+      ($data['stdout'] ?? false) ? explode("\n", $data['stdout']) : [],
       Process::$exitCodes[$exitCode] ?? null,
-      $data['stderr'] ? explode("\n", $data['stderr']) : [],
+      ($data['stderr'] ?? false) ? explode("\n", $data['stderr']) : [],
     );
   }
 }
