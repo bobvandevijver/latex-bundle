@@ -50,7 +50,7 @@ class Configuration implements ConfigurationInterface
       ->scalarNode('pdflatex_binary_path')->defaultValue('pdflatex');
 
     $compilerNodeBuilder
-      ->scalarNode('bibtex_binary_path')->defaultValue('');
+      ->scalarNode('bibtex_binary_path')->defaultValue('bibtex');
 
     $generatorNodeBuilder = $nodeBuilder
       ->arrayNode('generator')
