@@ -63,34 +63,7 @@ chmod o+rx /home/bobv-latex-pdflatex
 
 Next, configure the service that will be running the proxy. You can use any method, a [systemd example is provided by us](../podman_proxy/bobv-latex-podman-proxy.conf).
 
-Next, configure access to the directories the user needs to have access to. As example, we will provide some ACLs:
-
-```shell
-PARENT_DIRS=(
-  "/var/www/project"
-  "/var/www/project/var"
-  "/var/www/project/var/cache"
-  "/var/www/project/var/cache/prod"
-)
-LATEX_CACHE_DIR=/var/www/project/var/cache/prod/BobvLatex
-DEPENDENCY_DIRS=(
-  "/var/www/project/uploads",
-  "/var/www/project/assets/pdf"
-)
-
-for PARENT_DIR in "${PARENT_DIRS[@]}"; do
-  setfacl -nm u:bobv-latex-pdflatex:rx ${DEPENDENCY_DIR}
-  setfacl -dnm u:bobv-latex-pdflatex:rx ${DEPENDENCY_DIR}  
-done
-
-setfacl -Rnm u:bobv-latex-pdflatex:rw ${LATEX_CACHE_DIR}
-setfacl -dRnm u:bobv-latex-pdflatex:rw ${LATEX_CACHE_DIR}
-
-for DEPENDENCY_DIR in "${DEPENDENCY_DIRS[@]}"; do
-  setfacl -Rnm u:bobv-latex-pdflatex:r ${DEPENDENCY_DIR}
-  setfacl -dRnm u:bobv-latex-pdflatex:r ${DEPENDENCY_DIR}
-done
-```
+Next, configure access to the directories the podman user needs to have access to. This bundle offers a command that outputs a list of ACLs (`bobv:latex:configure-proxy-acls`).
 
 Finally, make sure the service is running and validate your installation by running `bin/console bobv:latex:test`.
 
@@ -99,6 +72,9 @@ Finally, make sure the service is running and validate your installation by runn
 During deployment, you will most probably want to update the proxy as well. Assuming you will use an `update` user to run deployment tasks, you can, for example, run the following:
 
 ```shell
+# Configure the rights for the podman proxy user
+sudo -n -u www-data php bin/console bobv:latex:configure-proxy-acls --output-only | xargs -L 1 -t sudo -n -u root
+
 # Install the latest podman proxy and restart it
 sudo -n systemctl start bobv-latex-podman-proxy-installer
 sudo -n systemctl restart bobv-latex-podman-proxy
@@ -114,6 +90,7 @@ To allow the sudo tasks, the following sudoers configuration can be used:
 # /etc/sudoers.d/bobv-latex-pdflatex
 update ALL= (root) NOPASSWD: /bin/systemctl start bobv-latex-podman-proxy-installer
 update ALL= (root) NOPASSWD: /bin/systemctl restart bobv-latex-podman-proxy
+update ALL= (root) NOPASSWD: /usr/bin/setfacl -[dRnm]* u\:bobv-latex-pdflatex\:[rw]*X /var/www/project*
 update ALL= (bobv-latex-pdflatex) NOPASSWD: /usr/bin/podman pull registry.drenso.dev/open/docker-images/pdflatex\:latest
 update ALL= (bobv-latex-pdflatex) NOPASSWD: /usr/bin/podman image prune -f
 ```

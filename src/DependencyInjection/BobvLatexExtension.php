@@ -2,6 +2,8 @@
 
 namespace Bobv\LatexBundle\DependencyInjection;
 
+use Bobv\LatexBundle\Cache\CacheService;
+use Bobv\LatexBundle\Command\ConfigureProxyAclCommand;
 use Bobv\LatexBundle\Command\LatexTestCommand;
 use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
 use Bobv\LatexBundle\Compiler\LocalLatexCompiler;
@@ -25,12 +27,19 @@ class BobvLatexExtension extends ConfigurableExtension
   /** @param array{
    *   compiler: array{
    *     class: string,
-   *     podman_proxy_sock: string,
-   *     podman_homedir: string,
-   *     podman_binary_path: string,
-   *   podman_image: string,
-   *     pdflatex_binary_path: string,
-   *     bibtex_binary_path: string,
+   *     podman_proxy: array{
+   *       socket_path: string,
+   *     },
+   *     podman: array{
+   *       homedir: string,
+   *       binary_path: string,
+   *       image: string,
+   *     },
+   *     local: array{
+   *       pdflatex_binary_path: string,
+   *       bibtex_binary_path: string,
+   *     },
+   *     dependency_dirs: list<string>,
    *   },
    *   generator: array{
    *     class: string,
@@ -55,6 +64,21 @@ class BobvLatexExtension extends ConfigurableExtension
       ])
       ->addTag('console.command');
 
+    $container
+      ->register(ConfigureProxyAclCommand::class)
+      ->setArguments([
+        new Reference(CacheService::class),
+        new Parameter('kernel.project_dir'),
+        $mergedConfig['compiler']['dependency_dirs'],
+      ])
+      ->addTag('console.command');
+
+    $container
+      ->register(CacheService::class)
+      ->setArguments([
+        $mergedConfig['cache_dir'],
+      ]);
+
     $compilerDefinition = $container
       ->register(self::SERVICE_COMPILER)
       ->setClass($mergedConfig['compiler']['class']);
@@ -62,18 +86,18 @@ class BobvLatexExtension extends ConfigurableExtension
     match ($compilerDefinition->getClass()) {
       LocalLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          $mergedConfig['compiler']['pdflatex_binary_path'],
-          $mergedConfig['compiler']['bibtex_binary_path'],
+          $mergedConfig['compiler']['local']['pdflatex_binary_path'],
+          $mergedConfig['compiler']['local']['bibtex_binary_path'],
         ]),
       PodmanLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          $mergedConfig['compiler']['podman_homedir'],
-          $mergedConfig['compiler']['podman_binary_path'],
-          $mergedConfig['compiler']['podman_image'],
+          $mergedConfig['compiler']['podman']['homedir'],
+          $mergedConfig['compiler']['podman']['binary_path'],
+          $mergedConfig['compiler']['podman']['image'],
         ]),
       PodmanProxyLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          $mergedConfig['compiler']['podman_proxy_sock'],
+          $mergedConfig['compiler']['podman_proxy']['socket_path'],
         ]),
       default => null,
     };
@@ -83,10 +107,10 @@ class BobvLatexExtension extends ConfigurableExtension
       ->register(self::SERVICE_GENERATOR)
       ->setClass($mergedConfig['generator']['class'])
       ->setArguments([
-        $mergedConfig['cache_dir'],
-        new Parameter('kernel.environment'),
-        new Reference('twig'),
+        new Reference(CacheService::class),
         new Reference(self::SERVICE_COMPILER),
+        new Reference('twig'),
+        new Parameter('kernel.environment'),
         $mergedConfig['max_age'],
       ]);
     $container->setAlias(LatexGeneratorInterface::class, self::SERVICE_GENERATOR);

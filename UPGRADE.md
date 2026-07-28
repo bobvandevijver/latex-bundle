@@ -1,6 +1,19 @@
 # Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
+## Upgrade from 7.0 to 7.1
+
+Some configuration paths have changed.
+
+If you are upgrading from 6.x or before, you probably already migrated these configuration values with the 6.x to 7.x instructions.
+
+- `podman_proxy_sock` => `podman_proxy.socket_path`
+- `podman_homedir` => `podman.homedir`
+- `podman_binary_path` => `podman.binary_path`
+- `podman_image` => `podman.image`
+- `pdflatex_binary_path` => `local.pdflatex_binary_path`
+- `bibtex_binary_path` => `local.podman.bibtex_binary_path`
+
 ## Upgrade from 6.x to 7.x
 
 This is a major release, and contains breaking changes. Please read carefully.
