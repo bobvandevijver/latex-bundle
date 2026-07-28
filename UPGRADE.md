@@ -16,11 +16,11 @@ If you are upgrading from 6.x or before, you probably already migrated these con
 
 ## Upgrade from 6.x to 7.x
 
-This is a major release, and contains breaking changes. Please read carefully.
+This is a major release and contains breaking changes. Please read carefully.
 
 ### Configuration
 
-The configuration has been rebuilt and parameters have been removed. If you were using parameters (starting with `bobv.latex.`) make sure to migrate to modern bundle configuration. Every option that was available before can still be set.
+The configuration has been rebuild and parameters have been removed. If you were using parameters (starting with `bobv.latex.`) make sure to migrate to modern bundle configuration. Every option that was available before can still be set.
 
 ### Generator
 
