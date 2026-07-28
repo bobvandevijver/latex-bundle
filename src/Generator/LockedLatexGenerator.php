@@ -102,6 +102,10 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
 
   private function getTimeout(?GeneratorOptions $options): float|int|null
   {
-    return ($options?->timeout ?? GeneratorOptions::DEFAULT_TIMEOUT) + self::TIMEOUT_OVERHEAD;
+    if ($options && $options->timeout === null) {
+      return null;
+    }
+
+    return ($options->timeout ?? GeneratorOptions::DEFAULT_TIMEOUT) + self::TIMEOUT_OVERHEAD;
   }
 }
