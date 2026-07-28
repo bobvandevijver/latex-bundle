@@ -201,7 +201,7 @@ class LatexGenerator implements LatexGeneratorInterface
 
     // Process extra options for security
     $pdflatexArgs = [];
-    foreach ($options->compileOptions as $option => $value) {
+    foreach ($options->pdflatexArgs as $option => $value) {
       $pdflatexArgs[] = sprintf('-%s %s', $option, $value ?: '');
     }
 
@@ -251,7 +251,7 @@ class LatexGenerator implements LatexGeneratorInterface
       }
 
       // Run bibliography tooling when enabled
-      if ($count === 0 && $this->latexCompiler->supportsBibliography()) {
+      if ($count === 0 && $options->runBibtex && $this->latexCompiler->supportsBibliography()) {
         $result = $this->latexCompiler->bibtex($context);
 
         // Check whether the pdflatex command completed successfully

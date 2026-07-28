@@ -18,7 +18,7 @@ The following methods have been dropped from the `LatexGeneratorInterface` in fa
 - `setMaxAge`
 - `setTimeout`
 
-The `$compileOptions` argument on method `generatePdf` has been replaced with the same options DTO. Do note that the following keys from `$compileOptions` have been replaced with dedicated DTO options:
+The `$compileOptions` argument on method `generatePdf` has been replaced with the same options DTO. Do note that the following keys from `$pdflatexArgs` have been replaced with dedicated DTO options:
 
 - `shell-escape`
 - `openin_any`
@@ -29,6 +29,10 @@ The `generateLatex` method must now always be passed a `LatexBaseInterface` inst
 The `generatePdf` method no longer accepts a `string` as file location, it must now be passed a `TexFileInfo` instance.
 
 The `generate*` functions now return an instance of `TexFileInfo` or `PdfFileInfo`, depending on the method. You can call `getTexLocation()` or `getPdfLocation()` on the returned instance to get the full file path.
+
+### BibTeX
+
+With this release, setting the BibTex path is no longer enough to trigger a BibTeX build. You will need to explicitly set `runBibtex` to `true` in the `GeneratorOptions` DTO.
 
 ## Upgrade from 5.x to 6.x
 
