@@ -25,7 +25,8 @@ class LongTable extends LatexElement
 
   public function addRow(mixed $row): self
   {
-    $data   = $this->getParams()['data'];
+    /** @var array<int, mixed> $data */
+    $data   = $this->getParams()['data'] ?? [];
     $data[] = [
       'newRule' => true,
       'data'    => $row,
