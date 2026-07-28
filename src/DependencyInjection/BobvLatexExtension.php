@@ -16,13 +16,36 @@ use Symfony\Component\HttpKernel\DependencyInjection\ConfigurableExtension;
 
 class BobvLatexExtension extends ConfigurableExtension
 {
-  private const BASE_ID                    = 'bobv.latex.';
-  private const SERVICE_COMPILER           = self::BASE_ID . 'compiler';
-  private const SERVICE_GENERATOR          = self::BASE_ID . 'generator';
-  private const SERVICE_LOCKED_GENERATOR   = self::BASE_ID . 'generator.locked';
-  private const SERVICE_TWIG_EXTENSION     = self::BASE_ID . 'twig.extension';
+  private const BASE_ID                  = 'bobv.latex.';
+  private const SERVICE_COMPILER         = self::BASE_ID . 'compiler';
+  private const SERVICE_GENERATOR        = self::BASE_ID . 'generator';
+  private const SERVICE_LOCKED_GENERATOR = self::BASE_ID . 'generator.locked';
+  private const SERVICE_TWIG_EXTENSION   = self::BASE_ID . 'twig.extension';
 
-  /** @param array<string, mixed> $mergedConfig */
+  /** @param array{
+   *   compiler: array{
+   *     class: string,
+   *     podman_proxy_sock: string,
+   *     podman_homedir: string,
+   *     podman_binary_path: string,
+   *   podman_image: string,
+   *     pdflatex_binary_path: string,
+   *     bibtex_binary_path: string,
+   *   },
+   *   generator: array{
+   *     class: string,
+   *   },
+   *   locked_generator: array{
+   *     class: string,
+   *   },
+   *   twig_extension: array{
+   *     class: string,
+   *   },
+   *   cache_dir: string,
+   *   max_age: string,
+   *   use_symfony_string: bool,
+   * } $mergedConfig
+   */
   protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
   {
     $container

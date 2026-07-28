@@ -11,7 +11,7 @@ class GeneratorOptions
   /**
    * @param bool                   $forceRegenerate whether to force regeneration of the TeX/PDF file(s), even if it already exists
    * @param bool                   $runBibtex       whether to run BibTeX
-   * @param array<string, mixed>   $pdflatexArgs    optional compile options for pdflatex
+   * @param array<string, string>  $pdflatexArgs    optional compile options for pdflatex
    * @param bool                   $shellEscape     whether to allow arbitrary program execution outside of the LaTeX file
    * @param string|null            $openInAny       value for the openin_any option, or null to disable the option
    * @param string|null            $openOutAny      value for the openout_any option, or null to disable the option

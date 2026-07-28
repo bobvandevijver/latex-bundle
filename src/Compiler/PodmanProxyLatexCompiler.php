@@ -74,18 +74,21 @@ final readonly class PodmanProxyLatexCompiler implements LatexCompilerInterface
     $response = stream_get_contents($fp);
     fclose($fp);
     try {
+      /** @var array{status: int|string, stdout?: string, stderr?: string} $data */
       $data = json_decode($response, true, flags: JSON_THROW_ON_ERROR);
     } catch (JsonException $e) {
       throw new LatexProxyException('Failed to decode podman proxy response', previous: $e);
     }
 
     $exitCode = (int)$data['status'];
+    /** @var string|null $exitCodeText */
+    $exitCodeText = Process::$exitCodes[$exitCode] ?? null;
 
     return new LatexCompilerResult(
       $exitCode === 0,
       $exitCode,
       ($data['stdout'] ?? false) ? explode("\n", $data['stdout']) : [],
-      Process::$exitCodes[$exitCode] ?? null,
+      $exitCodeText,
       ($data['stderr'] ?? false) ? explode("\n", $data['stderr']) : [],
     );
   }
