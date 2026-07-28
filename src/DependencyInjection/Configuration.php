@@ -2,18 +2,16 @@
 
 namespace Bobv\LatexBundle\DependencyInjection;
 
-use Bobv\LatexBundle\Twig\BobvLatexExtension;
 use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
 use Bobv\LatexBundle\Compiler\LocalLatexCompiler;
 use Bobv\LatexBundle\Generator\LatexGenerator;
 use Bobv\LatexBundle\Generator\LatexGeneratorInterface;
 use Bobv\LatexBundle\Generator\LockedLatexGenerator;
+use Bobv\LatexBundle\Twig\BobvLatexExtension;
 use Symfony\Component\Config\Definition\Builder\NodeBuilder;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
-
 use Symfony\Component\String\UnicodeString;
-use function Symfony\Component\DependencyInjection\Loader\Configurator\param;
 
 class Configuration implements ConfigurationInterface
 {
@@ -83,7 +81,7 @@ class Configuration implements ConfigurationInterface
       ->info('The implementation used as twig extension.');
 
     $nodeBuilder
-      ->scalarNode('cache_dir')->defaultValue(param('kernel.cache_dir'));
+      ->scalarNode('cache_dir')->defaultValue('%kernel.cache_dir%');
 
     $nodeBuilder
       ->scalarNode('max_age')->defaultValue('-1 day');

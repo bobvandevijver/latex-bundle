@@ -21,30 +21,10 @@ class BobvLatexExtension extends ConfigurableExtension
   private const SERVICE_GENERATOR          = self::BASE_ID . 'generator';
   private const SERVICE_LOCKED_GENERATOR   = self::BASE_ID . 'generator.locked';
   private const SERVICE_TWIG_EXTENSION     = self::BASE_ID . 'twig.extension';
-  private const PARAM_CACHE_DIR            = self::BASE_ID . 'cache_dir';
-  private const PARAM_MAX_AGE              = self::BASE_ID . 'max_age';
-  private const PARAM_USE_SYMFONY_STRING   = self::BASE_ID . 'use_symfony_string';
-  private const PARAM_PODMAN_PROXY_SOCK    = self::BASE_ID . 'compiler.podman.proxy.sock';
-  private const PARAM_PODMAN_HOMEDIR       = self::BASE_ID . 'compiler.podman.homedir';
-  private const PARAM_PODMAN_BINARY_PATH   = self::BASE_ID . 'compiler.podman.binary.path';
-  private const PARAM_PODMAN_IMAGE         = self::BASE_ID . 'compiler.podman.container';
-  private const PARAM_PDFLATEX_BINARY_PATH = self::BASE_ID . 'compiler.pdflatex.binary.path';
-  private const PARAM_BIBTEX_BINARY_PATH   = self::BASE_ID . 'compiler.bibtex.binary.path';
 
   /** @param array<string, mixed> $mergedConfig */
   protected function loadInternal(array $mergedConfig, ContainerBuilder $container): void
   {
-    $container->setParameter(self::PARAM_CACHE_DIR, $mergedConfig['cache_dir']);
-    $container->setParameter(self::PARAM_MAX_AGE, $mergedConfig['max_age']);
-    $container->setParameter(self::PARAM_USE_SYMFONY_STRING, $mergedConfig['use_symfony_string']);
-
-    $container->setParameter(self::PARAM_PODMAN_PROXY_SOCK, $mergedConfig['compiler']['podman_proxy_sock']);
-    $container->setParameter(self::PARAM_PODMAN_HOMEDIR, $mergedConfig['compiler']['podman_homedir']);
-    $container->setParameter(self::PARAM_PODMAN_BINARY_PATH, $mergedConfig['compiler']['podman_binary_path']);
-    $container->setParameter(self::PARAM_PODMAN_IMAGE, $mergedConfig['compiler']['podman_image']);
-    $container->setParameter(self::PARAM_PDFLATEX_BINARY_PATH, $mergedConfig['compiler']['pdflatex_binary_path']);
-    $container->setParameter(self::PARAM_BIBTEX_BINARY_PATH, $mergedConfig['compiler']['bibtex_binary_path']);
-
     $container
       ->register(LatexTestCommand::class)
       ->setArguments([
@@ -59,18 +39,18 @@ class BobvLatexExtension extends ConfigurableExtension
     match ($compilerDefinition->getClass()) {
       LocalLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          new Parameter(self::PARAM_PDFLATEX_BINARY_PATH),
-          new Parameter(self::PARAM_BIBTEX_BINARY_PATH),
+          $mergedConfig['compiler']['pdflatex_binary_path'],
+          $mergedConfig['compiler']['bibtex_binary_path'],
         ]),
       PodmanLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          new Parameter(self::PARAM_PODMAN_HOMEDIR),
-          new Parameter(self::PARAM_PODMAN_BINARY_PATH),
-          new Parameter(self::PARAM_PODMAN_IMAGE),
+          $mergedConfig['compiler']['podman_homedir'],
+          $mergedConfig['compiler']['podman_binary_path'],
+          $mergedConfig['compiler']['podman_image'],
         ]),
       PodmanProxyLatexCompiler::class => $compilerDefinition
         ->setArguments([
-          new Parameter(self::PARAM_PODMAN_PROXY_SOCK),
+          $mergedConfig['compiler']['podman_proxy_sock'],
         ]),
       default => null,
     };
@@ -80,11 +60,11 @@ class BobvLatexExtension extends ConfigurableExtension
       ->register(self::SERVICE_GENERATOR)
       ->setClass($mergedConfig['generator']['class'])
       ->setArguments([
-        new Parameter(self::PARAM_CACHE_DIR),
+        $mergedConfig['cache_dir'],
         new Parameter('kernel.environment'),
         new Reference('twig'),
         new Reference(self::SERVICE_COMPILER),
-        new Parameter(self::PARAM_MAX_AGE),
+        $mergedConfig['max_age'],
       ]);
     $container->setAlias(LatexGeneratorInterface::class, self::SERVICE_GENERATOR);
 
@@ -100,7 +80,7 @@ class BobvLatexExtension extends ConfigurableExtension
       ->register(self::SERVICE_TWIG_EXTENSION)
       ->setClass($mergedConfig['twig_extension']['class'])
       ->setArguments([
-        new Parameter(self::PARAM_USE_SYMFONY_STRING),
+        $mergedConfig['use_symfony_string'],
       ])
       ->addTag('twig.extension');
   }
