@@ -128,3 +128,13 @@ You can configure the following default in `/home/bobv-latex-pdflatex/.config/co
 [engine]
 cgroup_manager = "cgroupfs"
 ```
+
+#### I'm seeing a lot of logging when run with systemd
+
+This is due to podman using its own logging driver which forwards the logging to journalctl.
+You can disable this behaviour with the following configuration in `/home/bobv-latex-pdflatex/.config/containers/containers.conf`:
+
+```ini
+[containers]
+log_driver = "none"
+```
