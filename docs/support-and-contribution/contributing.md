@@ -6,14 +6,14 @@
 
 [back-to-index]: https://github.com/bobvandevijver/latex-bundle/blob/main/docs/documentation.md
 
-## 1. Createing and managing git branches
+## 1. Creating and managing git branches
 
-In your github fork, you need to keep your main branch clean, without any changes,
-like that you can create at any time a branch from your main. Each time, that you
-want commit a bug fix or a feature, you need to create a branch for it, which will
+In your GitHub fork, you need to keep your main branch clean, without any changes,
+like that you can create at any time a branch from your main. Each time that you
+want to commit a bug fix or a feature, you need to create a branch for it, which will
 be the copy of your main branch.
 
-When you do a pull request on a branch, you can continue to work on an another
+When you do a pull request on a branch, you can continue to work on another
 branch and make another pull request on the other branch.
 
 Before creating a new branch pull the changes from LatexBundle, your main
@@ -25,7 +25,7 @@ needs to be up to date.
 $ git branch <name_of_your_new_branch>
 ```
 
-### Push the branch on github:
+### Push the branch on GitHub:
 
 ```console
 $ git push origin <name_of_your_new_branch>
