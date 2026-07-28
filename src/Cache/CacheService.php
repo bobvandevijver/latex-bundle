@@ -5,6 +5,7 @@ namespace Bobv\LatexBundle\Cache;
 use Bobv\LatexBundle\Generator\GeneratorOptions;
 use Symfony\Component\Filesystem\Exception\IOException;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 
 final readonly class CacheService
 {
@@ -19,7 +20,7 @@ final readonly class CacheService
 
   public function getCacheBasePath(?GeneratorOptions $options): string
   {
-    return ($options->cacheDir ?? $this->cacheDir) . DIRECTORY_SEPARATOR . self::CACHE_SUB_DIR . DIRECTORY_SEPARATOR;
+    return Path::join($options->cacheDir ?? $this->cacheDir, self::CACHE_SUB_DIR) . '/';
   }
 
   public function ensureCacheDirExists(?GeneratorOptions $options): void

@@ -3,7 +3,9 @@
 namespace Exception;
 
 use Bobv\LatexBundle\Exception\LatexParseException;
+use Exception;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Filesystem\Path;
 
 class LatexParseExceptionTest extends TestCase
 {
@@ -11,10 +13,10 @@ class LatexParseExceptionTest extends TestCase
   public function testErrorParsing(): void
   {
     $exception = new LatexParseException(
-        __DIR__ . DIRECTORY_SEPARATOR . 'test.tex',
-        1,
-        explode("\n", file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'test.log')),
-        'General error',
+      Path::join(__DIR__, 'test.tex'),
+      1,
+      explode("\n", file_get_contents(Path::join(__DIR__ , 'test.log')) ?: throw new Exception('File not found')),
+      'General error',
     );
 
     $this->assertNotEmpty($exception->getFilteredLogSource());
@@ -23,13 +25,14 @@ class LatexParseExceptionTest extends TestCase
     $this->assertStringContainsString('\includegraphics[width=0.95\textwidth,totalheight=0.95\textheight,keepaspectratio]{/var/www/somefile.jpg}', $exception->getFilteredTexSource());
   }
 
-  public function testExactMessage(): void {
+  public function testExactMessage(): void
+  {
     $texLocation    = __DIR__ . DIRECTORY_SEPARATOR . 'test';
     $exception      = new LatexParseException(
-        $texLocation . '.tex',
-        1,
-        explode("\n", file_get_contents(__DIR__ . DIRECTORY_SEPARATOR . 'test.log')),
-        'General error',
+      $texLocation . '.tex',
+      1,
+      explode("\n", file_get_contents(Path::join(__DIR__ , 'test.log')) ?: throw new Exception('File not found')),
+      'General error',
     );
 
     $this->assertEquals("Something went wrong during the execution of the pdflatex command, as it returned 1 (General error). See the log file ($texLocation.log) for all details.

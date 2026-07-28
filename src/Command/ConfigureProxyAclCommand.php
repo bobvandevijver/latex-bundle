@@ -10,6 +10,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Filesystem\Filesystem;
+use Symfony\Component\Filesystem\Path;
 use Symfony\Component\Process\Process;
 use Throwable;
 
@@ -97,7 +98,7 @@ class ConfigureProxyAclCommand extends Command
       }
 
       foreach ($this->dependencyDirs as $dependencyDir) {
-        $dependencyDir = $this->projectDir . DIRECTORY_SEPARATOR . $dependencyDir;
+        $dependencyDir = Path::join($this->projectDir, $dependencyDir);
         if (!$this->filesystem->exists($dependencyDir)) {
           $sfStyle->warning("Dependency directory does not exist, skipping ($dependencyDir)");
           continue;
