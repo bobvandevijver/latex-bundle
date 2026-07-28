@@ -16,7 +16,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
   /** Define a trivial overhead for the timeout margin to prevent releasing the lock before the process timeout has happened. */
   private const TIMEOUT_OVERHEAD = 2;
   private readonly LockFactory $lockFactory; // Set in constructor
-  private ?LockInterface       $lock = null;
+  private ?LockInterface $lock = null;
 
   public function __construct(private readonly LatexGeneratorInterface $generator)
   {
@@ -53,8 +53,7 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     LatexBaseInterface $latex,
     bool $download = true,
     ?GeneratorOptions $options = null,
-  ): BinaryFileResponse
-  {
+  ): BinaryFileResponse {
     $this->ensureLock($options);
 
     return $this->generator->createPdfResponse($latex, $download, $options);
@@ -64,32 +63,31 @@ class LockedLatexGenerator implements LatexGeneratorInterface, LockedLatexGenera
     LatexBaseInterface $latex,
     bool $download = true,
     ?GeneratorOptions $options = null,
-  ): BinaryFileResponse
-  {
+  ): BinaryFileResponse {
     $this->ensureLock($options);
 
     return $this->generator->createTexResponse($latex, $download, $options);
   }
 
-  public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
+  public function generate(LatexBaseInterface $latex, ?GeneratorOptions $options = null): PdfFileInfo
   {
     $this->ensureLock($options);
 
     return $this->generator->generate($latex, $options);
   }
 
-  public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): string
+  public function generateLatex(LatexBaseInterface $latex, ?GeneratorOptions $options = null): TexFileInfo
   {
     $this->ensureLock($options);
 
     return $this->generator->generateLatex($latex, $options);
   }
 
-  public function generatePdf(string $texLocation, ?GeneratorOptions $options = null): string
+  public function generatePdf(TexFileInfo $texFileInfo, ?GeneratorOptions $options = null): PdfFileInfo
   {
     $this->ensureLock($options);
 
-    return $this->generator->generatePdf($texLocation, $options);
+    return $this->generator->generatePdf($texFileInfo, $options);
   }
 
   /** Verify the callee already has exclusive access */
