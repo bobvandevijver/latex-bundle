@@ -55,9 +55,9 @@ class LatexTestCommand extends Command
     $section2->addElement($box);
     $latex->addElement($section2);
 
-    $generatedLocation = $this->latexGenerator->generate($latex);
+    $pdfFileInfo = $this->latexGenerator->generate($latex);
 
-    $output->writeln($generatedLocation);
+    $output->writeln($pdfFileInfo->getPdfLocation());
 
     return Command::SUCCESS;
   }
