@@ -2,6 +2,7 @@
 
 namespace Bobv\LatexBundle\Generator;
 
+use Bobv\LatexBundle\Cache\CacheService;
 use Bobv\LatexBundle\Compiler\CompilerContext;
 use Bobv\LatexBundle\Compiler\LatexCompilerInterface;
 use Bobv\LatexBundle\Exception\BibliographyGenerationException;
@@ -23,10 +24,10 @@ class LatexGenerator implements LatexGeneratorInterface
   protected Filesystem $filesystem;
 
   public function __construct(
-    protected readonly string $cacheDir,
-    protected readonly string $env,
-    protected readonly Environment $twig,
+    protected readonly CacheService $cacheService,
     protected LatexCompilerInterface $latexCompiler,
+    protected readonly Environment $twig,
+    protected readonly string $env,
     protected string $maxAgeModifier,
   ) {
     $this->filesystem = new Filesystem();
@@ -150,25 +151,6 @@ class LatexGenerator implements LatexGeneratorInterface
   }
 
   /**
-   * Checks if the filesystem is ready to create the needed files.
-   *
-   * @throws IOException
-   */
-  protected function checkFilesystem(GeneratorOptions $options): void
-  {
-    $cacheBasePath = $this->getCacheBasePath($options);
-
-    // Check if the cache dir exists
-    if (!$this->filesystem->exists($cacheBasePath)) {
-      try {
-        $this->filesystem->mkdir($cacheBasePath);
-      } catch (IOException $ioe) {
-        throw new IOException('An error occurred while creating the cache directory at ' . $ioe->getPath() . '. Is the cache writable?', 0, $ioe);
-      }
-    }
-  }
-
-  /**
    * Compile a PDF from a tex file on a given location
    * If necessary, compilation will be done up to three times for correct references.
    *
@@ -270,11 +252,6 @@ class LatexGenerator implements LatexGeneratorInterface
     return $pdfFileInfo;
   }
 
-  protected function getCacheBasePath(GeneratorOptions $options): string
-  {
-    return ($options->cacheDir ?? $this->cacheDir) . '/BobvLatex/';
-  }
-
   /**
    * Write the file to the cache directory.
    *
@@ -284,10 +261,10 @@ class LatexGenerator implements LatexGeneratorInterface
    */
   protected function writeTexFile(string $texData, string $fileName, GeneratorOptions $options): TexFileInfo
   {
-    $this->checkFilesystem($options);
+    $this->cacheService->ensureCacheDirExists($options);
 
     $outputInfo  = new TexFileInfo(
-      $this->getCacheBasePath($options) . hash('ripemd160', $texData) . '/',
+      $this->cacheService->getCacheBasePath($options) . hash('ripemd160', $texData) . '/',
       $fileName . '.tex',
     );
     $texLocation = $outputInfo->getTexLocation();

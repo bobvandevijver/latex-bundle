@@ -33,22 +33,55 @@ class Configuration implements ConfigurationInterface
     );
 
     $compilerNodeBuilder
-      ->scalarNode('podman_proxy_sock')->defaultValue('unix:///home/bobv-latex-pdflatex/podman_proxy.sock');
+      ->arrayNode('dependency_dirs')
+      ->info('Top level directories that are used as linked dependency directories, relative to the project directory. Will only be used for the configure-proxy-acls command.')
+      ->defaultValue([])
+      ->prototype('scalar');
 
-    $compilerNodeBuilder
-      ->scalarNode('podman_homedir')->defaultValue('/home/bobv-latex-pdflatex');
+    $podmanProxyNodeBuilder = $compilerNodeBuilder
+      ->arrayNode('podman_proxy')
+      ->info('Configuration for the podman proxy compiler')
+      ->addDefaultsIfNotSet()
+      ->children();
+    $podmanProxyNodeBuilder
+      ->scalarNode('socket_path')->defaultValue('unix:///home/bobv-latex-pdflatex/podman_proxy.sock');
 
-    $compilerNodeBuilder
-      ->scalarNode('podman_binary_path')->defaultValue('podman');
+    $podmanNodeBuilder = $compilerNodeBuilder
+      ->arrayNode('podman')
+      ->info('Configuration for the podman compiler')
+      ->addDefaultsIfNotSet()
+      ->children();
 
-    $compilerNodeBuilder
-      ->scalarNode('podman_image')->defaultValue('registry.drenso.dev/open/docker-images/pdflatex:latest');
+    $podmanNodeBuilder
+      ->scalarNode('homedir')
+      ->info('The home directory used for podman')
+      ->defaultValue('/home/bobv-latex-pdflatex');
 
-    $compilerNodeBuilder
-      ->scalarNode('pdflatex_binary_path')->defaultValue('pdflatex');
+    $podmanNodeBuilder
+      ->scalarNode('binary_path')
+      ->info('The path to the podman binary')
+      ->defaultValue('podman');
 
-    $compilerNodeBuilder
-      ->scalarNode('bibtex_binary_path')->defaultValue('bibtex');
+    $podmanNodeBuilder
+      ->scalarNode('image')
+      ->info('The image used for the podman container')
+      ->defaultValue('registry.drenso.dev/open/docker-images/pdflatex:latest');
+
+    $localNodeBuilder = $compilerNodeBuilder
+      ->arrayNode('local')
+      ->info('Configuration for the local compiler')
+      ->addDefaultsIfNotSet()
+      ->children();
+
+    $localNodeBuilder
+      ->scalarNode('pdflatex_binary_path')
+      ->info('The path to the pdflatex binary')
+      ->defaultValue('pdflatex');
+
+    $localNodeBuilder
+      ->scalarNode('bibtex_binary_path')
+      ->info('The path to the bibtex binary')
+      ->defaultValue('bibtex');
 
     $generatorNodeBuilder = $nodeBuilder
       ->arrayNode('generator')
@@ -81,10 +114,14 @@ class Configuration implements ConfigurationInterface
       ->info('The implementation used as twig extension.');
 
     $nodeBuilder
-      ->scalarNode('cache_dir')->defaultValue('%kernel.cache_dir%');
+      ->scalarNode('cache_dir')
+      ->info('The directory where the generated files will be cached (always placed in a BobvLatex subdirectory)')
+      ->defaultValue('%kernel.cache_dir%');
 
     $nodeBuilder
-      ->scalarNode('max_age')->defaultValue('-1 day');
+      ->scalarNode('max_age')
+      ->info('The maximum age of the cached files')
+      ->defaultValue('-1 day');
 
     $nodeBuilder
       ->booleanNode('use_symfony_string')
