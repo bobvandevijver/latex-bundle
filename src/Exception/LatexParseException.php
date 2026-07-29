@@ -49,54 +49,12 @@ class LatexParseException extends LatexException
     parent::__construct($message, $exitCode);
   }
 
-  /**
-   * Return an extended error message together with the extracted errors.
-   *
-   * @deprecated Use the new object-oriented `getParseErrors` instead
-   */
-  public function getExtendedMessage(): string
-  {
-    $this->resolveErrors();
-
-    $message = $this->getMessage();
-
-    if (!empty($this->parseErrors)) {
-      $message .= "\n\n\nBelow some more info is tried to extract from the error:\n{$this->combineParseErrorLogSource()}";
-    }
-
-    return $message;
-  }
-
   /** @return ParseError[] */
   public function getParseErrors(): array
   {
     $this->resolveErrors();
 
     return $this->parseErrors;
-  }
-
-  /** @deprecated Use the new object-oriented `getParseErrors` instead */
-  public function getFilteredTexSource(): string
-  {
-    $this->resolveErrors();
-
-    $result = ['---'];
-    foreach ($this->parseErrors as $parseError) {
-      foreach ($parseError->texSnippets as $texSnippet) {
-        $result[] = "l.$texSnippet->lineNumber\n" . $texSnippet->getTexSnippet();
-      }
-    }
-    $result[] = '---';
-
-    return implode("\n", $result);
-  }
-
-  /** @deprecated Use the new object-oriented `getParseErrors` instead */
-  public function getFilteredLogSource(): string
-  {
-    $this->resolveErrors();
-
-    return $this->combineParseErrorLogSource();
   }
 
   /**
