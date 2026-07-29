@@ -1,6 +1,16 @@
 # Bobv Latex Bundle - Upgrade notes
 -------------------------------------
 
+## Upgrade from 7.1 to 7.2
+
+The following deprecated methods on `LatexParseException` were removed:
+
+- `getExtendedMessage`
+- `getFilteredTexSource`
+- `getFilteredLogSource`
+
+These were already marked as deprecated in 5.x.
+
 ## Upgrade from 7.0 to 7.1
 
 Some configuration paths have changed.

@@ -187,14 +187,4 @@ class LatexParseException extends LatexException
       $this->parseErrors[$idx] = new ParseError($parseError->logLines, $texSnippets);
     }
   }
-
-  private function combineParseErrorLogSource(): string
-  {
-    $logSource = implode(
-      "\n---\n",
-      array_map(static fn (ParseError $pe): string => $pe->getLogSource(), $this->parseErrors),
-    );
-
-    return implode("\n", ['---', $logSource, '---']);
-  }
 }
